@@ -1,0 +1,22 @@
+.archive {
+  margin-left: 15px;
+}
+
+.archive__header {
+  color: var(--dark-brown);
+  font-size: 1.7rem;
+}
+
+.archive__content .MuiFab-root:hover {
+  background-color: var(--light-brown);
+}
+
+.archive__content {
+  height: 29rem;
+  overflow: auto;
+}
+
+.archive__items {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+}

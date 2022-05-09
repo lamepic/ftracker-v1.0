@@ -1,0 +1,26 @@
+.form-group {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+
+.form-group label {
+  color: var(--dark-brown);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.form-group input {
+  padding: 5px;
+  border: 0.2px solid var(--light-brown);
+  width: 100%;
+  background-color: var(--lightest-brown);
+  border-radius: 5px;
+}
+
+.form-group > input:focus {
+  border: 0.2px solid var(--light-brown);
+  outline: 0.2px solid var(--dark-brown);
+}

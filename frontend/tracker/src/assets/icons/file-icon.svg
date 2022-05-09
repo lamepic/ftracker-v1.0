@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink" width="287" height="388.12" viewBox="0 0 287 388.12">
+    <defs>
+        <style>.a{opacity:0.14;}.b{fill:#582f08;}.c{fill:url(#a);}.d{fill:#331601;}.e{fill:#0c0000;}</style>
+        <linearGradient id="a" x1="0.5" y1="1.221" x2="0.5" y2="0.262" gradientUnits="objectBoundingBox">
+            <stop offset="0" stop-color="#140a00"/>
+            <stop offset="0.28" stop-color="#2f1802"/>
+            <stop offset="0.6" stop-color="#4e2803"/>
+            <stop offset="0.806" stop-color="#462302"/>
+            <stop offset="0.923" stop-color="#522902"/>
+            <stop offset="1" stop-color="#582f08"/>
+        </linearGradient>
+    </defs>
+    <g transform="translate(-1 -0.29)">
+        <path class="a" d="M13.06.29A12.14,12.14,0,0,0,1,12.39V376.31a12.14,12.14,0,0,0,12.1,12.1H275.9a12.14,12.14,0,0,0,12.1-12.1V84.84L203.45.29Z"/>
+        <path class="b" d="M12.89,6A12,12,0,0,0,1,17.88v358.6a12,12,0,0,0,11.93,11.93h259a12,12,0,0,0,11.92-11.93V89.27L200.49,6Z"/>
+        <path class="c" d="M200.49,6h-19.9l83.32,83.32V376.48A12,12,0,0,1,252,388.41h19.91a12,12,0,0,0,11.92-11.93V89.27Z"/>
+        <path class="d" d="M212.42,89.27h71.39L200.49,6V77.4a12,12,0,0,0,11.93,11.87Z"/>
+        <path d="M224.68,77a12,12,0,0,1-11.92-11.93V18.22L200.49,6V77.4a12,12,0,0,0,11.93,11.92h71.39L271.55,77Z"/>
+        <rect class="e" width="153.1" height="11.52" rx="2.3" transform="translate(23.3 32.64)"/>
+        <rect class="e" width="153.1" height="11.52" rx="2.3" transform="translate(23.3 64.34)"/>
+        <rect class="e" width="153.1" height="11.52" rx="2.3" transform="translate(23.3 96.03)"/>
+        <rect class="e" width="240.61" height="11.52" rx="2.3" transform="translate(23.3 127.73)"/>
+        <rect class="e" width="240.61" height="11.52" rx="2.3" transform="translate(23.3 286.22)"/>
+        <rect class="e" width="240.61" height="11.52" rx="2.3" transform="translate(23.3 317.92)"/>
+        <rect class="e" width="240.61" height="11.52" rx="2.3" transform="translate(23.3 349.62)"/>
+    </g>
+</svg>

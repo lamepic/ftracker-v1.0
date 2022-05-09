@@ -1,0 +1,71 @@
+.tracking {
+  margin-left: 15px;
+}
+
+.tracking__header {
+  color: var(--dark-brown);
+  font-size: 1.7rem;
+  font-weight: 600;
+  margin-top: 5px;
+}
+
+.tracking__container hr {
+  margin-top: 1.3rem;
+  background-color: var(--light-brown);
+}
+
+.tracking__content {
+  margin-top: 10px;
+  max-height: 29rem;
+  width: fit-content;
+  overflow: auto;
+  padding-right: 10px;
+  border: 1px solid red;
+}
+
+.MuiStep-root:nth-child(5n + 6) .MuiStepConnector-root {
+  display: none !important;
+}
+
+.loading__spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 5s ease-in-out;
+}
+
+/* .ant-steps-item-finish
+  > .ant-steps-item-container
+  > .ant-steps-item-content
+  > .ant-steps-item-title::after {
+  width: 100%;
+} */
+
+.ant-steps-item-finish
+  > .ant-steps-item-container
+  > .ant-steps-item-content
+  > .ant-steps-item-title::after {
+  background-color: var(--dark-brown);
+  color: var(--white) !important;
+}
+
+/* .ant-steps-item-finish:nth-last-child
+  > .ant-steps-item-container
+  > .ant-steps-item-content
+  > .ant-steps-item-title::after {
+  display: none;
+} */
+
+.ant-steps-item-description {
+  color: var(--dark-brown) !important;
+  font-weight: 500;
+}
+
+.ant-steps-item-container .ant-steps-item-icon {
+  background-color: var(--dark-brown) !important;
+  border: var(--dark-brown) !important;
+}
+
+.ant-steps-finish-icon svg {
+  fill: var(--white) !important;
+}

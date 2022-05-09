@@ -1,0 +1,121 @@
+@import "antd/dist/antd.css";
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --white: #fff;
+  --dark-brown: #582f08;
+  --semi-dark-brown: #603814;
+  --light-brown: #9d4d01;
+  --lighter-brown: #e3bc97;
+  --lightest-brown: #f9eeda;
+  --background-color: #eadfd5;
+  /* --background-color: #f1ebe4; */
+  --green: #009014;
+  --blue: #0707c7;
+  --red: #c50101;
+  --green: #009014;
+  --brown-text: #d2aa85;
+  --text-background: #e4a66c;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell",
+    "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+}
+
+.text-light-brown {
+  color: var(--light-brown);
+}
+
+.divider {
+  background-color: var(--dark-brown) !important;
+  height: 1px;
+  margin-top: 20px;
+}
+
+a {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.disabled:disabled {
+  cursor: not-allowed;
+  background-color: none !important;
+  pointer-events: all !important;
+}
+
+.disabled:disabled {
+  cursor: not-allowed;
+  background-color: none !important;
+  pointer-events: all !important;
+}
+
+.swal-button.swal-button--confirm {
+  background-color: var(--light-brown) !important;
+}
+
+.ant-table .ant-table-fixed-header svg {
+  background-color: var(--dark-brown);
+}
+
+.data-display-table thead[class*="ant-table-thead"] th {
+  background-color: var(--background-color) !important;
+}
+
+.data-display-table .ant-table-tbody {
+  background-color: var(--background-color);
+}
+
+.anticon.anticon-search svg {
+  fill: #000;
+}
+
+.ant-table-tbody > tr.ant-table-placeholder > td {
+  background: unset !important;
+}
+
+.ant-empty-img-simple-path,
+.ant-empty-img-simple-ellipse,
+.ant-empty-img-simple-g {
+  fill: var(--dark-brown);
+}
+
+.ant-empty-description {
+  color: var(--dark-brown);
+}
+
+.ant-btn.ant-btn-primary {
+  background-color: var(--dark-brown) !important;
+  border: none;
+}
+
+.ant-btn.ant-btn-primary svg {
+  fill: var(--white) !important;
+}

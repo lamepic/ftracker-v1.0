@@ -1,0 +1,113 @@
+.file-btn {
+  color: #fff;
+}
+
+.forward,
+.signature,
+.stamp {
+  background-color: var(--light-brown) !important;
+}
+
+.submit {
+  background-color: var(--dark-brown) !important;
+}
+
+.minute-box-preview {
+  background-color: var(--lightest-brown);
+  height: 200px;
+  width: 100%;
+  margin-top: 10px;
+  border-radius: 10px;
+  overflow-y: scroll;
+}
+
+.stamp-box-preview {
+  width: 50% !important;
+}
+
+.stamp-box-preview:first-child {
+  margin-right: 10px;
+}
+
+.minute-box-preview-lg {
+  height: 270px !important;
+}
+
+.file-info {
+  flex: 0.6;
+  padding-left: 15px;
+}
+
+.file-info textarea {
+  margin-top: 10px;
+}
+
+.minute {
+  padding: 10px;
+}
+
+.file-info form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+textarea {
+  width: 100%;
+  border-radius: 10px;
+  padding: 10px !important;
+}
+
+textarea::placeholder {
+  color: var(--dark-brown);
+}
+
+.minute-button {
+  /* margin-left: auto; */
+  /* margin-top: 15px; */
+  padding: 10px;
+  background-color: var(--light-brown) !important;
+  border: none;
+  color: var(--white);
+  cursor: pointer;
+}
+
+.date {
+  font-style: italic;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.employee {
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.relatedfiles-section p:first-child {
+  background-color: #e4a66c;
+  border-radius: 20px;
+  padding: 2px 8px;
+}
+
+.vr {
+  /* height: 340px; */
+  height: 380px;
+  width: 1px;
+  opacity: 0.5;
+  background-color: var(--dark-brown);
+  margin-top: 10px;
+}
+
+.vr-sm {
+  height: 270px;
+}
+
+.meta_info {
+  color: var(--dark-brown) !important;
+  font-weight: 600;
+  text-align: center;
+  text-transform: capitalize;
+  background-color: #eaeaea;
+  padding: 10px;
+}

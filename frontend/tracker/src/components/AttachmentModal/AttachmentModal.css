@@ -1,0 +1,9 @@
+.ant-modal-footer .ant-btn-primary {
+  background: var(--light-brown) !important;
+  border: none !important;
+}
+
+.ant-modal-footer .ant-btn-default:hover {
+  color: var(--light-brown);
+  border-color: var(--light-brown);
+}

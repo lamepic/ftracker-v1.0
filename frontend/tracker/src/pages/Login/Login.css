@@ -1,0 +1,22 @@
+.logo__text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: var(--dark-brown);
+}
+
+.logo__text-title {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.logo__text-subtitle {
+  font-size: 0.5rem;
+  font-weight: 600;
+}
+
+.logo-img {
+  width: 90px;
+  object-fit: contain;
+}

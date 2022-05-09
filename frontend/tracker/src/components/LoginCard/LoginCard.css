@@ -1,0 +1,26 @@
+.verification__btn:hover {
+  background-image: linear-gradient(
+    to right,
+    var(--lighter-brown),
+    var(--light-brown)
+  );
+}
+
+.verification__btn {
+  background-image: linear-gradient(
+    to right,
+    var(--light-brown),
+    var(--dark-brown)
+  );
+  width: 90%;
+  color: var(--white);
+  padding: 5px;
+  border-radius: 5px;
+  margin-top: 5px;
+}
+
+.login__btn {
+  width: 90% !important;
+  color: var(--white);
+  padding: 5px;
+}

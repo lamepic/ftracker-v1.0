@@ -1,0 +1,16 @@
+.badge {
+  background-color: #f54f4b;
+  color: #fff;
+  font-weight: 600;
+  font-size: 12px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 6.2rem;
+  right: -2px;
+  cursor: pointer;
+  z-index: 100;
+}

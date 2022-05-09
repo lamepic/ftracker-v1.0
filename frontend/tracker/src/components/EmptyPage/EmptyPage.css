@@ -1,0 +1,13 @@
+.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 25rem;
+}
+
+.empty__content h3 {
+  text-transform: uppercase;
+  font-size: 3rem;
+  color: var(--light-brown);
+  opacity: 0.7;
+}

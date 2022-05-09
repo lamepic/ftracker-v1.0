@@ -1,0 +1,79 @@
+.ant-dropdown-trigger,
+.ant-dropdown-link {
+  padding-left: 10px !important;
+}
+
+.request__header {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  border-bottom: 1px solid #eadfd5;
+  padding: 10px;
+  align-items: center;
+}
+
+.request__header > .MuiSvgIcon-root {
+  flex: 0.1;
+  color: var(--dark-brown) !important;
+}
+
+.request__header p {
+  flex: 0.9;
+  margin-left: 3rem;
+  font-weight: 600;
+}
+
+.request {
+  width: 250px;
+  position: relative;
+}
+
+.request__content {
+  border-bottom: 1px solid #eadfd5;
+  padding-bottom: 5px;
+}
+
+.request_from {
+  /* color: var(--dark-brown);
+      font-weight: 600;
+      font-size: 15px; */
+  max-width: 10rem;
+}
+
+.request_department {
+  font-size: 12px;
+}
+
+.document__name {
+  font-size: 14px;
+  color: tomato;
+  text-transform: capitalize;
+}
+
+.request__date {
+  font-size: 10px !important;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.empty__request {
+  text-align: center;
+  padding: 10px;
+}
+
+.activate__document__name {
+  color: var(--dark-brown);
+}
+
+.activate__msg {
+  color: #01660f;
+  font-size: 12px;
+  text-transform: capitalize;
+}
+
+.notification__loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

@@ -1,0 +1,63 @@
+.flow__header {
+  color: var(--dark-brown);
+  font-size: 1.7rem;
+  font-weight: 600;
+}
+
+.flow .divider {
+  margin-top: 10px;
+}
+
+.flow__content {
+  max-width: 450px;
+  height: 100%;
+}
+
+.flow-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.flow-group label {
+  color: var(--dark-brown);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.flow-group input {
+  padding: 5px;
+  border: 0.2px solid var(--light-brown);
+  background-color: var(--lightest-brown);
+  border-radius: 5px;
+  width: 70%;
+}
+
+.flow-group > input:focus {
+  border: 0.2px solid var(--light-brown);
+  outline: 0.2px solid var(--light-brown);
+}
+
+.flow-action {
+  margin-top: 20px;
+  padding: 10px;
+  /* border: 1px solid var(--light-brown); */
+  max-height: 400px;
+  overflow-y: auto;
+  background-color: var(--lightest-brown);
+  border-radius: 10px;
+}
+
+.action__header {
+  color: var(--dark-brown);
+  margin-bottom: 10px;
+}
+
+.ant-tabs-tab-btn {
+  color: var(--dark-brown) !important;
+}
+
+.ant-tabs-ink-bar.ant-tabs-ink-bar-animated {
+  background-color: var(--dark-brown) !important;
+}

@@ -1,0 +1,26 @@
+.homeOption {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: all 0.3s ease-in;
+  padding: 10px;
+}
+
+.homeOption__text {
+  color: var(--dark-brown);
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.homeOption__icon img {
+  width: 120px;
+  height: fit-content;
+  /* height: 100px; */
+}
+
+.homeOption:hover {
+  background-color: #e3bc97;
+  border-radius: 10px;
+}
