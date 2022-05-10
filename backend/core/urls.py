@@ -1,6 +1,8 @@
 from django.urls import path
 from rest_framework import routers
 
+from backend.core.models import Reference
+
 from .api import views
 
 app_name = "core"
@@ -83,5 +85,7 @@ urlpatterns = [
     path('parent-folder/<slug>/', views.ParentFolder.as_view(), name='parent_folder'),
     path('copy/', views.DocumentCopy.as_view(), name="copy"),
     path('signature-stamp/<document_id>/', views.SignatureStamp.as_view(),
-         name="signature_stamp")
+         name="signature_stamp"),
+    path('reference/<id>/', views.Reference.as_view(),
+         name="reference")
 ]
