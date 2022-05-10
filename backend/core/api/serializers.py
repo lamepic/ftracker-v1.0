@@ -322,6 +322,8 @@ class ArchiveCopySerializer(serializers.ModelSerializer):
 
 
 class ReferenceSerializer(serializers.ModelSerializer):
+    document_type = DocumentTypeSerializer(many=True)
+
     class Meta:
         model = models.Reference
-        fields = ['name', 'document_type']
+        fields = ['id', 'name', 'document_type']

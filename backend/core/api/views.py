@@ -1084,8 +1084,13 @@ class SignatureStamp(views.APIView):
 
 class ReferenceAPIView(views.APIView):
     def get(self, request, id, format=None):
-        references = get_object_or_404(models.Reference, id)
-        serialized_data = serializers.ReferenceSerializer(
-            references, many=True)
-
-        return Response(serialized_data.data, status=status.HTTP_200_OK)
+        try:
+            document_type = get_object_or_404(models.DocumentType, id=id)
+            references = models.Reference.objects.filter(
+                document_type=document_type)
+            serialized_data = serializers.ReferenceSerializer(
+                references, many=True)
+            return Response(serialized_data.data, status=status.HTTP_200_OK)
+        except Exception as err:
+            print(err)
+            raise exceptions.BadRequest(err.args[0])

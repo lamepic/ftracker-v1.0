@@ -471,3 +471,15 @@ export async function documentCopy(token) {
   const res = await axios.get("copy/", config);
   return res;
 }
+
+export async function references(token, id) {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Token ${token}`,
+    },
+  };
+
+  const res = await axios.get(`reference/${id}`, config);
+  return res;
+}

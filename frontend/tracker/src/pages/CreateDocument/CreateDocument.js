@@ -15,6 +15,7 @@ import {
   documentCopy,
   fetchDocumentAction,
   fetchDocumentType,
+  references,
 } from "../../http/document";
 import { useHistory } from "react-router-dom";
 import { UploadOutlined } from "@ant-design/icons";
@@ -167,9 +168,24 @@ function CreateDocument() {
     }
   };
 
+  const fetchReferences = async (id) => {
+    try {
+      const res = await references(store.token, id);
+      const data = res.data;
+      console.log(data);
+    } catch (e) {
+      console.log(e.response.data.detail);
+      notification.error({
+        message: "Error",
+        description: e.response.data.detail,
+      });
+    }
+  };
+
   const onDocumentTypeChange = async (value) => {
     _fetchDocumentActions(value);
     fetchCarbonCopyUserGroups();
+    fetchReferences(value);
   };
 
   const departmentOptions = _departments.map((department) => ({
