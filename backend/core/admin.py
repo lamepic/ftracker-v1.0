@@ -151,4 +151,4 @@ class CarbonCopyRelatedDocumentAdmin(admin.ModelAdmin):
 
 @admin.register(models.Reference)
 class ReferenceAdmin(admin.ModelAdmin):
-    list_display = ['name']
+    list_display = ['name', "last_increment"]
