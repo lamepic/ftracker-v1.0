@@ -394,6 +394,15 @@ class Stamp(models.Model):
         return self.user.first_name
 
 
+class Reference(models.Model):
+    name = models.CharField(max_length=50)
+    document_type = models.ManyToManyField(
+        DocumentType, related_name="reference_document_type")
+
+    def __str__(self):
+        return self.name
+
+
 @receiver(post_save, sender=ActivateDocument)
 def expire_date_handler(sender, instance, created, **kwargs):
     secret_id = random.randint(1, 9999)

@@ -147,3 +147,8 @@ class CarbonCopyRelatedDocumentAdmin(admin.ModelAdmin):
 
     def document(self, obj):
         return obj.document.name
+
+
+@admin.register(models.Reference)
+class ReferenceAdmin(admin.ModelAdmin):
+    list_display = ['name']
