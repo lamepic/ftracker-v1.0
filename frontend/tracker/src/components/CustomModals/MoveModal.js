@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Modal, notification } from "antd";
+import { Button, Modal, notification, Skeleton } from "antd";
 import GridData from "../DataDisplay/GridData";
 import { Box, CircularProgress, GridItem, Image, Text } from "@chakra-ui/react";
 import { capitalize, getFolderDifference } from "../../utility/helper";
@@ -31,6 +31,7 @@ function MoveModal({
   };
 
   const handleItemClick = async (e, item) => {
+    setLoading(true);
     e.stopPropagation();
     try {
       const checkpass = await checkFolderEncryption(store.token, item.slug);
@@ -52,7 +53,7 @@ function MoveModal({
                 password: value,
               });
               if (passRes.data.success) {
-                getSubfolders(item);
+                await getSubfolders(item);
               }
             } catch (e) {
               notification.error({
@@ -63,13 +64,15 @@ function MoveModal({
           }
         });
       } else {
-        getSubfolders(item);
+        await getSubfolders(item);
       }
     } catch (err) {
       return notification.error({
         message: "Error",
         description: err.response.data.detail,
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -80,8 +83,9 @@ function MoveModal({
       setGoBackPages([...goBackPages, modalFolders]);
       setOpenedFolder(item);
       setModalFolders(data.children);
+      console.log(modalFolders);
+      console.log(data.children);
     } catch (e) {
-      setLoading(false);
       return notification.error({
         message: "Error",
         description: e.response.data.detail,
@@ -139,10 +143,6 @@ function MoveModal({
     }
   };
 
-  if (loading) {
-    return <CircularProgress />;
-  }
-
   return (
     <>
       <Modal
@@ -174,9 +174,9 @@ function MoveModal({
         ]}
         width={900}
       >
-        <GridData>
-          {!loading &&
-            getFolderDifference(modalFolders, selectedRow).map((folder) => {
+        {!loading ? (
+          <GridData>
+            {getFolderDifference(modalFolders, selectedRow).map((folder) => {
               return (
                 <GridItem key={folder.id}>
                   <Box
@@ -201,7 +201,17 @@ function MoveModal({
                 </GridItem>
               );
             })}
-        </GridData>
+          </GridData>
+        ) : (
+          <Box width="100px">
+            <Skeleton.Button
+              active={loading}
+              size="large"
+              shape="default"
+              block="false"
+            />
+          </Box>
+        )}
       </Modal>
     </>
   );
