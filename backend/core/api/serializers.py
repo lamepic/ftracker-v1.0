@@ -319,3 +319,9 @@ class ArchiveCopySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Archive
         fields = ['created_by', 'closed_by', 'document']
+
+
+class ReferenceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Reference
+        fields = ['name', 'document_type']

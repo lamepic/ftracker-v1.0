@@ -1072,3 +1072,12 @@ class SignatureStamp(views.APIView):
             raise exceptions.ServerError(err.args[0])
 
         return Response({"message": f"{type.capitalize()} added Successfully"}, status=status.HTTP_200_OK)
+
+
+class ReferenceAPIView(views.APIView):
+    def get(self, request, id, format=None):
+        references = get_object_or_404(models.Reference, id)
+        serialized_data = serializers.ReferenceSerializer(
+            references, many=True)
+
+        return Response(serialized_data.data, status=status.HTTP_200_OK)
