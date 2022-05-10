@@ -613,6 +613,7 @@ class CreateFlow(views.APIView):
 
         name = data.get('flowName')
         flow = data.get('users')
+        references = data.get('references')
 
         if len(flow) == 0:
             raise exceptions.FieldError("Flow cannot be empty")
@@ -620,6 +621,12 @@ class CreateFlow(views.APIView):
         try:
             document_type = models.DocumentType.objects.create(
                 name=name, department=request.user.department)
+
+            for reference in references:
+                reference = models.Reference.objects.create(name=reference.get(
+                    'reference'), last_increment=reference.get('last_increment'))
+                reference.document_type.add(document_type)
+                reference.save()
 
             for action in flow:
                 employee = models.User.objects.get(
@@ -633,6 +640,7 @@ class CreateFlow(views.APIView):
                     document_action = models.DocumentAction.objects.create(
                         user=employee, action='CC', document_type=document_type)
         except Exception as err:
+            print(err)
             raise exceptions.ServerError(err.args[0])
 
         return Response(request.data, status=status.HTTP_200_OK)
