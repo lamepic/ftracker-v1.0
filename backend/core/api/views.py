@@ -317,12 +317,13 @@ class PreviewCodeAPIView(views.APIView):
 class DocumentTypeAPIView(views.APIView):
     def get(self, request, format=None):
         try:
+
             document_types = models.DocumentType.objects.filter(
                 Q(department=request.user.department) | Q(department=None))
 
             serialized_data = serializers.DocumentTypeSerializer(
                 document_types, many=True)
-        except:
+        except Exception as err:
             raise exceptions.NotFound
 
         return Response(serialized_data.data, status=status.HTTP_200_OK)

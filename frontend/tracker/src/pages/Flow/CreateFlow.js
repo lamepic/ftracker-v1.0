@@ -50,7 +50,10 @@ function Flow() {
       last_increment: values.last_increment,
     };
 
-    const references = [reference, ...values.references].map((reference) => {
+    const form_references =
+      values.references === undefined ? [] : values.references;
+
+    const references = [reference, ...form_references].map((reference) => {
       if (reference.last_increment === undefined) {
         reference.last_increment = 0;
       }

@@ -387,6 +387,7 @@ function CreateDocument() {
                       borderColor: "var(--dark-brown)",
                       outline: "none",
                     }}
+                    placeholder="eg. AAA/BBB/CCC"
                   />
                 ) : (
                   <Select
