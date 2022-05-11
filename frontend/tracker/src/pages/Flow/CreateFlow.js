@@ -1,6 +1,14 @@
 import React, { useEffect, useState } from "react";
 import "./Flow.css";
-import { Form, Button, Space, Select, Input, InputNumber } from "antd";
+import {
+  Form,
+  Button,
+  Space,
+  Select,
+  Input,
+  InputNumber,
+  notification,
+} from "antd";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { loadUsers } from "../../http/user";
 import { useStateValue } from "../../store/StateProvider";
@@ -8,7 +16,6 @@ import { useHistory } from "react-router-dom";
 import { createFlow } from "../../http/document";
 import Loading from "../../components/Loading/Loading";
 import { Box } from "@chakra-ui/react";
-import { openNotificationWithIcon } from "../../utility/helper";
 const { Option } = Select;
 
 function Flow() {
@@ -16,6 +23,7 @@ function Flow() {
   const [employees, setEmployees] = useState([]);
   const [loading, setLoading] = useState(true);
   const [form] = Form.useForm();
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     fetchUsers();
@@ -29,8 +37,12 @@ function Flow() {
   };
 
   const onFinish = async (values) => {
+    setSubmitting(true);
     if (values.users === 0) {
-      return openNotificationWithIcon("error", "Error", "Add flow");
+      return notification.error({
+        message: "Error",
+        description: "Add users",
+      });
     }
 
     const reference = {
@@ -38,7 +50,12 @@ function Flow() {
       last_increment: values.last_increment,
     };
 
-    const references = [reference, ...values.references];
+    const references = [reference, ...values.references].map((reference) => {
+      if (reference.last_increment === undefined) {
+        reference.last_increment = 0;
+      }
+      return reference;
+    });
 
     const data = {
       references,
@@ -50,10 +67,18 @@ function Flow() {
       const res = await createFlow(store.token, data);
       if (res.status === 200) {
         form.resetFields();
-        openNotificationWithIcon("success", "Success", "Flow Created");
+        return notification.success({
+          message: "Success",
+          description: "Flow Created",
+        });
       }
     } catch (e) {
-      openNotificationWithIcon("error", "Error", e.response.data.detail);
+      return notification.error({
+        message: "Error",
+        description: e.response.data.detail,
+      });
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -196,6 +221,7 @@ function Flow() {
                         color: "var(--white)",
                         border: "none",
                       }}
+                      loading={submitting}
                     >
                       Submit
                     </Button>
@@ -226,12 +252,6 @@ function Flow() {
                     <Form.Item
                       name={["last_increment"]}
                       style={{ width: "80%", marginLeft: "5px" }}
-                      rules={[
-                        {
-                          required: true,
-                          message: "Provide a value",
-                        },
-                      ]}
                       label="Last increment"
                     >
                       <InputNumber min={1} placeholder="Last increment" />
@@ -267,15 +287,7 @@ function Flow() {
                                 // style={{ width: "80%" }}
                               />
                             </Form.Item>
-                            <Form.Item
-                              name={[name, "last_increment"]}
-                              rules={[
-                                {
-                                  required: true,
-                                  message: "Provide a value",
-                                },
-                              ]}
-                            >
+                            <Form.Item name={[name, "last_increment"]}>
                               <InputNumber
                                 min={1}
                                 placeholder="Last increment"
