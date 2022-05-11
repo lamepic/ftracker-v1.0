@@ -734,6 +734,16 @@ class CreateDocument(views.APIView):
         data_document_type = data.get('documentType')
         document = data.get('document')
         reference = data.get('reference')
+
+        try:
+            reference_id = int(reference)
+            reference = get_object_or_404(models.Reference, id=reference_id)
+            reference.last_increment += 1
+            reference.save()
+            reference = f'{reference.name}/{reference.last_increment}'
+        except:
+            reference = reference
+
         subject = data.get('subject')
         filename = data.get('filename')
         encrypt = json.loads(data.get('encrypt'))
