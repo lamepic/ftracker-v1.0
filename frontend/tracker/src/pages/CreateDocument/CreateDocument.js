@@ -68,6 +68,7 @@ function CreateDocument() {
   const [submitting, setSubmitting] = useState(false);
   const [carbonCopyGroups, setCarbonCopyGroups] = useState([]);
   const [carbonCopyUsers, setCarbonCopyUsers] = useState([]);
+  const [documentTypeReferences, setDocumentTypeReferences] = useState([]);
 
   const { loading, data: documentTypes } = useFetchData(fetchDocumentType);
   const { data: _departments } = useFetchData(departments);
@@ -169,12 +170,14 @@ function CreateDocument() {
   };
 
   const fetchReferences = async (id) => {
+    form.setFieldsValue({
+      reference: "",
+    });
     try {
       const res = await references(store.token, id);
       const data = res.data;
-      console.log(data);
+      setDocumentTypeReferences(data);
     } catch (e) {
-      console.log(e.response.data.detail);
       notification.error({
         message: "Error",
         description: e.response.data.detail,
@@ -203,6 +206,8 @@ function CreateDocument() {
   };
 
   const onFinish = (values) => {
+    // TODO: add the reference and increment it in the backend.
+
     let data = {};
     if (selectedDocumentType.name !== "Custom") {
       data = {
@@ -345,19 +350,6 @@ function CreateDocument() {
                 />
               </Form.Item>
               <Form.Item
-                name="reference"
-                label="Reference"
-                labelAlign="left"
-                rules={[{ required: true }]}
-              >
-                <Input
-                  style={{
-                    borderColor: "var(--dark-brown)",
-                    outline: "none",
-                  }}
-                />
-              </Form.Item>
-              <Form.Item
                 name="document_type"
                 label="Document Type"
                 labelAlign="left"
@@ -382,6 +374,37 @@ function CreateDocument() {
                     );
                   })}
                 </Select>
+              </Form.Item>
+              <Form.Item
+                name="reference"
+                label="Reference"
+                labelAlign="left"
+                rules={[{ required: true }]}
+              >
+                {selectedDocumentType?.name?.toLowerCase() === "custom" ? (
+                  <Input
+                    style={{
+                      borderColor: "var(--dark-brown)",
+                      outline: "none",
+                    }}
+                  />
+                ) : (
+                  <Select
+                    placeholder="Select Reference"
+                    style={{
+                      borderColor: "var(--dark-brown)",
+                      outline: "none",
+                    }}
+                  >
+                    {documentTypeReferences.map((reference) => {
+                      return (
+                        <Select.Option value={reference.id} key={reference.id}>
+                          {reference.name}
+                        </Select.Option>
+                      );
+                    })}
+                  </Select>
+                )}
               </Form.Item>
               {documentAction === null ||
               documentAction?.document_type?.name !== "Custom" ? (
