@@ -245,7 +245,7 @@ function Flow() {
                       label="Reference"
                     >
                       <Input
-                        placeholder="Reference"
+                        placeholder="eg. AAA/BBB/CCC"
                         // style={{ width: "80%" }}
                       />
                     </Form.Item>
@@ -283,7 +283,7 @@ function Flow() {
                               }}
                             >
                               <Input
-                                placeholder="Reference"
+                                placeholder="eg. AAA/BBB/CCC"
                                 // style={{ width: "80%" }}
                               />
                             </Form.Item>
