@@ -6,6 +6,7 @@ import { Route, Switch } from "react-router-dom";
 import PrivateRoute from "../utility/PrivateRoute";
 import useFetchUser from "../hooks/useFetchUser";
 import ResetPassword from "./ResetPassword/ResetPassword";
+import ConfirmResetPasswordEmail from "./ResetPassword/ConfirmResetPasswordEmail";
 
 function App() {
   const user = useFetchUser();
@@ -17,6 +18,7 @@ function App() {
         <PrivateRoute path="/dashboard" component={Dashboard} />
         {/* <Route exact path="*" component={() => <p>404</p>} /> */}
         <Route path="/forgot-password" component={ResetPassword} />
+        <Route path="/confirm-email" component={ConfirmResetPasswordEmail} />
       </Switch>
     </div>
   );
