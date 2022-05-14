@@ -1,4 +1,4 @@
-import axios from "../utility/axios";
+import axios, { auth_axios } from "../utility/axios";
 
 // load user
 export async function loadUser(token) {
@@ -42,6 +42,6 @@ export async function confirmEmail(email) {
     email,
   };
 
-  const res = await axios.post("auth/users/reset_password/", body);
+  const res = await auth_axios.post("users/reset_password/", body);
   return res;
 }
