@@ -17,7 +17,11 @@ function App() {
         <Route exact path="/" component={Login} />
         <PrivateRoute path="/dashboard" component={Dashboard} />
         {/* <Route exact path="*" component={() => <p>404</p>} /> */}
-        <Route path="/forgot-password" component={ResetPassword} />
+        <Route
+          exact
+          path="/password/reset/confirm/:uid/:token/"
+          component={ResetPassword}
+        />
         <Route path="/confirm-email" component={ConfirmResetPasswordEmail} />
       </Switch>
     </div>
