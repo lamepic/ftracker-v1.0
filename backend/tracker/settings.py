@@ -60,7 +60,7 @@ ROOT_URLCONF = 'tracker.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'template')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -140,6 +140,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+WEB_URL = env('WEB_URL')
+
 AUTH_USER_MODEL = 'user.User'
 
 CORS_ALLOWED_ORIGINS = env('CORS_ALLOWED_ORIGINS').split()
@@ -165,6 +167,9 @@ DJOSER = {
     'SERIALIZERS': {
         'user': 'user.api.serializers.UserSerializer',
         'current_user': 'user.api.serializers.UserSerializer',
+    },
+    'EMAIL': {
+        'password_reset': 'core.email.PasswordResetEmail'
     },
 }
 
