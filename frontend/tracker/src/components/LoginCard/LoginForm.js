@@ -6,6 +6,7 @@ import { notification } from "antd";
 import { useStateValue } from "../../store/StateProvider";
 import * as actionTypes from "../../store/actionTypes";
 import { auth_axios } from "../../utility/axios";
+import { Link } from "react-router-dom";
 
 function LoginForm({ loading, setLoading }) {
   const [store, dispatch] = useStateValue();
@@ -102,6 +103,9 @@ function LoginForm({ loading, setLoading }) {
             </Button>
           </Form.Item>
         </Form>
+        <p className="forgot__password">
+          <Link to="">Forgot password?</Link>
+        </p>
       </Box>
     </div>
   );

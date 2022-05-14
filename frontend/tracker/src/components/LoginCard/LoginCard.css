@@ -24,3 +24,8 @@
   color: var(--white);
   padding: 5px;
 }
+
+.forgot__password {
+  margin: auto;
+  width: 90%;
+}
