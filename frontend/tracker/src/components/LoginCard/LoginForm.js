@@ -104,7 +104,7 @@ function LoginForm({ loading, setLoading }) {
           </Form.Item>
         </Form>
         <p className="forgot__password">
-          <Link to="/forgot-password">Forgot password?</Link>
+          <Link to="/confirm-email">Forgot password?</Link>
         </p>
       </Box>
     </div>
