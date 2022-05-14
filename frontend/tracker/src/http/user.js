@@ -35,3 +35,13 @@ export async function departments(token) {
   const res = await axios.get("departments/", config);
   return res;
 }
+
+// email confirmation
+export async function confirmEmail(email) {
+  const body = {
+    email,
+  };
+
+  const res = await axios.post("auth/users/reset_password/", body);
+  return res;
+}

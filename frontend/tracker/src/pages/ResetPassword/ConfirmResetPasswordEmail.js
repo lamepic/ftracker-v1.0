@@ -5,12 +5,13 @@ import { Link } from "react-router-dom";
 
 function ConfirmResetPasswordEmail() {
   const [loading, setLoading] = useState(false);
-  const [emailSent, setEmailSent] = useState(true);
-  const [email, setEmail] = useState("richardarthur228@gmail.com");
+  const [emailSent, setEmailSent] = useState(false);
+  const [email, setEmail] = useState("");
 
   const onFinish = () => {
     setLoading(true);
   };
+
   return (
     <Box
       h="100vh"
