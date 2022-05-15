@@ -1,15 +1,32 @@
 import { Box, Text } from "@chakra-ui/react";
-import { Button, Form, Input } from "antd";
+import { Button, Form, Input, notification } from "antd";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { confirmEmail } from "../../http/user";
 
 function ConfirmResetPasswordEmail() {
   const [loading, setLoading] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
   const [email, setEmail] = useState("");
 
-  const onFinish = () => {
+  const onFinish = async (values) => {
     setLoading(true);
+    const _email = values.email.trim();
+    setEmail(_email);
+    try {
+      const res = await confirmEmail(_email);
+      if (res.status === 204) {
+        setEmailSent(true);
+      }
+    } catch (e) {
+      console.log(e.response);
+      notification.error({
+        message: "Error",
+        description: e.response.data.detail,
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
