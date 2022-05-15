@@ -52,6 +52,7 @@ export async function resetPassword(data) {
     uid: data.uid,
     token: data.token,
     new_password: data.password,
+    re_new_password: data.re_new_password
   };
 
   const res = await auth_axios.post("users/reset_password_confirm/", body);

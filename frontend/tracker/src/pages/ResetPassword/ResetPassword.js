@@ -14,29 +14,26 @@ function ResetPassword() {
     setLoading(true);
     try {
       const password = values.password;
-      const confirmPassword = values.confirmPassword;
+      const re_new_password = values.confirmPassword;
 
-      if (password === confirmPassword) {
-        const data = {
-          password,
-          uid,
-          token,
-        };
-        const res = await resetPassword(data);
-        if (res.status === 204) {
-          setPasswordResetSuccess(true);
-        }
-      } else {
-        return notification.error({
-          message: "Error",
-          description: "Passwords must match",
-        });
+      const data = {
+        password,
+        uid,
+        token,
+        re_new_password,
+      };
+      const res = await resetPassword(data);
+      if (res.status === 204) {
+        setPasswordResetSuccess(true);
       }
     } catch (e) {
-      console.log(e.response.data);
+      const { data } = e?.response;
+
       notification.error({
         message: "Error",
-        description: e.response.data.new_password[0],
+        description: data?.non_field_errors
+          ? data?.non_field_errors[0]
+          : data?.new_password[0],
       });
     } finally {
       setLoading(false);
