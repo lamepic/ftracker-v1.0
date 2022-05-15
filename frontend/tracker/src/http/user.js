@@ -45,3 +45,15 @@ export async function confirmEmail(email) {
   const res = await auth_axios.post("users/reset_password/", body);
   return res;
 }
+
+// reset password
+export async function resetPassword(data) {
+  const body = {
+    uid: data.uid,
+    token: data.token,
+    new_password: data.password,
+  };
+
+  const res = await auth_axios.post("users/reset_password_confirm/", body);
+  return res;
+}
