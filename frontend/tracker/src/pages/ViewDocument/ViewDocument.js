@@ -19,6 +19,7 @@ import Preview from "../../components/Preview/Preview";
 import { notification } from "antd";
 import ForwardModal from "../../components/ForwardModal/ForwardModal";
 import useIcon from "../../hooks/useIcon";
+import SignatureModal from "../../components/CustomModals/SignatureModal";
 
 function ViewDocument() {
   const [store] = useStateValue();
@@ -35,6 +36,7 @@ function ViewDocument() {
   const [signatures, setSignatures] = useState([]);
   const [stamps, setStamps] = useState([]);
   const [submittingMinute, setSubmittingMinute] = useState(false);
+  const [openSignatureModal, setOpenSignatureModal] = useState(false);
 
   const [filename, setFilename] = useState("");
   const icon = useIcon(filename);
@@ -487,9 +489,7 @@ function ViewDocument() {
                                 className="file-btn signature"
                                 marginLeft="auto"
                                 marginRight="10px"
-                                onClick={() => {
-                                  handleSignatureStamp("signature");
-                                }}
+                                onClick={() => setOpenSignatureModal(true)}
                               >
                                 Add signature
                               </Button>
@@ -523,6 +523,13 @@ function ViewDocument() {
           document={document}
           openModal={openModal}
           setOpenModal={setOpenModal}
+        />
+      )}
+      {openSignatureModal && (
+        <SignatureModal
+          // openSignatureModal={openSignatureModal}
+          setOpenSignatureModal={setOpenSignatureModal}
+          doc={document}
         />
       )}
     </>

@@ -142,6 +142,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 WEB_URL = env('WEB_URL')
 
+X_FRAME_OPTIONS = 'ALLOWALL'
+
 AUTH_USER_MODEL = 'user.User'
 
 CORS_ALLOWED_ORIGINS = env('CORS_ALLOWED_ORIGINS').split()

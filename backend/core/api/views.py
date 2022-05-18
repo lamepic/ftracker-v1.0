@@ -1105,3 +1105,8 @@ class ReferenceAPIView(views.APIView):
         except Exception as err:
             print(err)
             raise exceptions.BadRequest(err.args[0])
+
+class SignatureView(views.APIView):
+    def post(self, request, format=None):
+        print(request.data)
+        return Response({"status": "success"}, status=status.HTTP_200_OK)
