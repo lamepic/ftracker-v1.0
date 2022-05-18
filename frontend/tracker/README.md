@@ -19,3 +19,4 @@
 
 # html-to-react
 # docusign
+# doing manual img to doc
