@@ -1,9 +1,14 @@
 import json
+import io
+import os
+from reportlab.pdfgen import canvas
+from PyPDF2 import PdfFileWriter, PdfFileReader
 from datetime import datetime
 from django.db.models import Q
 from django.conf import settings
 from django.db import IntegrityError
 from django.contrib.auth import get_user_model
+from django.core.files.base import File 
 
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.hashers import make_password
@@ -733,7 +738,7 @@ class CreateDocument(views.APIView):
         data_lst = list(data)  # for attachments
 
         data_document_type = data.get('documentType')
-        document = data.get('document')
+        document_file = data.get('document')
         reference = data.get('reference')
 
         try:
@@ -758,20 +763,23 @@ class CreateDocument(views.APIView):
             models.DocumentType, id=data_document_type)
 
         try:
-            if document:
+            if data_document_type:
                 document = models.Document.objects.create(
-                    content=document, subject=subject, created_by=sender,
+                    subject=subject, created_by=sender,
                     ref=reference, document_type=document_type, encrypt=encrypt, filename=filename)
+                document_file_obj = models.DocumentFile.objects.create(doc_file=document_file, document=document)
             else:
                 document = models.Document.objects.create(
                     subject=subject, created_by=sender,
                     ref=reference, document_type=document_type, encrypt=encrypt, filename=filename)
+                document_file_obj = models.Document.objects.create(document=document)
 
             if carbon_copy:
                 carbon_copy = json.loads(carbon_copy)
                 user_receiver = models.DocumentCopyReceiver()
                 user_receiver.save()
-                carbon_copy_document_content = None if document.content == None else document.content.url
+                created_document_document_file = document.document_file.all()[0]
+                carbon_copy_document_content = None if created_document_document_file.doc_file == None else created_document_document_file.doc_file.url
                 carbon_copy_document = models.CarbonCopyDocument.objects.create(
                     content=carbon_copy_document_content,
                     subject=document.subject,
@@ -857,6 +865,7 @@ class CreateDocument(views.APIView):
         except IntegrityError as err:
             raise exceptions.BadRequest(err.args[0])
         except Exception as err:
+            print('create document -->', err)
             raise exceptions.ServerError(err.args[0])
 
         return Response({'message': 'Document sent'}, status=status.HTTP_201_CREATED)
@@ -1108,5 +1117,72 @@ class ReferenceAPIView(views.APIView):
 
 class SignatureView(views.APIView):
     def post(self, request, format=None):
-        print(request.data)
+        try:
+            signature_type = request.data.get('type')
+            document_id = request.data.get('doc_id')
+            mouse_position = request.data.get('mousePosition')
+            img_file = None
+            if signature_type == 'signature':
+                img_file = models.Signature.objects.get(user=request.user)
+                img_file = img_file.signature.path
+                print(img_file)
+            elif signature_type == 'stamp':
+                img_file = models.Stamp.objects.get(user=request.user)
+            else:
+                img_file = request.data.get('signatureImage')
+            
+            document = get_object_or_404(models.Document, id=document_id)
+            document_file_obj = models.DocumentFile.objects.filter(document__id=document.id, current=True)[0]
+            
+            in_pdf_file = document_file_obj.doc_file.path
+            in_pdf_file_name = document_file_obj.doc_file.name.split('/')[1]
+            out_pdf_file = 'temp_file.pdf'
+            
+            totalpages = 0
+            with open(in_pdf_file, 'rb') as f:   
+                readpdf = PdfFileReader(f)
+                totalpages = readpdf.numPages
+        
+            packet = io.BytesIO()
+            can = canvas.Canvas(packet)
+            x_start = mouse_position['x'] 
+            y_start = mouse_position['y']
+           
+            can.drawImage(img_file, x_start, y_start, width=120, preserveAspectRatio=True, mask='auto')
+            for i in range(totalpages):
+                can.showPage()
+            can.save()
+        
+            #move to the beginning of the StringIO buffer
+            packet.seek(0)
+        
+            new_pdf = PdfFileReader(packet)
+        
+            # read the existing PDF
+            existing_pdf = PdfFileReader(open(in_pdf_file, "rb"))
+            output = PdfFileWriter()
+        
+            for i in range(len(existing_pdf.pages)):
+                page = existing_pdf.getPage(i)
+                page.mergePage(new_pdf.getPage(i))
+                output.addPage(page)
+        
+            with open(out_pdf_file, "wb") as outputStream:
+                output.write(outputStream)
+                outputStream.close()
+                # signature_file = File(outputStream)
+                # print(signature_file)
+                # models.DocumentFile.objects.create(doc_file=signature_file, document=document)
+            # current_document_file = models.DocumentFile.objects.last()
+            with open(out_pdf_file, 'rb') as f:
+                # models.DocumentFile.objects.create(document=document, doc_file=File(f))
+                # current_document_file.current = False
+                # current_document_file.save()
+                
+                document_file_obj.doc_file.save(in_pdf_file_name, File(f))
+            os.remove(out_pdf_file)
+        except Exception as err:
+            print('error -->', err)
+            raise exceptions.ServerError(err.args[0])
+            
         return Response({"status": "success"}, status=status.HTTP_200_OK)

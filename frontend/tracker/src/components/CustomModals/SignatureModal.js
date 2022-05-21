@@ -1,21 +1,20 @@
 import { Box, EditablePreview } from "@chakra-ui/react";
-import { Button, Modal } from "antd";
+import { Button, Modal, notification } from "antd";
 import React, { useRef, useState } from "react";
 import DocViewer, { DocViewerRenderers } from "react-doc-viewer";
 import swal from "sweetalert";
 import SignatureCanvas from "react-signature-canvas";
-import { addSignature } from "../../http/document";
+import { addSignature, notificationsCount } from "../../http/document";
 import { useStateValue } from "../../store/StateProvider";
 
 function SignatureModal({ openSignatureModal, setOpenSignatureModal, doc }) {
-  const [store, dispatch] = useStateValue();
   const canvas = useRef(null);
+  const signaturePadRef = useRef(null);
+  const [store, dispatch] = useStateValue();
   const [confirmLoading, setConfirmLoading] = React.useState(false);
-  const [modalText, setModalText] = React.useState("Content of the modal");
-  const [mousePos, setMousePos] = useState({});
+  const docViewerRef = useRef(null);
 
   const handleOk = () => {
-    setModalText("The modal will be closed after two seconds");
     setConfirmLoading(true);
     setTimeout(() => {
       setOpenSignatureModal(false);
@@ -28,64 +27,88 @@ function SignatureModal({ openSignatureModal, setOpenSignatureModal, doc }) {
   };
 
   const docs = [
-    { uri: `${process.env.REACT_APP_DOCUMENT_PATH}${doc?.content}` },
+    { uri: `${process.env.REACT_APP_DOCUMENT_PATH}${doc?.content.doc_file}` },
   ];
 
   const handleClick = async (e) => {
     e.stopPropagation();
-    setOpenSignatureModal(true);
-    // setMousePos()
-    const mousePosition = { x: e.screenX, y: e.screenY };
-    const data = {
-      mousePosition,
-      doc_id:doc.id
-    };
-
-    swal({ content: canvas.current, buttons: true }).then(
-      async (willSubmit) => {
-        if (willSubmit) {
-          const res = await addSignature(store.token, data);
-        //   if (res.status === 200) {
-        //     swal("Your signature has been added", {
-        //       icon: "success",
-        //     });
-        //   }
-        }
+    setOpenSignatureModal({ open: true, type: openSignatureModal.type });
+    const rect = e.target.getBoundingClientRect();
+    const x = e.clientX - docViewerRef.current.offsetLeft;
+    const y = e.clientY - docViewerRef.current.offsetTop;
+    const mousePosition = { x, y };
+    console.log(mousePosition)
+    try {
+      switch (openSignatureModal.type) {
+        case "sign":
+          swal({
+            content: canvas.current,
+            buttons: true,
+            closeModal: false,
+          }).then(async (willSubmit) => {
+            if (willSubmit) {
+              const signatureImage = signaturePadRef.current
+                .getTrimmedCanvas()
+                .toDataURL("image/png");
+              const data = {
+                mousePosition,
+                doc_id: doc.id,
+                signatureImage,
+              };
+              const res = await addSignature(store.token, data);
+              console.log(res.data);
+              if (res.status === 200) {
+                swal.stopLoading();
+                swal.close();
+                notification.success({
+                  message: "Success",
+                  description: "Signature added",
+                });
+              }
+            }
+          });
+          break;
+        case "append":
+          try {
+            const data = {
+              mousePosition,
+              doc_id: doc.id,
+              type: "signature",
+            };
+            const res = await addSignature(store.token, data);
+            if (res.status === 200) {
+              notification.success({
+                message: "Success",
+                description: "Signature added",
+              });
+            }
+          } catch (e) {
+            notification.error({
+              description: "Error",
+              message: e.response.data.detail,
+            });
+          }
+          break;
+        default:
+          break;
       }
-    );
+    } catch (e) {
+      swal.stopLoading();
+      swal.close();
+      notification.error({
+        description: "Error",
+        message: e.response.data.detail,
+      });
+    }
   };
-
-  console.log(mousePos);
 
   return (
     <>
-      {/* <Modal
-        title="Add Signature"
-        visible={openSignatureModal}
-        onOk={handleOk}
-        confirmLoading={confirmLoading}
-        onCancel={handleCancel}
-        style={{ top: 20 }}
-        width={1000}
-      >
-        <Box display="flex" justifyContent="space-between">
-          <Box flex="0.7" border="1px solid red" minH="70vh">
-            <DocViewer
-              documents={docs}
-              pluginRenderers={DocViewerRenderers}
-              style={{ width: "100%", height: "100%" }}
-            //   onClick={(e) => setMousePos({ x: e.screenX, y: e.screenY })}
-            />
-          </Box>
-          <Box flex="0.3" border="1px solid black" minH="70vh">
-            <p>Sigg</p>
-          </Box>
-        </Box>
-      </Modal> */}
       <div ref={canvas}>
         <SignatureCanvas
-          penColor="green"
+          penColor="black"
           canvasProps={{ width: 500, height: 200, className: "sigCanvas" }}
+          ref={signaturePadRef}
         />
       </div>
       <Box
@@ -100,14 +123,16 @@ function SignatureModal({ openSignatureModal, setOpenSignatureModal, doc }) {
         w="100%"
         h="100%"
         zIndex="100"
-        onClick={() => setOpenSignatureModal(false)}
+        onClick={() => setOpenSignatureModal({ open: false, type: "" })}
       >
-        <DocViewer
-          documents={docs}
-          pluginRenderers={DocViewerRenderers}
-          style={{ width: "70%", height: "100%" }}
-          onClick={handleClick}
-        />
+        <div ref={docViewerRef} style={{width: "70%", height: "100%"}}> 
+          <DocViewer
+            documents={docs}
+            pluginRenderers={DocViewerRenderers}
+            style={{ width: "100%", height: "100%" }}
+            onClick={(e) => handleClick(e)}
+          />
+        </div>
       </Box>
     </>
   );
