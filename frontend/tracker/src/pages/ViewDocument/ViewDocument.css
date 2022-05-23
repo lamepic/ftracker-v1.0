@@ -111,3 +111,14 @@ textarea::placeholder {
   background-color: #eaeaea;
   padding: 10px;
 }
+/* 
+.canvas__box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: ;
+  height: 713.18px;
+  color: transparent;
+  transform: translate(-50%, -50%) rotate(0deg);
+  pointer-events: none;
+} */
