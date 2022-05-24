@@ -2,6 +2,7 @@
 
 # dependencies
 frontend/tracker/node_modules
+frontend/tracker/public/webviewer
 backend/user/__pycache__
 backend/user/migrations
 backend/core/__pycache__

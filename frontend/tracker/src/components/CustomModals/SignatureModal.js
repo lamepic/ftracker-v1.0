@@ -1,6 +1,6 @@
-import { Box } from "@chakra-ui/react";
+import { Box, Button } from "@chakra-ui/react";
 import { notification } from "antd";
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import DocViewer, { DocViewerRenderers } from "react-doc-viewer";
 import swal from "sweetalert";
 import SignatureCanvas from "react-signature-canvas";
@@ -21,6 +21,94 @@ function SignatureModal({
   const docViewerRef = useRef(null);
   const history = useHistory();
 
+  useEffect(() => {
+    import("pdfjs-dist").then((pdfjsLib) => {
+      pdfjsLib.GlobalWorkerOptions.workerSrc =
+        "//mozilla.github.io/pdf.js/build/pdf.worker.js";
+
+      var pdfDoc = null,
+        pageNum = 1,
+        pageRendering = false,
+        pageNumPending = null,
+        scale = 0.8,
+        canvas = document.getElementById("the-canvas"),
+        ctx = canvas.getContext("2d");
+
+      function renderPage(num) {
+        pageRendering = true;
+        // Using promise to fetch the page
+        pdfDoc.getPage(num).then(function (page) {
+          var viewport = page.getViewport({ scale: scale });
+          canvas.height = viewport.height;
+          canvas.width = viewport.width;
+
+          // Render PDF page into canvas context
+          var renderContext = {
+            canvasContext: ctx,
+            viewport: viewport,
+          };
+          var renderTask = page.render(renderContext);
+
+          // Wait for rendering to finish
+          renderTask.promise.then(function () {
+            pageRendering = false;
+            if (pageNumPending !== null) {
+              // New page rendering is pending
+              renderPage(pageNumPending);
+              pageNumPending = null;
+            }
+          });
+        });
+
+        // Update page counters
+        document.getElementById("page_num").textContent = num;
+      }
+      function queueRenderPage(num) {
+        if (pageRendering) {
+          pageNumPending = num;
+        } else {
+          renderPage(num);
+        }
+      }
+
+      /**
+       * Displays previous page.
+       */
+      function onPrevPage() {
+        if (pageNum <= 1) {
+          return;
+        }
+        pageNum--;
+        queueRenderPage(pageNum);
+      }
+      document.getElementById("prev").addEventListener("click", onPrevPage);
+
+      function onNextPage() {
+        if (pageNum >= pdfDoc.numPages) {
+          return;
+        }
+        pageNum++;
+        queueRenderPage(pageNum);
+      }
+      document.getElementById("next").addEventListener("click", onNextPage);
+
+      /**
+       * Asynchronously downloads PDF.
+       */
+      pdfjsLib
+        .getDocument(
+          `${process.env.REACT_APP_DOCUMENT_PATH}${doc?.content.doc_file}`
+        )
+        .promise.then(function (pdfDoc_) {
+          pdfDoc = pdfDoc_;
+          document.getElementById("page_count").textContent = pdfDoc.numPages;
+
+          // Initial/first page rendering
+          renderPage(pageNum);
+        });
+    });
+  }, []);
+
   const handleOk = () => {
     setConfirmLoading(true);
     setTimeout(() => {
@@ -39,17 +127,16 @@ function SignatureModal({
 
   const handleClick = async (e) => {
     e.stopPropagation();
-    console.log(docViewerRef.current);
 
     // setOpenSignatureModal({ open: true, type: openSignatureModal.type });
     // const pdfCanvas = document
     //   .getElementsByClassName("react-pdf__Page__textContent")[0]
     //   .getBoundingClientRect();
 
-    // // const rect = e.target.getBoundingClientRect();
-    // const x = e.clientX - pdfCanvas.left;
-    // const y = e.clientY - pdfCanvas.top;
-    // const mousePosition = { x, y };
+    // const rect = e.target.getBoundingClientRect();
+    const x = e.clientX - pdfCanvas.left;
+    const y = e.clientY - pdfCanvas.top;
+    const mousePosition = { x, y };
 
     // try {
     //   switch (openSignatureModal.type) {
@@ -140,19 +227,27 @@ function SignatureModal({
           ref={docViewerRef}
           style={{ width: "854px", height: "100%", border: "1px solid red" }}
         >
-          <DocViewer
-            documents={docs}
-            pluginRenderers={DocViewerRenderers}
-            style={{ width: "100%", height: "100%" }}
+          <Box
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
             onClick={(e) => handleClick(e)}
-            config={{
-              header: {
-                disableHeader: true,
-                disableFileName: true,
-                retainURLParams: false,
-              },
-            }}
-          />
+          >
+            <canvas id="the-canvas"></canvas>
+            <Box border="1px solid red" width="50%">
+              <Button id="prev" width="10px">
+                Previous
+              </Button>
+              <Button id="next" width="10px">
+                Next
+              </Button>
+              &nbsp; &nbsp;
+              <span>
+                Page: <span id="page_num"></span> /{" "}
+                <span id="page_count"></span>
+              </span>
+            </Box>
+          </Box>
           <div ref={canvas}>
             <SignatureCanvas
               penColor="black"
