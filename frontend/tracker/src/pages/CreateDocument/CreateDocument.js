@@ -26,6 +26,8 @@ import useFetchData from "../../hooks/useFetchData";
 import Loading from "../../components/Loading/Loading";
 import AttachmentModal from "../../components/AttachmentModal/AttachmentModal";
 import { uploadRules } from "../../utility/helper";
+import Lottie from "react-lottie";
+import * as animationData from "./animation/animated-folder.json";
 
 const layout = {
   labelCol: {
@@ -296,292 +298,320 @@ function CreateDocument() {
     }
   };
 
+  const defaultOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: animationData,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+    },
+  };
+
   return (
-    <Box position="relative" marginTop="10px">
-      {submitting && (
-        <Box
-          position="absolute"
-          zIndex="1000"
-          display="grid"
-          placeItems="center"
-          h="100%"
-          w="100%"
-          backdropFilter="blur(1px)"
-        >
-          <Box display="grid" placeItems="center">
-            <Spinner
-              thickness="4px"
-              speed="0.65s"
-              color="var(--dark-brown)"
-              size="xl"
-            />
-            <Text fontWeight="600" color="var(--dark-brown)">
-              Submitting...
-            </Text>
+    <Box display="flex" justifyContent="space-between" marginTop="10px">
+      <Box position="relative" flex="0.6">
+        {submitting && (
+          <Box
+            position="absolute"
+            zIndex="1000"
+            display="grid"
+            placeItems="center"
+            h="100%"
+            w="100%"
+            backdropFilter="blur(1px)"
+          >
+            <Box display="grid" placeItems="center">
+              <Spinner
+                thickness="4px"
+                speed="0.65s"
+                color="var(--dark-brown)"
+                size="xl"
+              />
+              <Text fontWeight="600" color="var(--dark-brown)">
+                Submitting...
+              </Text>
+            </Box>
           </Box>
-        </Box>
-      )}
-      {!loading ? (
-        <Box>
-          <Heading as="h2" fontSize="22px" color="var(--dark-brown)">
-            Add Document / Attachment
-          </Heading>
-          <hr className="divider" />
-          <Box maxW="490px" marginTop="10px">
-            <Form
-              form={form}
-              {...layout}
-              name="complex-form"
-              onFinish={onFinish}
-              validateMessages={validateMessages}
-              requiredMark={false}
-            >
-              <Form.Item
-                labelAlign="left"
-                name="subject"
-                label="Subject"
-                rules={[{ required: true }]}
+        )}
+        {!loading ? (
+          <Box>
+            <Heading as="h2" fontSize="22px" color="var(--dark-brown)">
+              Add Document / Attachment
+            </Heading>
+            <hr className="divider" />
+            <Box maxW="490px" marginTop="10px">
+              <Form
+                form={form}
+                {...layout}
+                name="complex-form"
+                onFinish={onFinish}
+                validateMessages={validateMessages}
+                requiredMark={false}
               >
-                <Input
-                  style={{
-                    borderColor: "var(--dark-brown)",
-                    outline: "none",
-                  }}
-                />
-              </Form.Item>
-              <Form.Item
-                name="document_type"
-                label="Document Type"
-                labelAlign="left"
-                rules={[{ required: true, message: "Select a document type" }]}
-              >
-                <Select
-                  placeholder="Select Document type"
-                  style={{
-                    borderColor: "var(--dark-brown)",
-                    outline: "none",
-                  }}
-                  onChange={(value) => onDocumentTypeChange(value)}
+                <Form.Item
+                  labelAlign="left"
+                  name="subject"
+                  label="Subject"
+                  rules={[{ required: true }]}
                 >
-                  {documentTypes.map((documentType) => {
-                    return (
-                      <Select.Option
-                        value={documentType.id}
-                        key={documentType.id}
-                      >
-                        {documentType.name}
-                      </Select.Option>
-                    );
-                  })}
-                </Select>
-              </Form.Item>
-              <Form.Item
-                name="reference"
-                label="Reference"
-                labelAlign="left"
-                rules={[{ required: true }]}
-              >
-                {selectedDocumentType?.name?.toLowerCase() === "custom" ? (
                   <Input
                     style={{
                       borderColor: "var(--dark-brown)",
                       outline: "none",
                     }}
-                    placeholder="eg. AAA/BBB/CCC"
                   />
-                ) : (
+                </Form.Item>
+                <Form.Item
+                  name="document_type"
+                  label="Document Type"
+                  labelAlign="left"
+                  rules={[
+                    { required: true, message: "Select a document type" },
+                  ]}
+                >
                   <Select
-                    placeholder="Select Reference"
+                    placeholder="Select Document type"
                     style={{
                       borderColor: "var(--dark-brown)",
                       outline: "none",
                     }}
+                    onChange={(value) => onDocumentTypeChange(value)}
                   >
-                    {documentTypeReferences.map((reference) => {
+                    {documentTypes.map((documentType) => {
                       return (
-                        <Select.Option value={reference.id} key={reference.id}>
-                          {reference.name}
+                        <Select.Option
+                          value={documentType.id}
+                          key={documentType.id}
+                        >
+                          {documentType.name}
                         </Select.Option>
                       );
                     })}
                   </Select>
-                )}
-              </Form.Item>
-              {documentAction === null ||
-              documentAction?.document_type?.name !== "Custom" ? (
-                <Form.Item
-                  labelAlign="left"
-                  name="department"
-                  label="Department"
-                  rules={[{ required: true }]}
-                >
-                  <Input
-                    style={{
-                      borderColor: "var(--dark-brown)",
-                      backgroundColor: "var(--lightest-brown)",
-                      outline: "none",
-                      color: "#000",
-                    }}
-                    disabled
-                  />
                 </Form.Item>
-              ) : (
                 <Form.Item
+                  name="reference"
+                  label="Reference"
                   labelAlign="left"
-                  name="department"
-                  label="Department"
                   rules={[{ required: true }]}
                 >
-                  <Select
-                    showSearch
-                    placeholder="Select Department"
-                    optionFilterProp="children"
-                    filterOption={(input, option) =>
-                      option.children
-                        .toLowerCase()
-                        .indexOf(input.toLowerCase()) >= 0
-                    }
-                    onChange={onDepartmentChange}
+                  {selectedDocumentType?.name?.toLowerCase() === "custom" ? (
+                    <Input
+                      style={{
+                        borderColor: "var(--dark-brown)",
+                        outline: "none",
+                      }}
+                      placeholder="eg. AAA/BBB/CCC"
+                    />
+                  ) : (
+                    <Select
+                      placeholder="Select Reference"
+                      style={{
+                        borderColor: "var(--dark-brown)",
+                        outline: "none",
+                      }}
+                    >
+                      {documentTypeReferences.map((reference) => {
+                        return (
+                          <Select.Option
+                            value={reference.id}
+                            key={reference.id}
+                          >
+                            {reference.name}
+                          </Select.Option>
+                        );
+                      })}
+                    </Select>
+                  )}
+                </Form.Item>
+                {documentAction === null ||
+                documentAction?.document_type?.name !== "Custom" ? (
+                  <Form.Item
+                    labelAlign="left"
+                    name="department"
+                    label="Department"
+                    rules={[{ required: true }]}
                   >
-                    {departmentOptions.map((department) => (
-                      <Select.Option
-                        value={department.value}
-                        key={department.value}
-                      >
-                        {department.label}
-                      </Select.Option>
-                    ))}
-                  </Select>
-                </Form.Item>
-              )}
-              {documentAction === null ||
-              documentAction?.document_type?.name !== "Custom" ? (
-                <Form.Item
-                  labelAlign="left"
-                  name="receiver"
-                  label="To"
-                  rules={[{ required: true }]}
-                >
-                  <Input
-                    style={{
-                      borderRadius: "3px",
-                      borderColor: "var(--dark-brown)",
-                      backgroundColor: "var(--lightest-brown)",
-                      outline: "none",
-                      color: "#000",
-                    }}
-                    disabled
-                  />
-                </Form.Item>
-              ) : (
-                <>
+                    <Input
+                      style={{
+                        borderColor: "var(--dark-brown)",
+                        backgroundColor: "var(--lightest-brown)",
+                        outline: "none",
+                        color: "#000",
+                      }}
+                      disabled
+                    />
+                  </Form.Item>
+                ) : (
+                  <Form.Item
+                    labelAlign="left"
+                    name="department"
+                    label="Department"
+                    rules={[{ required: true }]}
+                  >
+                    <Select
+                      showSearch
+                      placeholder="Select Department"
+                      optionFilterProp="children"
+                      filterOption={(input, option) =>
+                        option.children
+                          .toLowerCase()
+                          .indexOf(input.toLowerCase()) >= 0
+                      }
+                      onChange={onDepartmentChange}
+                    >
+                      {departmentOptions.map((department) => (
+                        <Select.Option
+                          value={department.value}
+                          key={department.value}
+                        >
+                          {department.label}
+                        </Select.Option>
+                      ))}
+                    </Select>
+                  </Form.Item>
+                )}
+                {documentAction === null ||
+                documentAction?.document_type?.name !== "Custom" ? (
                   <Form.Item
                     labelAlign="left"
                     name="receiver"
                     label="To"
                     rules={[{ required: true }]}
                   >
-                    <Select
-                      showSearch
-                      placeholder="Select Employee"
-                      optionFilterProp="children"
-                    >
-                      {namesOfUsers &&
-                        namesOfUsers.map((receiver) => (
-                          <Select.Option
-                            value={receiver.staff_id}
-                            key={receiver.staff_id}
-                          >
-                            {receiver.name}
-                          </Select.Option>
-                        ))}
-                    </Select>
+                    <Input
+                      style={{
+                        borderRadius: "3px",
+                        borderColor: "var(--dark-brown)",
+                        backgroundColor: "var(--lightest-brown)",
+                        outline: "none",
+                        color: "#000",
+                      }}
+                      disabled
+                    />
                   </Form.Item>
-                </>
-              )}
-              <Form.Item labelAlign="left" name="carbonCopy" label="CC">
-                <Select
-                  mode="multiple"
-                  allowClear
-                  style={{ width: "100%" }}
-                  placeholder="Please select users to copy"
-                  onChange={handleCarbonCopyChange}
-                >
-                  <Select.OptGroup label="Groups">
-                    {carbonCopyGroups}
-                  </Select.OptGroup>
-                  <Select.OptGroup label="Users">
-                    {carbonCopyUsers}
-                  </Select.OptGroup>
-                </Select>
-              </Form.Item>
-              <Form.Item
-                labelAlign="left"
-                name="document"
-                label="Document"
-                wrapperCol={{ ...layout.wrapperCol }}
-                getValueFromEvent={getFile}
-              >
-                <Upload
-                  maxCount={1}
-                  customRequest={dummyRequest}
-                  {...uploadRules}
-                >
-                  <Button icon={<UploadOutlined />} style={{ width: "285px" }}>
-                    Upload
-                  </Button>
-                </Upload>
-              </Form.Item>
-              <Form.Item
-                labelAlign="left"
-                name="attachments"
-                label={`Attachments (${attachments.length})`}
-                wrapperCol={{ ...layout.wrapperCol }}
-                getValueFromEvent={getFile}
-              >
-                <Button
-                  icon={<UploadOutlined />}
-                  style={{ width: "285px" }}
-                  onClick={() => setOpenModal(true)}
-                >
-                  Upload Attachments
-                </Button>
-                {openModal && (
-                  <AttachmentModal
-                    getAttachments={setAttachments}
-                    attachments={attachments}
-                    openModal={openModal}
-                    setOpenModal={setOpenModal}
-                  />
+                ) : (
+                  <>
+                    <Form.Item
+                      labelAlign="left"
+                      name="receiver"
+                      label="To"
+                      rules={[{ required: true }]}
+                    >
+                      <Select
+                        showSearch
+                        placeholder="Select Employee"
+                        optionFilterProp="children"
+                      >
+                        {namesOfUsers &&
+                          namesOfUsers.map((receiver) => (
+                            <Select.Option
+                              value={receiver.staff_id}
+                              key={receiver.staff_id}
+                            >
+                              {receiver.name}
+                            </Select.Option>
+                          ))}
+                      </Select>
+                    </Form.Item>
+                  </>
                 )}
-              </Form.Item>
-              <Form.Item
-                name="encrypt"
-                label="Encrypt"
-                labelAlign="left"
-                valuePropName="checked"
-              >
-                <Checkbox onChange={onEncryptChange} />
-              </Form.Item>
-              <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 19 }}>
-                <Button
-                  type="primary"
-                  htmlType="submit"
-                  style={{
-                    width: "100px",
-                    backgroundColor: "var(--light-brown)",
-                    border: "none",
-                  }}
+                <Form.Item labelAlign="left" name="carbonCopy" label="CC">
+                  <Select
+                    mode="multiple"
+                    allowClear
+                    style={{ width: "100%" }}
+                    placeholder="Please select users to copy"
+                    onChange={handleCarbonCopyChange}
+                  >
+                    <Select.OptGroup label="Groups">
+                      {carbonCopyGroups}
+                    </Select.OptGroup>
+                    <Select.OptGroup label="Users">
+                      {carbonCopyUsers}
+                    </Select.OptGroup>
+                  </Select>
+                </Form.Item>
+                <Form.Item
+                  labelAlign="left"
+                  name="document"
+                  label="Document"
+                  wrapperCol={{ ...layout.wrapperCol }}
+                  getValueFromEvent={getFile}
                 >
-                  Submit
-                </Button>
-              </Form.Item>
-            </Form>
+                  <Upload
+                    maxCount={1}
+                    customRequest={dummyRequest}
+                    {...uploadRules}
+                  >
+                    <Button
+                      icon={<UploadOutlined />}
+                      style={{ width: "285px" }}
+                    >
+                      Upload
+                    </Button>
+                  </Upload>
+                </Form.Item>
+                <Form.Item
+                  labelAlign="left"
+                  name="attachments"
+                  label={`Attachments (${attachments.length})`}
+                  wrapperCol={{ ...layout.wrapperCol }}
+                  getValueFromEvent={getFile}
+                >
+                  <Button
+                    icon={<UploadOutlined />}
+                    style={{ width: "285px" }}
+                    onClick={() => setOpenModal(true)}
+                  >
+                    Upload Attachments
+                  </Button>
+                  {openModal && (
+                    <AttachmentModal
+                      getAttachments={setAttachments}
+                      attachments={attachments}
+                      openModal={openModal}
+                      setOpenModal={setOpenModal}
+                    />
+                  )}
+                </Form.Item>
+                <Form.Item
+                  name="encrypt"
+                  label="Encrypt"
+                  labelAlign="left"
+                  valuePropName="checked"
+                >
+                  <Checkbox onChange={onEncryptChange} />
+                </Form.Item>
+                <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 19 }}>
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    style={{
+                      width: "100px",
+                      backgroundColor: "var(--light-brown)",
+                      border: "none",
+                    }}
+                  >
+                    Submit
+                  </Button>
+                </Form.Item>
+              </Form>
+            </Box>
           </Box>
-        </Box>
-      ) : (
-        <Loading />
-      )}
+        ) : (
+          <Loading />
+        )}
+      </Box>
+      <Box flex="0.4" display="grid" placeItems="center">
+        <Lottie
+          options={defaultOptions}
+          height={400}
+          width={400}
+          // isStopped={this.state.isStopped}
+          // isPaused={this.state.isPaused}
+        />
+      </Box>
     </Box>
   );
 }

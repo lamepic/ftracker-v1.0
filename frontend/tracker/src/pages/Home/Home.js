@@ -59,7 +59,7 @@ function Home() {
                 fontWeight="600"
                 isTruncated
               >
-                Hi, {userInfo.first_name}
+                {/* Hi, {userInfo.first_name} */}Cocoa Papers
               </Text>
               <Text as="h4" fontSize={{ lg: "1rem" }} fontWeight="500">
                 Ready to start your day with Cocoa Papers?
