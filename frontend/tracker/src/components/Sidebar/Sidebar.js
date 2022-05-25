@@ -34,7 +34,7 @@ function Sidebar({ onClose, isOpen }) {
             <SidebarOption icon={home} name="home" />
           </Link>
           <Link to="/dashboard/tracker">
-            <SidebarOption icon={tracker} name="tracker" />
+            <SidebarOption icon={tracker} name="locator" />
           </Link>
           {store.user?.is_department && (
             <Link to="/dashboard/create-flow">
