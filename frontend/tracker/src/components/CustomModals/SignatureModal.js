@@ -1,13 +1,10 @@
-import { Box, Button } from "@chakra-ui/react";
-import { notification } from "antd";
+import { Box } from "@chakra-ui/react";
+import { Button, Modal, notification } from "antd";
 import React, { useEffect, useRef, useState } from "react";
-import DocViewer, { DocViewerRenderers } from "react-doc-viewer";
-import swal from "sweetalert";
 import SignatureCanvas from "react-signature-canvas";
 import { addSignature } from "../../http/document";
 import { useStateValue } from "../../store/StateProvider";
 import { useHistory } from "react-router-dom";
-import { PDFJSViewer } from "pdfjs-dist/web/pdf_viewer";
 
 function SignatureModal({
   openSignatureModal,
@@ -15,13 +12,12 @@ function SignatureModal({
   doc,
   setSignatureAdded,
 }) {
-  const canvas = useRef(null);
-  const signaturePadRef = useRef(null);
   const [store, dispatch] = useStateValue();
-  const [confirmLoading, setConfirmLoading] = React.useState(false);
   const docViewerRef = useRef(null);
-  const history = useHistory();
   const [pdfViewport, setPdfViewport] = useState();
+  const [showSignaturePad, setShowSignaturePad] = useState(false);
+  const [mousePosition, setMousePosition] = useState({});
+  const history = useHistory();
 
   useEffect(() => {
     var pdfjsLib = window["pdfjs-dist/build/pdf"];
@@ -70,26 +66,11 @@ function SignatureModal({
     );
   }, []);
 
-  const handleOk = () => {
-    setConfirmLoading(true);
-    setTimeout(() => {
-      setOpenSignatureModal(false);
-      setConfirmLoading(false);
-    }, 2000);
-  };
-
   const handleCancel = () => {
     setOpenSignatureModal(false);
   };
 
-  const docs = [
-    { uri: `${process.env.REACT_APP_DOCUMENT_PATH}${doc?.content.doc_file}` },
-  ];
-
   function showCoordinate(x_pos, y_pos) {
-    // var x = event.clientX;
-    // var y = event.clientY;
-
     var selected = pdfViewport.convertToPdfPoint(x_pos, y_pos);
     let x = selected[0];
     let y = selected[1];
@@ -98,8 +79,7 @@ function SignatureModal({
 
   const handleClick = async (e) => {
     e.stopPropagation();
-
-    // setOpenSignatureModal({ open: true, type: openSignatureModal.type });
+    setOpenSignatureModal({ open: true, type: openSignatureModal.type });
     const pdfCanvas = document
       .getElementsByClassName("pdfCanvas")[0]
       .getBoundingClientRect();
@@ -108,96 +88,58 @@ function SignatureModal({
     const x = e.clientX - pdfCanvas.left;
     const y = e.clientY - pdfCanvas.top;
 
-    const mousePosition = showCoordinate(x, y);
-    console.log(mousePosition);
-
-    try {
-      switch (openSignatureModal.type) {
-        case "sign":
-          swal({
-            content: canvas.current,
-            buttons: true,
-            closeModal: false,
-          }).then(async (willSubmit) => {
-            if (willSubmit) {
-              const signatureImage = signaturePadRef.current
-                .getTrimmedCanvas()
-                .toDataURL("image/png");
-              const data = {
-                mousePosition,
-                doc_id: doc.id,
-                signatureImage,
-              };
-              const res = await addSignature(store.token, data);
-              console.log(res.data);
-              if (res.status === 200) {
-                swal.stopLoading();
-                swal.close();
-                setSignatureAdded(true);
-                notification.success({
-                  message: "Success",
-                  description: "Signature added",
-                });
-              }
-            }
+    const position = showCoordinate(x, y);
+    setMousePosition(position);
+    switch (openSignatureModal.type) {
+      case "sign":
+        setShowSignaturePad(true);
+        break;
+      case "append":
+        try {
+          const data = {
+            mousePosition: position,
+            doc_id: doc.id,
+            type: "signature",
+          };
+          const res = await addSignature(store.token, data);
+          if (res.status === 200) {
+            notification.success({
+              message: "Success",
+              description: "Signature added",
+            });
+            history.go(0);
+          }
+        } catch (e) {
+          notification.error({
+            description: "Error",
+            message: e.response.data.detail,
           });
-          break;
-        case "append":
-          try {
-            const data = {
-              mousePosition,
-              doc_id: doc.id,
-              type: "signature",
-            };
-            const res = await addSignature(store.token, data);
-            if (res.status === 200) {
-              setSignatureAdded(true);
-              notification.success({
-                message: "Success",
-                description: "Signature added",
-              });
-            }
-          } catch (e) {
-            notification.error({
-              description: "Error",
-              message: e.response.data.detail,
+        }
+        break;
+      case "stamp":
+        try {
+          const data = {
+            mousePosition: position,
+            doc_id: doc.id,
+            type: "stamp",
+          };
+          const res = await addSignature(store.token, data);
+          if (res.status === 200) {
+            notification.success({
+              message: "Success",
+              description: "Stamp added",
             });
+            history.go(0);
           }
-          break;
-        case "stamp":
-          try {
-            const data = {
-              mousePosition,
-              doc_id: doc.id,
-              type: "stamp",
-            };
-            const res = await addSignature(store.token, data);
-            if (res.status === 200) {
-              setSignatureAdded(true);
-              notification.success({
-                message: "Success",
-                description: "Stamp added",
-              });
-            }
-          } catch (e) {
-            notification.error({
-              description: "Error",
-              message: e.response.data.detail,
-            });
-          }
-          break;
-        default:
-          break;
-      }
-    } catch (e) {
-      swal.stopLoading();
-      swal.close();
-      notification.error({
-        description: "Error",
-        message: e.response.data.detail,
-      });
-    } finally {
-      signaturePadRef.current.clear();
+        } catch (e) {
+          notification.error({
+            description: "Error",
+            message: e.response.data.detail,
+          });
+        }
+        break;
+      default:
+        break;
     }
   };
 
@@ -229,7 +171,8 @@ function SignatureModal({
             onClick={(e) => handleClick(e)}
           >
             <canvas id="the-canvas" className="pdfCanvas"></canvas>
-            <Box border="1px solid red" width="50%">
+          </Box>
+          {/* <Box border="1px solid red" width="50%">
               <Button id="prev" width="10px">
                 Previous
               </Button>
@@ -241,36 +184,133 @@ function SignatureModal({
                 Page: <span id="page_num"></span> /{" "}
                 <span id="page_count"></span>
               </span>
-            </Box>
-          </Box>
-          <div
-            ref={canvas}
-            style={{
-              border: "1px solid red",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
-            <SignatureCanvas
-              penColor="black"
-              canvasProps={{ width: 500, height: 200, className: "sigCanvas" }}
-              ref={signaturePadRef}
-              maxWidth="1"
-            />
-            <Box>
-              <Box
-                border="1px solid red"
-                width="20px"
-                height="20px"
-                borderRadius="50%"
-              ></Box>
-            </Box>
-          </div>
+            </Box> */}
         </div>
       </Box>
+      {showSignaturePad && (
+        <SignaturePad
+          showSignaturePad={showSignaturePad}
+          setShowSignaturePad={setShowSignaturePad}
+          pdfViewport={pdfViewport}
+          openSignatureModal={openSignatureModal}
+          doc={doc}
+          mousePosition={mousePosition}
+        />
+      )}
     </>
   );
 }
 
 export default SignatureModal;
+
+const SignaturePad = ({
+  showSignaturePad,
+  setShowSignaturePad,
+  doc,
+  mousePosition,
+}) => {
+  const [loading, setLoading] = useState(false);
+  const canvas = useRef(null);
+  const signaturePadRef = useRef(null);
+  const [colors, setColors] = useState("black");
+  const [store, dispatch] = useStateValue();
+  const history = useHistory();
+
+  const handleOk = async () => {
+    setLoading(true);
+    try {
+      const signatureImage = signaturePadRef.current
+        .getTrimmedCanvas()
+        .toDataURL("image/png");
+      const data = {
+        mousePosition,
+        doc_id: doc.id,
+        signatureImage,
+      };
+      const res = await addSignature(store.token, data);
+      console.log(res.data);
+      if (res.status === 200) {
+        notification.success({
+          message: "Success",
+          description: "Signature added",
+        });
+        setShowSignaturePad(false);
+        history.go(0);
+      }
+    } catch (e) {
+      notification.error({
+        description: "Error",
+        message: e.response?.data.detail,
+      });
+    } finally {
+      signaturePadRef.current.clear();
+      setLoading(false);
+    }
+  };
+
+  const handleCancel = () => {
+    setShowSignaturePad(false);
+  };
+  return (
+    <Modal
+      visible={showSignaturePad}
+      // title="Title"
+      onOk={handleOk}
+      onCancel={handleCancel}
+      footer={[
+        <Button key="back" onClick={() => signaturePadRef.current.clear()}>
+          Clear
+        </Button>,
+        <Button
+          key="submit"
+          type="primary"
+          loading={loading}
+          onClick={handleOk}
+        >
+          Append
+        </Button>,
+      ]}
+      bodyStyle={{ padding: "0" }}
+    >
+      <div
+        ref={canvas}
+        style={{
+          borderBottom: "1px solid #eee",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <SignatureCanvas
+          penColor={colors}
+          canvasProps={{ width: 500, height: 200, className: "sigCanvas" }}
+          ref={signaturePadRef}
+          maxWidth="1.5"
+        />
+      </div>
+      <Box display="flex">
+        {["black", "red", "blue"].map((color) => {
+          return (
+            <Box padding="10px" onClick={() => setColors(color)}>
+              <Box
+                border={`1px solid ${color}`}
+                width="30px"
+                height="30px"
+                borderRadius="50%"
+                display="grid"
+                placeItems="center"
+              >
+                <Box
+                  width="20px"
+                  height="20px"
+                  borderRadius="50%"
+                  bg={colors === color ? colors : ""}
+                ></Box>
+              </Box>
+            </Box>
+          );
+        })}
+      </Box>
+    </Modal>
+  );
+};

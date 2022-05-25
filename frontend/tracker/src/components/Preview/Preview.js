@@ -63,6 +63,13 @@ function Preview({ setOpenPreview, doc }) {
             pluginRenderers={DocViewerRenderers}
             style={{ width: "70%", height: "100%" }}
             onClick={openPreview}
+            config={{
+              header: {
+                disableHeader: true,
+                disableFileName: true,
+                retainURLParams: false,
+              },
+            }}
           />
         )}
       </Box>
