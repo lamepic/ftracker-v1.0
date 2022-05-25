@@ -62,7 +62,7 @@ function Home() {
                 Hi, {userInfo.first_name}
               </Text>
               <Text as="h4" fontSize={{ lg: "1rem" }} fontWeight="500">
-                Ready to start your day with Documents Tracker?
+                Ready to start your day with Cocoa Papers?
               </Text>
             </Box>
             <Image
