@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import "./Search.css";
 import { Box, Text } from "@chakra-ui/react";
 import { AutoComplete, Button, Input } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
 import { useStateValue } from "../../store/StateProvider";
 import { SearchDocument, requestDocument } from "../../http/document";
 import * as actionTypes from "../../store/actionTypes";
@@ -244,6 +245,11 @@ function Search() {
             border: "none",
             outline: "none",
           }}
+          prefix={
+            <SearchOutlined
+              style={{ paddingRight: "15px", paddingLeft: "5px" }}
+            />
+          }
         />
       </AutoComplete>
     </Box>
