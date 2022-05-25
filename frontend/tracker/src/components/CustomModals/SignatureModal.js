@@ -1,12 +1,13 @@
 import { Box, Button } from "@chakra-ui/react";
 import { notification } from "antd";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import DocViewer, { DocViewerRenderers } from "react-doc-viewer";
 import swal from "sweetalert";
 import SignatureCanvas from "react-signature-canvas";
 import { addSignature } from "../../http/document";
 import { useStateValue } from "../../store/StateProvider";
 import { useHistory } from "react-router-dom";
+import { PDFJSViewer } from "pdfjs-dist/web/pdf_viewer";
 
 function SignatureModal({
   openSignatureModal,
@@ -20,93 +21,53 @@ function SignatureModal({
   const [confirmLoading, setConfirmLoading] = React.useState(false);
   const docViewerRef = useRef(null);
   const history = useHistory();
+  const [pdfViewport, setPdfViewport] = useState();
 
   useEffect(() => {
-    import("pdfjs-dist").then((pdfjsLib) => {
-      pdfjsLib.GlobalWorkerOptions.workerSrc =
-        "//mozilla.github.io/pdf.js/build/pdf.worker.js";
+    var pdfjsLib = window["pdfjs-dist/build/pdf"];
 
-      var pdfDoc = null,
-        pageNum = 1,
-        pageRendering = false,
-        pageNumPending = null,
-        scale = 0.8,
-        canvas = document.getElementById("the-canvas"),
-        ctx = canvas.getContext("2d");
+    // The workerSrc property shall be specified.
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+      "//cdn.jsdelivr.net/npm/pdfjs-dist@2.6.347/build/pdf.worker.js";
 
-      function renderPage(num) {
-        pageRendering = true;
-        // Using promise to fetch the page
-        pdfDoc.getPage(num).then(function (page) {
+    var loadingTask = pdfjsLib.getDocument(
+      `${process.env.REACT_APP_DOCUMENT_PATH}${doc?.content.doc_file}`
+    );
+    loadingTask.promise.then(
+      function (pdf) {
+        console.log("PDF loaded");
+
+        // Fetch the first page
+        var pageNumber = 1;
+        pdf.getPage(pageNumber).then(function (page) {
+          console.log("Page loaded");
+
+          var scale = 1.3;
           var viewport = page.getViewport({ scale: scale });
+          setPdfViewport(viewport);
+
+          // Prepare canvas using PDF page dimensions
+          var canvas = document.getElementById("the-canvas");
+          var context = canvas.getContext("2d");
           canvas.height = viewport.height;
           canvas.width = viewport.width;
 
           // Render PDF page into canvas context
           var renderContext = {
-            canvasContext: ctx,
+            canvasContext: context,
             viewport: viewport,
           };
           var renderTask = page.render(renderContext);
-
-          // Wait for rendering to finish
           renderTask.promise.then(function () {
-            pageRendering = false;
-            if (pageNumPending !== null) {
-              // New page rendering is pending
-              renderPage(pageNumPending);
-              pageNumPending = null;
-            }
+            console.log("Page rendered");
           });
         });
-
-        // Update page counters
-        document.getElementById("page_num").textContent = num;
+      },
+      function (reason) {
+        // PDF loading error
+        console.error(reason);
       }
-      function queueRenderPage(num) {
-        if (pageRendering) {
-          pageNumPending = num;
-        } else {
-          renderPage(num);
-        }
-      }
-
-      /**
-       * Displays previous page.
-       */
-      function onPrevPage() {
-        if (pageNum <= 1) {
-          return;
-        }
-        pageNum--;
-        queueRenderPage(pageNum);
-      }
-      document.getElementById("prev").addEventListener("click", onPrevPage);
-
-      function onNextPage() {
-        if (pageNum >= pdfDoc.numPages) {
-          return;
-        }
-        pageNum++;
-        queueRenderPage(pageNum);
-      }
-      document.getElementById("next").addEventListener("click", onNextPage);
-
-      /**
-       * Asynchronously downloads PDF.
-       */
-      pdfjsLib
-        .getDocument(
-          `${process.env.REACT_APP_DOCUMENT_PATH}${doc?.content.doc_file}`
-        )
-        .promise.then(function (pdfDoc_) {
-          pdfDoc = pdfDoc_;
-          document.getElementById("page_count").textContent = pdfDoc.numPages;
-
-          // Initial/first page rendering
-          renderPage(pageNum);
-        });
-    });
+    );
   }, []);
 
   const handleOk = () => {
@@ -125,86 +86,119 @@ function SignatureModal({
     { uri: `${process.env.REACT_APP_DOCUMENT_PATH}${doc?.content.doc_file}` },
   ];
 
+  function showCoordinate(x_pos, y_pos) {
+    // var x = event.clientX;
+    // var y = event.clientY;
+
+    var selected = pdfViewport.convertToPdfPoint(x_pos, y_pos);
+    let x = selected[0];
+    let y = selected[1];
+    return { x, y };
+  }
+
   const handleClick = async (e) => {
     e.stopPropagation();
 
     // setOpenSignatureModal({ open: true, type: openSignatureModal.type });
-    // const pdfCanvas = document
-    //   .getElementsByClassName("react-pdf__Page__textContent")[0]
-    //   .getBoundingClientRect();
+    const pdfCanvas = document
+      .getElementsByClassName("pdfCanvas")[0]
+      .getBoundingClientRect();
 
-    // const rect = e.target.getBoundingClientRect();
+    const rect = e.target.getBoundingClientRect();
     const x = e.clientX - pdfCanvas.left;
     const y = e.clientY - pdfCanvas.top;
-    const mousePosition = { x, y };
 
-    // try {
-    //   switch (openSignatureModal.type) {
-    //     case "sign":
-    //       swal({
-    //         content: canvas.current,
-    //         buttons: true,
-    //         closeModal: false,
-    //       }).then(async (willSubmit) => {
-    //         if (willSubmit) {
-    //           const signatureImage = signaturePadRef.current
-    //             .getTrimmedCanvas()
-    //             .toDataURL("image/png");
-    //           const data = {
-    //             mousePosition,
-    //             doc_id: doc.id,
-    //             signatureImage,
-    //           };
-    //           console.log(signatureImage);
-    //           const res = await addSignature(store.token, data);
-    //           console.log(res.data);
-    //           if (res.status === 200) {
-    //             swal.stopLoading();
-    //             swal.close();
-    //             setSignatureAdded(true);
-    //             notification.success({
-    //               message: "Success",
-    //               description: "Signature added",
-    //             });
-    //           }
-    //         }
-    //       });
-    //       break;
-    //     case "append":
-    //       try {
-    //         const data = {
-    //           mousePosition,
-    //           doc_id: doc.id,
-    //           type: "signature",
-    //         };
-    //         const res = await addSignature(store.token, data);
-    //         if (res.status === 200) {
-    //           setSignatureAdded(true);
-    //           notification.success({
-    //             message: "Success",
-    //             description: "Signature added",
-    //           });
-    //         }
-    //       } catch (e) {
-    //         notification.error({
-    //           description: "Error",
-    //           message: e.response.data.detail,
-    //         });
-    //       }
-    //       break;
-    //     default:
-    //       break;
-    //   }
-    // } catch (e) {
-    //   swal.stopLoading();
-    //   swal.close();
-    //   notification.error({
-    //     description: "Error",
-    //     message: e.response.data.detail,
-    //   });
-    // } finally {
-    //   signaturePadRef.current.clear();
-    // }
+    const mousePosition = showCoordinate(x, y);
+    console.log(mousePosition);
+
+    try {
+      switch (openSignatureModal.type) {
+        case "sign":
+          swal({
+            content: canvas.current,
+            buttons: true,
+            closeModal: false,
+          }).then(async (willSubmit) => {
+            if (willSubmit) {
+              const signatureImage = signaturePadRef.current
+                .getTrimmedCanvas()
+                .toDataURL("image/png");
+              const data = {
+                mousePosition,
+                doc_id: doc.id,
+                signatureImage,
+              };
+              const res = await addSignature(store.token, data);
+              console.log(res.data);
+              if (res.status === 200) {
+                swal.stopLoading();
+                swal.close();
+                setSignatureAdded(true);
+                notification.success({
+                  message: "Success",
+                  description: "Signature added",
+                });
+              }
+            }
+          });
+          break;
+        case "append":
+          try {
+            const data = {
+              mousePosition,
+              doc_id: doc.id,
+              type: "signature",
+            };
+            const res = await addSignature(store.token, data);
+            if (res.status === 200) {
+              setSignatureAdded(true);
+              notification.success({
+                message: "Success",
+                description: "Signature added",
+              });
+            }
+          } catch (e) {
+            notification.error({
+              description: "Error",
+              message: e.response.data.detail,
+            });
+          }
+          break;
+        case "stamp":
+          try {
+            const data = {
+              mousePosition,
+              doc_id: doc.id,
+              type: "stamp",
+            };
+            const res = await addSignature(store.token, data);
+            if (res.status === 200) {
+              setSignatureAdded(true);
+              notification.success({
+                message: "Success",
+                description: "Stamp added",
+              });
+            }
+          } catch (e) {
+            notification.error({
+              description: "Error",
+              message: e.response.data.detail,
+            });
+          }
+          break;
+        default:
+          break;
+      }
+    } catch (e) {
+      swal.stopLoading();
+      swal.close();
+      notification.error({
+        description: "Error",
+        message: e.response.data.detail,
+      });
+    } finally {
+      signaturePadRef.current.clear();
+    }
   };
 
   return (
@@ -225,7 +219,8 @@ function SignatureModal({
       >
         <div
           ref={docViewerRef}
-          style={{ width: "854px", height: "100%", border: "1px solid red" }}
+          style={{ width: "854px", height: "100%", overflowY: "scroll" }}
+          className="pdfBox"
         >
           <Box
             display="flex"
@@ -233,7 +228,7 @@ function SignatureModal({
             alignItems="center"
             onClick={(e) => handleClick(e)}
           >
-            <canvas id="the-canvas"></canvas>
+            <canvas id="the-canvas" className="pdfCanvas"></canvas>
             <Box border="1px solid red" width="50%">
               <Button id="prev" width="10px">
                 Previous
@@ -248,12 +243,29 @@ function SignatureModal({
               </span>
             </Box>
           </Box>
-          <div ref={canvas}>
+          <div
+            ref={canvas}
+            style={{
+              border: "1px solid red",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
             <SignatureCanvas
               penColor="black"
               canvasProps={{ width: 500, height: 200, className: "sigCanvas" }}
               ref={signaturePadRef}
+              maxWidth="1"
             />
+            <Box>
+              <Box
+                border="1px solid red"
+                width="20px"
+                height="20px"
+                borderRadius="50%"
+              ></Box>
+            </Box>
           </div>
         </div>
       </Box>

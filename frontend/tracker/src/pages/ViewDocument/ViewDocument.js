@@ -488,7 +488,10 @@ function ViewDocument() {
                                 marginLeft="auto"
                                 marginRight="10px"
                                 onClick={() => {
-                                  handleSignatureStamp("stamp");
+                                  setOpenSignatureModal({
+                                    open: true,
+                                    type: "stamp",
+                                  });
                                 }}
                               >
                                 Add stamp

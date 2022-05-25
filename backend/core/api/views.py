@@ -3,6 +3,7 @@ import io
 import os
 from reportlab.pdfgen import canvas
 from reportlab.lib.units import mm
+from reportlab.lib.pagesizes import A4
 from PyPDF2 import PdfFileWriter, PdfFileReader
 from datetime import datetime
 from django.db.models import Q
@@ -1134,6 +1135,7 @@ class SignatureView(views.APIView):
                 print(img_file)
             elif signature_type == 'stamp':
                 img_file = models.Stamp.objects.get(user=request.user)
+                img_file = img_file.stamp.path
             else:
                 img_file = request.data.get('signatureImage')
 
@@ -1151,13 +1153,15 @@ class SignatureView(views.APIView):
                 totalpages = readpdf.numPages
 
             packet = io.BytesIO()
-            can = canvas.Canvas(packet, bottomup=0)
+            can = canvas.Canvas(packet, pagesize=A4)
             x_start = mouse_position['x']
-            y_start = mouse_position['y']
-            x_millimeters = x_start * (25.4 / PPI)
-            y_millimeters = y_start * (25.4 / PPI)
+            y_start = None
+            if signature_type not in ('signature', 'stamp'):
+                y_start = mouse_position['y']
+            else:
+                y_start = mouse_position['y'] - 135
 
-            can.drawImage(img_file, *utils.coord(x_millimeters, y_millimeters, mm), width=120,
+            can.drawImage(img_file, x_start, y_start, width=120,
                           preserveAspectRatio=True, mask='auto')
             for i in range(totalpages):
                 can.showPage()
@@ -1169,8 +1173,9 @@ class SignatureView(views.APIView):
             new_pdf = PdfFileReader(packet)
 
             # read the existing PDF
-            existing_pdf = PdfFileReader(open(in_pdf_file, "rb"))
             output = PdfFileWriter()
+            q = open(in_pdf_file, 'rb')
+            existing_pdf = PdfFileReader(q)
 
             for i in range(len(existing_pdf.pages)):
                 page = existing_pdf.getPage(i)
@@ -1183,8 +1188,9 @@ class SignatureView(views.APIView):
             with open(out_pdf_file, 'rb') as f:
                 document_file_obj.doc_file.save(in_pdf_file_name, File(f))
             os.remove(out_pdf_file)
+            q.close()
 
-            # os.remove(in_pdf_file)
+            os.remove(in_pdf_file)
         except Exception as err:
             print('error -->', err)
             raise exceptions.ServerError(err.args[0])
