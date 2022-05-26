@@ -14,7 +14,6 @@ import {
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import Loading from "../../components/Loading/Loading";
 import {
-  addSignatureStamp,
   createMinute,
   fetchDocument,
   fetchNextUserToForwardDoc,
