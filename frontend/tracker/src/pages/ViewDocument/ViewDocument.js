@@ -17,7 +17,6 @@ import {
   addSignatureStamp,
   createMinute,
   fetchDocument,
-  fetchDocumentCopy,
   fetchNextUserToForwardDoc,
   forwardDocument,
   markComplete,
@@ -229,28 +228,6 @@ function ViewDocument() {
       }
     } else {
       setOpenPreview(true);
-    }
-  };
-
-  const handleSignatureStamp = async (type) => {
-    const data = {
-      type,
-      document_id: document.id,
-    };
-    try {
-      const res = await addSignatureStamp(store.token, data);
-      if (res.status === 200) {
-        _fetchDocument();
-        notification.success({
-          message: "Success",
-          description: res.data.message,
-        });
-      }
-    } catch (e) {
-      notification.error({
-        message: "Error",
-        description: e.response.data.detail,
-      });
     }
   };
 
@@ -535,14 +512,6 @@ function ViewDocument() {
                                   </MenuItem>
                                 </MenuList>
                               </Menu>
-                              // <Button
-                              //   className="file-btn signature"
-                              //   marginLeft="auto"
-                              //   marginRight="10px"
-                              //   onClick={() => setOpenSignatureModal(true)}
-                              // >
-                              //   Add signature
-                              // </Button>
                             )}
                           </>
                         )}
