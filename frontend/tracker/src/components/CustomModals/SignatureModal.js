@@ -1,18 +1,13 @@
+import React, { useEffect, useRef, useState } from "react";
 import { Box } from "@chakra-ui/react";
 import { Button, Modal, notification } from "antd";
-import React, { useEffect, useRef, useState } from "react";
 import SignatureCanvas from "react-signature-canvas";
 import { addSignature } from "../../http/document";
 import { useStateValue } from "../../store/StateProvider";
 import { useHistory } from "react-router-dom";
 import { ArrowLeftOutlined, ArrowRightOutlined } from "@ant-design/icons";
 
-function SignatureModal({
-  openSignatureModal,
-  setOpenSignatureModal,
-  doc,
-  setSignatureAdded,
-}) {
+function SignatureModal({ openSignatureModal, setOpenSignatureModal, doc }) {
   const [store, dispatch] = useStateValue();
   const docViewerRef = useRef(null);
   const [pdfViewport, setPdfViewport] = useState();
@@ -132,7 +127,6 @@ function SignatureModal({
       .getElementsByClassName("pdfCanvas")[0]
       .getBoundingClientRect();
 
-    const rect = e.target.getBoundingClientRect();
     const x = e.clientX - pdfCanvas.left;
     const y = e.clientY - pdfCanvas.top;
 
