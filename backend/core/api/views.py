@@ -1192,7 +1192,6 @@ class SignatureView(views.APIView):
 
             os.remove(in_pdf_file)
         except Exception as err:
-            print('error -->', err)
             raise exceptions.ServerError(err.args[0])
 
         return Response({"status": "success"}, status=status.HTTP_200_OK)
