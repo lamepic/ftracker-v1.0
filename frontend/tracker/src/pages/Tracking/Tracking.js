@@ -55,7 +55,7 @@ function Tracking() {
                   );
                 })}
               </Box>
-              <Box marginLeft="10rem" marginTop="1rem" flex="1">
+              <Box marginLeft="10rem" flex="1" height="fit-content">
                 <Lottie options={defaultOptions} width="450" />
               </Box>
             </Box>
