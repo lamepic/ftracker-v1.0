@@ -27,7 +27,7 @@ import Loading from "../../components/Loading/Loading";
 import AttachmentModal from "../../components/AttachmentModal/AttachmentModal";
 import { uploadRules } from "../../utility/helper";
 import Lottie from "react-lottie";
-import * as animationData from "./animation/animated-folder.json";
+import * as animationData from "../../assets/animation/create-doc.json";
 
 const layout = {
   labelCol: {
