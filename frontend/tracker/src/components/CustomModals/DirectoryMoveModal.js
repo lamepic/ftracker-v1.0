@@ -184,12 +184,15 @@ function DirectoryMoveModal({
     <>
       <Modal
         title={capitalize(openedFolder.name)}
+        style={{
+          top: 20,
+        }}
         visible={openDirectoryMoveModal}
         onCancel={handleCancel}
         footer={[
           <Box
             display="flex"
-            justifyContent="space-between"
+            justifyContent="center"
             alignItems="center"
             key="footer"
           >
@@ -224,7 +227,7 @@ function DirectoryMoveModal({
         width={900}
       >
         {!loading ? (
-          <Box minH="200px">
+          <Box height="400px" overflowY="auto">
             {getFolderDifference(modalFolders, selectedRow).length > 0 ? (
               <GridData>
                 {getFolderDifference(modalFolders, selectedRow).map(
@@ -254,11 +257,12 @@ function DirectoryMoveModal({
             ) : (
               <Box
                 display="flex"
-                flexDirection="column"
-                alignItems="center"
                 justifyContent="center"
+                // height="400px"
               >
-                <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                <Box>
+                  <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                </Box>
               </Box>
             )}
           </Box>
@@ -267,7 +271,7 @@ function DirectoryMoveModal({
             display="flex"
             alignItems="center"
             justifyContent="center"
-            minH="200px"
+            height="400px"
           >
             <Spinner
               thickness="3px"
