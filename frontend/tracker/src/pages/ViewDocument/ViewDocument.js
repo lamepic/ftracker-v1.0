@@ -51,7 +51,6 @@ function ViewDocument() {
     open: false,
     type: "",
   });
-  const [signatureAdded, setSignatureAdded] = useState(false);
 
   const [filename, setFilename] = useState("");
   const icon = useIcon(filename);
@@ -77,7 +76,6 @@ function ViewDocument() {
       });
     } finally {
       setLoading(false);
-      setSignatureAdded(false);
     }
   };
 
@@ -582,7 +580,6 @@ function ViewDocument() {
           openSignatureModal={openSignatureModal}
           setOpenSignatureModal={setOpenSignatureModal}
           doc={document}
-          setSignatureAdded={setSignatureAdded}
         />
       )}
     </>
