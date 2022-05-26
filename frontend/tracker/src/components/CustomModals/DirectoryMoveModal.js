@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Button, Modal, notification } from "antd";
+import { Button, Empty, Modal, notification } from "antd";
 import GridData from "../DataDisplay/GridData";
-import { Box, CircularProgress, Image, Text } from "@chakra-ui/react";
+import { Box, Image, Spinner, Text } from "@chakra-ui/react";
 import { capitalize, getFolderDifference } from "../../utility/helper";
 import {
   checkFolderEncryption,
@@ -59,6 +59,7 @@ function DirectoryMoveModal({
 
   const handleItemClick = async (e, item) => {
     e.stopPropagation();
+    setLoading(true);
     try {
       const checkpass = await checkFolderEncryption(store.token, item.slug);
       const data = checkpass.data;
@@ -80,7 +81,7 @@ function DirectoryMoveModal({
               });
               if (passRes.data.success) {
                 setOpenedFolder(item);
-                getSubfolders(item);
+                await getSubfolders(item);
               }
             } catch (e) {
               notification.error({
@@ -91,13 +92,15 @@ function DirectoryMoveModal({
           }
         });
       } else {
-        getSubfolders(item);
+        await getSubfolders(item);
       }
     } catch (err) {
       return notification.error({
         message: "Error",
         description: err.response.data.detail,
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -108,7 +111,6 @@ function DirectoryMoveModal({
       setOpenedFolder(item);
       setModalFolders([...data.children]);
     } catch (e) {
-      setLoading(false);
       return notification.error({
         message: "Error",
         description: e.response.data.detail,
@@ -219,30 +221,62 @@ function DirectoryMoveModal({
             )}
           </Box>,
         ]}
-        width={700}
+        width={900}
       >
         {!loading ? (
-          <GridData>
-            {getFolderDifference(modalFolders, selectedRow).map((folder) => {
-              return (
-                <Box
-                  onClick={(e) => handleItemClick(e, folder)}
-                  key={folder.id}
-                  display="flex"
-                  flexDirection="column"
-                  alignItems="center"
-                  justifyContent="center"
-                >
-                  <Image src={folderIcon} />
-                  <Text color="var(--dark-brown)" fontWeight="500" isTruncated>
-                    {capitalize(folder.name)}
-                  </Text>
-                </Box>
-              );
-            })}
-          </GridData>
+          <Box minH="200px">
+            {getFolderDifference(modalFolders, selectedRow).length > 0 ? (
+              <GridData>
+                {getFolderDifference(modalFolders, selectedRow).map(
+                  (folder) => {
+                    return (
+                      <Box
+                        onClick={(e) => handleItemClick(e, folder)}
+                        key={folder.id}
+                        display="flex"
+                        flexDirection="column"
+                        alignItems="center"
+                        justifyContent="center"
+                      >
+                        <Image src={folderIcon} />
+                        <Text
+                          color="var(--dark-brown)"
+                          fontWeight="500"
+                          isTruncated
+                        >
+                          {capitalize(folder.name)}
+                        </Text>
+                      </Box>
+                    );
+                  }
+                )}
+              </GridData>
+            ) : (
+              <Box
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+              </Box>
+            )}
+          </Box>
         ) : (
-          <CircularProgress />
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            minH="200px"
+          >
+            <Spinner
+              thickness="3px"
+              speed="0.65s"
+              emptyColor="gray.200"
+              color="#9d4d01"
+              size="lg"
+            />
+          </Box>
         )}
       </Modal>
     </>
