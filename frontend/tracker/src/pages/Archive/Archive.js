@@ -183,9 +183,9 @@ function Archive() {
     }
   };
 
-  if (folderLoading || loading) {
-    return <Loading />;
-  }
+  // if (folderLoading || loading) {
+  //   return <Loading />;
+  // }
 
   return (
     <>
@@ -199,76 +199,82 @@ function Archive() {
           >
             Archive
           </Text>
-          <Toolbar>
-            <ToolbarOption
-              text="New Folder"
-              Icon={FolderAddOutlined}
-              openModal={setOpenCreateFolderModal}
-            />
-            <ToolbarOption
-              text="Upload File"
-              Icon={UploadOutlined}
-              openModal={setOpenCreateFileModal}
-            />
-            {selectedRow.length === 1 && (
-              <Box
-                display="flex"
-                alignItems="center"
-                _hover={{
-                  cursor: "pointer",
-                  backgroundColor: "var(--lightest-brown)",
-                }}
-                marginRight="10px"
-                transition="all 0.3s ease-in-out"
-                padding="8px"
-                onClick={() => handleRenameModal()}
-              >
-                <EditOutlined
-                  style={{
-                    fontSize: "25px",
-                    marginRight: "5px",
-                    color: "var(--dark-brown)",
-                  }}
-                />
-                <Text color="var(--dark-brown)" fontWeight="500">
-                  Rename
-                </Text>
-              </Box>
-            )}
-            {selectedRow.length > 0 && (
-              <>
+          {!(folderLoading || loading) ? (
+            <Box>
+              <Toolbar>
                 <ToolbarOption
-                  text="Move"
-                  Icon={SendOutlined}
-                  openModal={setOpenMoveModal}
+                  text="New Folder"
+                  Icon={FolderAddOutlined}
+                  openModal={setOpenCreateFolderModal}
                 />
-              </>
-            )}
-          </Toolbar>
-          {archive.length + folders.length ? (
-            <Box
-              maxH={{ sm: "100vh", lg: "70vh" }}
-              overflowY="auto"
-              marginTop="20px"
-            >
-              <TableData
-                data={[...archiveData, ...folderData]}
-                setSelectedRow={setSelectedRow}
-              />
+                <ToolbarOption
+                  text="Upload File"
+                  Icon={UploadOutlined}
+                  openModal={setOpenCreateFileModal}
+                />
+                {selectedRow.length === 1 && (
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    _hover={{
+                      cursor: "pointer",
+                      backgroundColor: "var(--lightest-brown)",
+                    }}
+                    marginRight="10px"
+                    transition="all 0.3s ease-in-out"
+                    padding="8px"
+                    onClick={() => handleRenameModal()}
+                  >
+                    <EditOutlined
+                      style={{
+                        fontSize: "25px",
+                        marginRight: "5px",
+                        color: "var(--dark-brown)",
+                      }}
+                    />
+                    <Text color="var(--dark-brown)" fontWeight="500">
+                      Rename
+                    </Text>
+                  </Box>
+                )}
+                {selectedRow.length > 0 && (
+                  <>
+                    <ToolbarOption
+                      text="Move"
+                      Icon={SendOutlined}
+                      openModal={setOpenMoveModal}
+                    />
+                  </>
+                )}
+              </Toolbar>
+              {archive.length + folders.length ? (
+                <Box
+                  maxH={{ sm: "100vh", lg: "70vh" }}
+                  overflowY="auto"
+                  marginTop="20px"
+                >
+                  <TableData
+                    data={[...archiveData, ...folderData]}
+                    setSelectedRow={setSelectedRow}
+                  />
+                </Box>
+              ) : (
+                <Box>
+                  <Text
+                    textAlign="center"
+                    as="h3"
+                    color="var(--light-brown)"
+                    fontSize="3rem"
+                    textTransform="uppercase"
+                    marginTop="10rem"
+                  >
+                    Archive is Empty
+                  </Text>
+                </Box>
+              )}
             </Box>
           ) : (
-            <Box>
-              <Text
-                textAlign="center"
-                as="h3"
-                color="var(--light-brown)"
-                fontSize="3rem"
-                textTransform="uppercase"
-                marginTop="10rem"
-              >
-                Archive is Empty
-              </Text>
-            </Box>
+            <Loading />
           )}
         </Box>
       </Box>
