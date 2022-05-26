@@ -54,11 +54,6 @@ class StampSerializer(serializers.ModelSerializer):
         model = models.Stamp
         fields = ["id", "user", "stamp", "created_at"]
 
-    # def to_representation(self, instance):
-    #     representation = super().to_representation(instance)
-    #     representation['user'] = f'{instance.user.first_name} {instance.user.last_name}'
-    #     return representation
-
 
 class SignatureSerializer(serializers.ModelSerializer):
     user = users_serializers.UserSerializer()
@@ -66,11 +61,6 @@ class SignatureSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Signature
         fields = ["id", "user", "signature", "created_at"]
-
-    # def to_representation(self, instance):
-    #     representation = super().to_representation(instance)
-    #     representation['user'] = f'{instance.user.first_name} {instance.user.last_name}'
-    #     return representation
 
 
 class DocumentsSerializer(serializers.ModelSerializer):
@@ -110,19 +100,8 @@ class DocumentsSerializer(serializers.ModelSerializer):
         serialized_data = DocumentFileSerializer(content)
         return serialized_data.data
 
-    # def get_signature(self, obj):
-    #     signature = models.Signature.objects.filter(document=obj)
-    #     serialized_data = SignatureSerializer(signature, many=True)
-    #     return serialized_data.data
-
-    # def get_stamp(self, obj):
-    #     stamp = models.Stamp.objects.filter(document=obj)
-    #     serialized_data = StampSerializer(stamp, many=True)
-    #     return serialized_data.data
-
 
 class DocumentFileSerializer(serializers.ModelSerializer):
-    # document = DocumentsSerializer()
 
     class Meta:
         model = models.DocumentFile
@@ -253,14 +232,6 @@ class FolderSerializer(serializers.ModelSerializer):
                   'children', 'created_at')
 
     def get_documents(self, obj):
-        # documents = obj.document_set.all()
-        # archive_documents = obj.archive_folder.all()
-
-        # documents = list(documents)
-        # documents.extend(list(doc.document for doc in archive_documents))
-
-        # serialized_document = DocumentsSerializer(
-        #     documents, many=True)
 
         archive_documents = obj.archive_folder.all()
         serialized_document = ArchiveSerializer(archive_documents, many=True)
