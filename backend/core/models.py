@@ -1,3 +1,4 @@
+import os
 import random
 import json
 import uuid
@@ -64,8 +65,31 @@ class DocumentBase(models.Model):
         abstract = True
 
 
+class DocumentFile(models.Model):
+    doc_file = models.FileField(upload_to='documents/', blank=True, null=True)
+    current = models.BooleanField(default=True)
+    document = models.ForeignKey(
+        "Document", on_delete=models.CASCADE, related_name='document_file', blank=True, null=True)
+
+    def __str__(self):
+        return self.document.subject
+
+    def save(self, *args, **kwargs):
+
+        if self.doc_file:
+            filename = self.doc_file.name
+            check = (".pdf", ".docx", ".doc", ".xls", ".xlsx",
+                     ".ppt", ".pptx", ".txt", ".jpeg", ".jpg")
+            if not filename.endswith(check):
+                raise ValidationError("Unsupported File format")
+        else:
+            self.document.filename = self.subject
+
+        super(DocumentFile, self).save(*args, **kwargs)
+
+
 class Document(DocumentBase):
-    content = models.FileField(upload_to='documents/', blank=True, null=True)
+    # content = models.FileField(upload_to='documents/', blank=True, null=True)
     encrypt = models.BooleanField(default=False)
     password = models.CharField(max_length=100, null=True, blank=True)
     created_by = models.ForeignKey(
@@ -79,15 +103,6 @@ class Document(DocumentBase):
             raise ValidationError("Subject cannot be blank")
         if len(self.ref.strip()) == 0:
             raise ValidationError("Reference cannot be blank")
-
-        if self.content:
-            filename = self.content.name
-            check = (".pdf", ".docx", ".doc", ".xls", ".xlsx",
-                     ".ppt", ".pptx", ".txt", ".jpeg", ".jpg")
-            if not filename.endswith(check):
-                raise ValidationError("Unsupported File format")
-        else:
-            self.filename = self.subject
 
         self.subject = self.subject.strip()
         self.ref = self.ref.strip()
@@ -414,3 +429,24 @@ def expire_date_handler(sender, instance, created, **kwargs):
 
         task = PeriodicTask.objects.create(crontab=schedule, name='document_'+str(
             secret_id), task='core.tasks.expire_document', args=json.dumps((instance.id,)))
+
+
+# @receiver(models.signals.pre_save, sender=DocumentFile)
+# def auto_delete_file_on_change(sender, instance, **kwargs):
+#     """
+#     Deletes old file from filesystem
+#     when corresponding `MediaFile` object is updated
+#     with new file.
+#     """
+#     if not instance.pk:
+#         return False
+
+#     try:
+#         old_file = DocumentFile.objects.get(pk=instance.pk).doc_file
+#     except DocumentFile.DoesNotExist:
+#         return False
+
+#     new_file = instance.doc_file
+#     if not old_file == new_file:
+#         if os.path.isfile(old_file.path):
+#             os.remove(old_file.path)

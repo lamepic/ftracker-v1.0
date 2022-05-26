@@ -42,6 +42,11 @@ def generate_code():
     return ''.join(code)
 
 
+def coord(x, y, unit=1):
+    x, y = x * unit, y * unit
+    return x, y
+
+
 class Count:
     def __init__(self, count):
         self.count = count

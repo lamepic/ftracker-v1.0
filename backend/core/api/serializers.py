@@ -80,6 +80,7 @@ class DocumentsSerializer(serializers.ModelSerializer):
     document_type = DocumentTypeSerializer()
     signature = SignatureSerializer(many=True)
     stamp = StampSerializer(many=True)
+    content = serializers.SerializerMethodField()
 
     class Meta:
         model = models.Document
@@ -104,6 +105,12 @@ class DocumentsSerializer(serializers.ModelSerializer):
         serialized_data = PreviewCodeSerializer(code, many=True)
         return serialized_data.data
 
+    def get_content(self, obj):
+        content = models.DocumentFile.objects.filter(document__id=obj.id)[0]
+        print('here -->', content)
+        serialized_data = DocumentFileSerializer(content)
+        return serialized_data.data
+
     # def get_signature(self, obj):
     #     signature = models.Signature.objects.filter(document=obj)
     #     serialized_data = SignatureSerializer(signature, many=True)
@@ -113,6 +120,14 @@ class DocumentsSerializer(serializers.ModelSerializer):
     #     stamp = models.Stamp.objects.filter(document=obj)
     #     serialized_data = StampSerializer(stamp, many=True)
     #     return serialized_data.data
+
+
+class DocumentFileSerializer(serializers.ModelSerializer):
+    # document = DocumentsSerializer()
+
+    class Meta:
+        model = models.DocumentFile
+        fields = ['doc_file', 'current']
 
 
 class IncomingSerializer(serializers.ModelSerializer):

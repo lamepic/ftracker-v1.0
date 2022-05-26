@@ -20,6 +20,4 @@
 
 # docusign
 
-# doing manual img to doc
-
-# using mozilla pdfjs to make our own pdf
+# handle reference exception

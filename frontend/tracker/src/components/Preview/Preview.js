@@ -5,15 +5,15 @@ import DocViewer, { DocViewerRenderers } from "react-doc-viewer";
 
 function Preview({ setOpenPreview, doc }) {
   let path;
-  if (doc.content !== null) {
-    const content = doc.content.split("/");
+  if (doc.content.doc_file !== null) {
+    const content = doc.content.doc_file.split("/");
     path = content[content.length - 1];
   } else {
     path = null;
   }
 
   const docs = [
-    { uri: `${process.env.REACT_APP_DOCUMENT_PATH}${doc?.content}` },
+    { uri: `${process.env.REACT_APP_DOCUMENT_PATH}${doc?.content.doc_file}` },
   ];
 
   const openPreview = (e) => {
@@ -63,6 +63,13 @@ function Preview({ setOpenPreview, doc }) {
             pluginRenderers={DocViewerRenderers}
             style={{ width: "70%", height: "100%" }}
             onClick={openPreview}
+            config={{
+              header: {
+                disableHeader: true,
+                disableFileName: true,
+                retainURLParams: false,
+              },
+            }}
           />
         )}
       </Box>

@@ -1,6 +1,17 @@
 import React, { useEffect, useState } from "react";
 import "./ViewDocument.css";
-import { Box, Button, Text, Image, Grid } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Text,
+  Image,
+  Grid,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+} from "@chakra-ui/react";
+import { ChevronDownIcon } from "@chakra-ui/icons";
 import Loading from "../../components/Loading/Loading";
 import {
   addSignatureStamp,
@@ -19,6 +30,7 @@ import Preview from "../../components/Preview/Preview";
 import { notification } from "antd";
 import ForwardModal from "../../components/ForwardModal/ForwardModal";
 import useIcon from "../../hooks/useIcon";
+import SignatureModal from "../../components/CustomModals/SignatureModal";
 
 function ViewDocument() {
   const [store] = useStateValue();
@@ -35,6 +47,11 @@ function ViewDocument() {
   const [signatures, setSignatures] = useState([]);
   const [stamps, setStamps] = useState([]);
   const [submittingMinute, setSubmittingMinute] = useState(false);
+  const [openSignatureModal, setOpenSignatureModal] = useState({
+    open: false,
+    type: "",
+  });
+  const [signatureAdded, setSignatureAdded] = useState(false);
 
   const [filename, setFilename] = useState("");
   const icon = useIcon(filename);
@@ -60,6 +77,7 @@ function ViewDocument() {
       });
     } finally {
       setLoading(false);
+      setSignatureAdded(false);
     }
   };
 
@@ -470,7 +488,10 @@ function ViewDocument() {
                                 marginLeft="auto"
                                 marginRight="10px"
                                 onClick={() => {
-                                  handleSignatureStamp("stamp");
+                                  setOpenSignatureModal({
+                                    open: true,
+                                    type: "stamp",
+                                  });
                                 }}
                               >
                                 Add stamp
@@ -483,16 +504,47 @@ function ViewDocument() {
                               (signature) =>
                                 signature.user.staff_id === store.user.staff_id
                             ) && (
-                              <Button
-                                className="file-btn signature"
-                                marginLeft="auto"
-                                marginRight="10px"
-                                onClick={() => {
-                                  handleSignatureStamp("signature");
-                                }}
-                              >
-                                Add signature
-                              </Button>
+                              <Menu _focus={{ outline: "none" }}>
+                                <MenuButton
+                                  as={Button}
+                                  rightIcon={<ChevronDownIcon />}
+                                  className="file-btn signature"
+                                  marginLeft="auto"
+                                  marginRight="10px"
+                                >
+                                  Signature
+                                </MenuButton>
+                                <MenuList>
+                                  <MenuItem
+                                    onClick={() =>
+                                      setOpenSignatureModal({
+                                        open: true,
+                                        type: "sign",
+                                      })
+                                    }
+                                  >
+                                    Sign
+                                  </MenuItem>
+                                  <MenuItem
+                                    onClick={() =>
+                                      setOpenSignatureModal({
+                                        open: true,
+                                        type: "append",
+                                      })
+                                    }
+                                  >
+                                    Append Signature
+                                  </MenuItem>
+                                </MenuList>
+                              </Menu>
+                              // <Button
+                              //   className="file-btn signature"
+                              //   marginLeft="auto"
+                              //   marginRight="10px"
+                              //   onClick={() => setOpenSignatureModal(true)}
+                              // >
+                              //   Add signature
+                              // </Button>
                             )}
                           </>
                         )}
@@ -523,6 +575,14 @@ function ViewDocument() {
           document={document}
           openModal={openModal}
           setOpenModal={setOpenModal}
+        />
+      )}
+      {openSignatureModal.open && (
+        <SignatureModal
+          openSignatureModal={openSignatureModal}
+          setOpenSignatureModal={setOpenSignatureModal}
+          doc={document}
+          setSignatureAdded={setSignatureAdded}
         />
       )}
     </>
