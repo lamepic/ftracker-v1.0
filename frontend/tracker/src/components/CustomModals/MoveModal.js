@@ -1,7 +1,14 @@
 import React, { useState } from "react";
-import { Button, Modal, notification, Skeleton } from "antd";
+import { Button, Empty, Modal, notification, Skeleton } from "antd";
 import GridData from "../DataDisplay/GridData";
-import { Box, CircularProgress, GridItem, Image, Text } from "@chakra-ui/react";
+import {
+  Box,
+  CircularProgress,
+  GridItem,
+  Image,
+  Spinner,
+  Text,
+} from "@chakra-ui/react";
 import { capitalize, getFolderDifference } from "../../utility/helper";
 import { useStateValue } from "../../store/StateProvider";
 import swal from "sweetalert";
@@ -147,6 +154,9 @@ function MoveModal({
     <>
       <Modal
         title={capitalize(openedFolder.name || "archive")}
+        style={{
+          top: 20,
+        }}
         visible={openMoveModal}
         onCancel={handleCancel}
         footer={[
@@ -175,40 +185,61 @@ function MoveModal({
         width={900}
       >
         {!loading ? (
-          <GridData>
-            {getFolderDifference(modalFolders, selectedRow).map((folder) => {
-              return (
-                <GridItem key={folder.id}>
-                  <Box
-                    onClick={(e) => handleItemClick(e, folder)}
-                    display="flex"
-                    flexDirection="column"
-                    alignItems="center"
-                    justifyContent="center"
-                    _hover={{ cursor: "pointer" }}
-                  >
-                    <Image src={FolderIcon} />
-                    <Text
-                      color="var(--dark-brown)"
-                      fontWeight="500"
-                      noOfLines={2}
-                      textAlign="center"
-                      // fontSize="0.7rem"
-                    >
-                      {capitalize(folder.name)}
-                    </Text>
-                  </Box>
-                </GridItem>
-              );
-            })}
-          </GridData>
+          <Box height="400px" overflowY="auto">
+            {getFolderDifference(modalFolders, selectedRow).length > 0 ? (
+              <GridData>
+                {getFolderDifference(modalFolders, selectedRow).map(
+                  (folder) => {
+                    return (
+                      <GridItem key={folder.id}>
+                        <Box
+                          onClick={(e) => handleItemClick(e, folder)}
+                          display="flex"
+                          flexDirection="column"
+                          alignItems="center"
+                          justifyContent="center"
+                          _hover={{ cursor: "pointer" }}
+                        >
+                          <Image src={FolderIcon} />
+                          <Text
+                            color="var(--dark-brown)"
+                            fontWeight="500"
+                            noOfLines={2}
+                            textAlign="center"
+                            // fontSize="0.7rem"
+                          >
+                            {capitalize(folder.name)}
+                          </Text>
+                        </Box>
+                      </GridItem>
+                    );
+                  }
+                )}
+              </GridData>
+            ) : (
+              <Box
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+              </Box>
+            )}
+          </Box>
         ) : (
-          <Box width="100px">
-            <Skeleton.Button
-              active={loading}
-              size="large"
-              shape="default"
-              block="false"
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            height="400px"
+          >
+            <Spinner
+              thickness="3px"
+              speed="0.65s"
+              emptyColor="gray.200"
+              color="#9d4d01"
+              size="lg"
             />
           </Box>
         )}
