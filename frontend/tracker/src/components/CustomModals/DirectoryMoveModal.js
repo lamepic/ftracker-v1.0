@@ -240,6 +240,7 @@ function DirectoryMoveModal({
                         flexDirection="column"
                         alignItems="center"
                         justifyContent="center"
+                        _hover={{ cursor: "pointer" }}
                       >
                         <Image src={folderIcon} />
                         <Text
