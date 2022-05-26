@@ -5,6 +5,7 @@ import SignatureCanvas from "react-signature-canvas";
 import { addSignature } from "../../http/document";
 import { useStateValue } from "../../store/StateProvider";
 import { useHistory } from "react-router-dom";
+import { ArrowLeftOutlined, ArrowRightOutlined } from "@ant-design/icons";
 
 function SignatureModal({
   openSignatureModal,
@@ -26,49 +27,96 @@ function SignatureModal({
     pdfjsLib.GlobalWorkerOptions.workerSrc =
       "//cdn.jsdelivr.net/npm/pdfjs-dist@2.6.347/build/pdf.worker.js";
 
-    var loadingTask = pdfjsLib.getDocument(
-      `${process.env.REACT_APP_DOCUMENT_PATH}${doc?.content.doc_file}`
-    );
-    loadingTask.promise.then(
-      function (pdf) {
-        console.log("PDF loaded");
+    var pdfDoc = null,
+      pageNum = 1,
+      pageRendering = false,
+      pageNumPending = null,
+      scale = 1.3,
+      canvas = document.getElementById("the-canvas"),
+      ctx = canvas.getContext("2d");
 
-        // Fetch the first page
-        var pageNumber = 1;
-        pdf.getPage(pageNumber).then(function (page) {
-          console.log("Page loaded");
+    function renderPage(num) {
+      pageRendering = true;
+      // Using promise to fetch the page
+      pdfDoc.getPage(num).then(function (page) {
+        var viewport = page.getViewport({ scale: scale });
+        setPdfViewport(viewport);
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
 
-          var scale = 1.3;
-          var viewport = page.getViewport({ scale: scale });
-          setPdfViewport(viewport);
+        // Render PDF page into canvas context
+        var renderContext = {
+          canvasContext: ctx,
+          viewport: viewport,
+        };
+        var renderTask = page.render(renderContext);
 
-          // Prepare canvas using PDF page dimensions
-          var canvas = document.getElementById("the-canvas");
-          var context = canvas.getContext("2d");
-          canvas.height = viewport.height;
-          canvas.width = viewport.width;
-
-          // Render PDF page into canvas context
-          var renderContext = {
-            canvasContext: context,
-            viewport: viewport,
-          };
-          var renderTask = page.render(renderContext);
-          renderTask.promise.then(function () {
-            console.log("Page rendered");
-          });
+        // Wait for rendering to finish
+        renderTask.promise.then(function () {
+          pageRendering = false;
+          if (pageNumPending !== null) {
+            // New page rendering is pending
+            renderPage(pageNumPending);
+            pageNumPending = null;
+          }
         });
-      },
-      function (reason) {
-        // PDF loading error
-        console.error(reason);
-      }
-    );
-  }, []);
+      });
 
-  const handleCancel = () => {
-    setOpenSignatureModal(false);
-  };
+      // Update page counters
+      document.getElementById("page_num").textContent = num;
+    }
+
+    /**
+     * If another page rendering in progress, waits until the rendering is
+     * finised. Otherwise, executes rendering immediately.
+     */
+    function queueRenderPage(num) {
+      if (pageRendering) {
+        pageNumPending = num;
+      } else {
+        renderPage(num);
+      }
+    }
+
+    /**
+     * Displays previous page.
+     */
+    function onPrevPage() {
+      if (pageNum <= 1) {
+        return;
+      }
+      pageNum--;
+      queueRenderPage(pageNum);
+    }
+    document.getElementById("prev").addEventListener("click", onPrevPage);
+
+    /**
+     * Displays next page.
+     */
+    function onNextPage() {
+      if (pageNum >= pdfDoc.numPages) {
+        return;
+      }
+      pageNum++;
+      queueRenderPage(pageNum);
+    }
+    document.getElementById("next").addEventListener("click", onNextPage);
+
+    /**
+     * Asynchronously downloads PDF.
+     */
+    pdfjsLib
+      .getDocument(
+        `${process.env.REACT_APP_DOCUMENT_PATH}${doc?.content.doc_file}`
+      )
+      .promise.then(function (pdfDoc_) {
+        pdfDoc = pdfDoc_;
+        document.getElementById("page_count").textContent = pdfDoc.numPages;
+
+        // Initial/first page rendering
+        renderPage(pageNum);
+      });
+  }, []);
 
   function showCoordinate(x_pos, y_pos) {
     var selected = pdfViewport.convertToPdfPoint(x_pos, y_pos);
@@ -159,33 +207,52 @@ function SignatureModal({
         zIndex="100"
         onClick={() => setOpenSignatureModal({ open: false, type: "" })}
       >
-        <div
+        <Box
           ref={docViewerRef}
-          style={{ width: "854px", height: "100%", overflowY: "scroll" }}
+          style={{ width: "70%", height: "100%", overflowY: "scroll" }}
           className="pdfBox"
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          bg="#2A2A2E"
+          position="relative"
+          onClick={(e) => {
+            e.stopPropagation();
+            setOpenSignatureModal({
+              open: true,
+              type: openSignatureModal.type,
+            });
+          }}
         >
+          <Box
+            width="100%"
+            bg="#38383D"
+            color="#fff"
+            onClick={() =>
+              setOpenSignatureModal({
+                open: true,
+                type: openSignatureModal.type,
+              })
+            }
+          >
+            <Button id="prev" icon={<ArrowLeftOutlined />}></Button>
+            <Button id="next" icon={<ArrowRightOutlined />}></Button>
+            &nbsp; &nbsp;
+            <span>
+              Page: <span id="page_num"></span> / <span id="page_count"></span>
+            </span>
+          </Box>
           <Box
             display="flex"
             flexDirection="column"
             alignItems="center"
             onClick={(e) => handleClick(e)}
+            paddingBottom="20px"
+            paddingTop="20px"
           >
             <canvas id="the-canvas" className="pdfCanvas"></canvas>
           </Box>
-          {/* <Box border="1px solid red" width="50%">
-              <Button id="prev" width="10px">
-                Previous
-              </Button>
-              <Button id="next" width="10px">
-                Next
-              </Button>
-              &nbsp; &nbsp;
-              <span>
-                Page: <span id="page_num"></span> /{" "}
-                <span id="page_count"></span>
-              </span>
-            </Box> */}
-        </div>
+        </Box>
       </Box>
       {showSignaturePad && (
         <SignaturePad
@@ -291,7 +358,13 @@ const SignaturePad = ({
       <Box display="flex">
         {["black", "red", "blue"].map((color) => {
           return (
-            <Box padding="10px" onClick={() => setColors(color)}>
+            <Box
+              padding="10px"
+              onClick={() => setColors(color)}
+              key={color}
+              cursor="pointer"
+              transition="all 1s ease-in"
+            >
               <Box
                 border={`1px solid ${color}`}
                 width="30px"
