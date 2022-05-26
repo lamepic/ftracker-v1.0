@@ -16,10 +16,6 @@
 
 # Automatic archiving
 
-# html-to-react
-
-# docusign
-
 # handle reference exception
 
 # duplicate raw file and save path in copy.
