@@ -107,7 +107,6 @@ class DocumentsSerializer(serializers.ModelSerializer):
 
     def get_content(self, obj):
         content = models.DocumentFile.objects.filter(document__id=obj.id)[0]
-        print('here -->', content)
         serialized_data = DocumentFileSerializer(content)
         return serialized_data.data
 
