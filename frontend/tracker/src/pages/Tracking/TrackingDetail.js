@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "./Tracking.css";
 import { fetchTracking } from "../../http/document";
 import { useStateValue } from "../../store/StateProvider";
 import * as actionTypes from "../../store/actionTypes";
 import Modal from "antd/lib/modal/Modal";
-import { CircularProgress, Text } from "@chakra-ui/react";
+import { Spinner, Text } from "@chakra-ui/react";
 import { Popover, Steps } from "antd";
 import useFetchData from "../../hooks/useFetchData";
 
@@ -27,7 +27,7 @@ function TrackingDetail() {
   return (
     <div>
       <Modal
-        title="Tracker"
+        title="Locator"
         visible={store.openTrackingModal}
         onCancel={handleOk}
         footer={null}
@@ -126,7 +126,13 @@ function TrackingDetail() {
           </Steps>
         ) : (
           <div className="loading__spinner">
-            <CircularProgress />
+            <Spinner
+              thickness="3px"
+              speed="0.65s"
+              emptyColor="gray.200"
+              color="#9d4d01"
+              size="lg"
+            />
           </div>
         )}
       </Modal>
