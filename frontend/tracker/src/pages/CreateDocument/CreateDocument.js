@@ -100,6 +100,11 @@ function CreateDocument() {
         });
       }
     } catch (error) {
+      form.setFieldsValue({
+        document_type: "",
+        department: "",
+        receiver: "",
+      });
       return notification.error({
         message: "Error",
         description: error.response.data.detail,
