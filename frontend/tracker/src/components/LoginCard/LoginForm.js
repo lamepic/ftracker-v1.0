@@ -45,7 +45,7 @@ function LoginForm({ loading, setLoading }) {
     } catch (error) {
       return notification.error({
         message: "Error",
-        description: `${error.response.data.non_field_errors[0]}`,
+        description: "Incorrect staff number or password",
       });
     } finally {
       setLoading(false);
