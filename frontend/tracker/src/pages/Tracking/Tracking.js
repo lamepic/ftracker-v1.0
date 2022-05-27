@@ -41,7 +41,6 @@ function Tracking() {
                   const user_department = item.receiver.department?.name;
                   const doc = item.document;
                   const id = item.document.id;
-                  const meta_info = item.meta_info;
 
                   return (
                     <TrackingCard
@@ -50,7 +49,6 @@ function Tracking() {
                       deparment={user_department}
                       document={doc}
                       id={id}
-                      meta_info={meta_info}
                     />
                   );
                 })}

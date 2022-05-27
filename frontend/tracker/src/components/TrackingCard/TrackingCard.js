@@ -5,7 +5,7 @@ import { Button, Card } from "antd";
 import { Box, Text } from "@chakra-ui/react";
 import Preview from "../Preview/Preview";
 
-function TrackingCard({ receiver, deparment, document, id, meta_info }) {
+function TrackingCard({ receiver, deparment, document, id }) {
   const [store, dispatch] = useStateValue();
   const [openPreviewModal, setOpenPreviewModal] = useState(false);
 
