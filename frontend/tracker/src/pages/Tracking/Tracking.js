@@ -34,7 +34,7 @@ function Tracking() {
                 maxH={{ sm: "85vh", lg: "75vh" }}
                 overflowY="auto"
                 paddingRight="10px"
-                flex="1"
+                flex="0.4"
               >
                 {outgoing.map((item) => {
                   const user = item.receiver;
@@ -55,8 +55,8 @@ function Tracking() {
                   );
                 })}
               </Box>
-              <Box marginLeft="10rem" flex="1" height="fit-content">
-                <Lottie options={defaultOptions} width="450" />
+              <Box marginLeft="10rem" flex="0.6" height="fit-content">
+                <Lottie options={defaultOptions} />
               </Box>
             </Box>
           ) : (
