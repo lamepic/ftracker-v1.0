@@ -72,7 +72,7 @@ function Dashboard() {
 
               <Route path="/dashboard/user-archive/" component={UserArchive} />
 
-              <Route path="/dashboard/tracker" component={Tracking} />
+              <Route path="/dashboard/locator" component={Tracking} />
 
               <Route
                 path="/dashboard/activate-document"
