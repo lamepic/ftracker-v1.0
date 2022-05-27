@@ -33,7 +33,7 @@ function Sidebar({ onClose, isOpen }) {
           <Link to="/dashboard">
             <SidebarOption icon={home} name="home" />
           </Link>
-          <Link to="/dashboard/tracker">
+          <Link to="/dashboard/locator">
             <SidebarOption icon={tracker} name="locator" />
           </Link>
           {store.user?.is_department && (
@@ -58,8 +58,8 @@ function Sidebar({ onClose, isOpen }) {
                 <Link to="/dashboard" onClick={onClose}>
                   <SidebarOption icon={home} name="home" />
                 </Link>
-                <Link to="/dashboard/tracker" onClick={onClose}>
-                  <SidebarOption icon={tracker} name="tracker" />
+                <Link to="/dashboard/locator" onClick={onClose}>
+                  <SidebarOption icon={tracker} name="locator" />
                 </Link>
                 {store.user?.is_department && (
                   <Link to="/dashboard/create-flow" onClick={onClose}>
