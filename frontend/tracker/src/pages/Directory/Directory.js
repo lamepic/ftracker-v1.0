@@ -229,6 +229,7 @@ function Directory() {
                       size="large"
                       shape="square"
                       block={true}
+                      key={idx}
                     />
                   );
                 })}
