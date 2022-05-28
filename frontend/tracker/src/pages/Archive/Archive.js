@@ -199,54 +199,54 @@ function Archive() {
           >
             Archive
           </Text>
+          <Toolbar>
+            <ToolbarOption
+              text="New Folder"
+              Icon={FolderAddOutlined}
+              openModal={setOpenCreateFolderModal}
+            />
+            <ToolbarOption
+              text="Upload File"
+              Icon={UploadOutlined}
+              openModal={setOpenCreateFileModal}
+            />
+            {selectedRow.length === 1 && (
+              <Box
+                display="flex"
+                alignItems="center"
+                _hover={{
+                  cursor: "pointer",
+                  backgroundColor: "var(--lightest-brown)",
+                }}
+                marginRight="10px"
+                transition="all 0.3s ease-in-out"
+                padding="8px"
+                onClick={() => handleRenameModal()}
+              >
+                <EditOutlined
+                  style={{
+                    fontSize: "25px",
+                    marginRight: "5px",
+                    color: "var(--dark-brown)",
+                  }}
+                />
+                <Text color="var(--dark-brown)" fontWeight="500">
+                  Rename
+                </Text>
+              </Box>
+            )}
+            {selectedRow.length > 0 && (
+              <>
+                <ToolbarOption
+                  text="Move"
+                  Icon={SendOutlined}
+                  openModal={setOpenMoveModal}
+                />
+              </>
+            )}
+          </Toolbar>
           {!(folderLoading || loading) ? (
             <Box>
-              <Toolbar>
-                <ToolbarOption
-                  text="New Folder"
-                  Icon={FolderAddOutlined}
-                  openModal={setOpenCreateFolderModal}
-                />
-                <ToolbarOption
-                  text="Upload File"
-                  Icon={UploadOutlined}
-                  openModal={setOpenCreateFileModal}
-                />
-                {selectedRow.length === 1 && (
-                  <Box
-                    display="flex"
-                    alignItems="center"
-                    _hover={{
-                      cursor: "pointer",
-                      backgroundColor: "var(--lightest-brown)",
-                    }}
-                    marginRight="10px"
-                    transition="all 0.3s ease-in-out"
-                    padding="8px"
-                    onClick={() => handleRenameModal()}
-                  >
-                    <EditOutlined
-                      style={{
-                        fontSize: "25px",
-                        marginRight: "5px",
-                        color: "var(--dark-brown)",
-                      }}
-                    />
-                    <Text color="var(--dark-brown)" fontWeight="500">
-                      Rename
-                    </Text>
-                  </Box>
-                )}
-                {selectedRow.length > 0 && (
-                  <>
-                    <ToolbarOption
-                      text="Move"
-                      Icon={SendOutlined}
-                      openModal={setOpenMoveModal}
-                    />
-                  </>
-                )}
-              </Toolbar>
               {archive.length + folders.length ? (
                 <Box
                   maxH={{ sm: "100vh", lg: "70vh" }}
