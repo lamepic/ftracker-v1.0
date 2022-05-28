@@ -139,40 +139,59 @@ function Directory() {
           >
             Archive
           </Text>
-          {!loading ? (
-            <Box>
-              <Toolbar>
+          <Toolbar>
+            <ToolbarOption
+              text="New Folder"
+              Icon={FolderAddOutlined}
+              openModal={setOpenCreateFolderModal}
+            />
+            <ToolbarOption
+              text="Upload File"
+              Icon={UploadOutlined}
+              openModal={setOpenCreateFileModal}
+            />
+            {selectedRow.length === 1 && (
+              <ToolbarOption
+                text="Rename"
+                Icon={EditOutlined}
+                openModal={setOpenRenameModal}
+              />
+            )}
+            {selectedRow.length > 0 && (
+              <>
                 <ToolbarOption
-                  text="New Folder"
-                  Icon={FolderAddOutlined}
-                  openModal={setOpenCreateFolderModal}
+                  text="Move"
+                  Icon={SendOutlined}
+                  openModal={setOpenDirectoryMoveModal}
                 />
-                <ToolbarOption
-                  text="Upload File"
-                  Icon={UploadOutlined}
-                  openModal={setOpenCreateFileModal}
-                />
-                {selectedRow.length === 1 && (
-                  <ToolbarOption
-                    text="Rename"
-                    Icon={EditOutlined}
-                    openModal={setOpenRenameModal}
-                  />
-                )}
-                {selectedRow.length > 0 && (
-                  <>
-                    <ToolbarOption
-                      text="Move"
-                      Icon={SendOutlined}
-                      openModal={setOpenDirectoryMoveModal}
-                    />
-                  </>
-                )}
-              </Toolbar>
-              <Box marginTop="20px">
-                <Breadcrumb separator=">">
+              </>
+            )}
+          </Toolbar>
+          <Box marginTop="20px">
+            <Breadcrumb separator=">">
+              <Breadcrumb.Item
+                onClick={() => history.push(`/dashboard/archive/`)}
+              >
+                <Text
+                  _hover={{ cursor: "pointer" }}
+                  fontSize="0.9rem"
+                  fontWeight="500"
+                  as="span"
+                >
+                  Archive
+                </Text>
+              </Breadcrumb.Item>
+              {store.breadcrumbs?.map((breadcrumb, idx) => {
+                return (
                   <Breadcrumb.Item
-                    onClick={() => history.push(`/dashboard/archive/`)}
+                    onClick={() => {
+                      dispatch({
+                        type: actionTypes.REMOVE_BREADCRUMBS,
+                        payload: idx,
+                      });
+                      history.push(`/dashboard/archive/${breadcrumb.slug}`);
+                    }}
+                    key={breadcrumb.slug}
                   >
                     <Text
                       _hover={{ cursor: "pointer" }}
@@ -180,34 +199,15 @@ function Directory() {
                       fontWeight="500"
                       as="span"
                     >
-                      Archive
+                      {breadcrumb.name}
                     </Text>
                   </Breadcrumb.Item>
-                  {store.breadcrumbs?.map((breadcrumb, idx) => {
-                    return (
-                      <Breadcrumb.Item
-                        onClick={() => {
-                          dispatch({
-                            type: actionTypes.REMOVE_BREADCRUMBS,
-                            payload: idx,
-                          });
-                          history.push(`/dashboard/archive/${breadcrumb.slug}`);
-                        }}
-                        key={breadcrumb.slug}
-                      >
-                        <Text
-                          _hover={{ cursor: "pointer" }}
-                          fontSize="0.9rem"
-                          fontWeight="500"
-                          as="span"
-                        >
-                          {breadcrumb.name}
-                        </Text>
-                      </Breadcrumb.Item>
-                    );
-                  })}
-                </Breadcrumb>
-              </Box>
+                );
+              })}
+            </Breadcrumb>
+          </Box>
+          {!loading ? (
+            <Box>
               <Box
                 maxH={{ sm: "100vh", lg: "60vh" }}
                 overflowY="auto"
