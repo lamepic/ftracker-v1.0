@@ -5,8 +5,8 @@ import {
   EditOutlined,
   SendOutlined,
 } from "@ant-design/icons";
-import { Box, Text } from "@chakra-ui/react";
-import { Breadcrumb, notification } from "antd";
+import { Box, Stack, Text } from "@chakra-ui/react";
+import { Breadcrumb, notification, Skeleton } from "antd";
 import { useHistory, useParams } from "react-router-dom";
 import CreateFileModal from "../../components/CustomModals/CreateFileModal";
 import CreateFolderModal from "../../components/CustomModals/CreateFolderModal";
@@ -220,7 +220,21 @@ function Directory() {
               </Box>
             </Box>
           ) : (
-            <Loading />
+            <Box marginTop="20px">
+              <Stack>
+                {Array.from({ length: 8 }).map((item, idx) => {
+                  return (
+                    <Skeleton.Button
+                      active={loading}
+                      size="large"
+                      shape="square"
+                      block={true}
+                    />
+                  );
+                })}
+              </Stack>
+            </Box>
+            // <Loading />
           )}
         </Box>
       </Box>
