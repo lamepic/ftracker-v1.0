@@ -283,6 +283,7 @@ function Archive() {
                       size="large"
                       shape="square"
                       block={true}
+                      key={idx}
                     />
                   );
                 })}
