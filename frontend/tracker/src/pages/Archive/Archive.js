@@ -5,7 +5,7 @@ import Folder from "../../components/Doc/Folder";
 import File from "../../components/Doc/File";
 import { fetchUserArchive } from "../../http/document";
 import Loading from "../../components/Loading/Loading";
-import { Box, Text } from "@chakra-ui/react";
+import { Box, Stack, Text } from "@chakra-ui/react";
 import {
   FolderAddOutlined,
   UploadOutlined,
@@ -24,7 +24,7 @@ import DirectoryFolderIcon from "../../components/Doc/DirectoryFolderIcon";
 import * as actionTypes from "../../store/actionTypes";
 import DirectoryFileIcon from "../../components/Doc/DirectoryFileIcon";
 import Preview from "../../components/Preview/Preview";
-import { notification } from "antd";
+import { notification, Skeleton } from "antd";
 import Toolbar from "../../components/Navbar/Toolbar";
 import TableData from "../../components/DataDisplay/TableData";
 import moment from "moment";
@@ -274,7 +274,20 @@ function Archive() {
               )}
             </Box>
           ) : (
-            <Loading />
+            <Box marginTop="20px">
+              <Stack>
+                {Array.from({ length: 8 }).map((item, idx) => {
+                  return (
+                    <Skeleton.Button
+                      active={loading}
+                      size="large"
+                      shape="square"
+                      block={true}
+                    />
+                  );
+                })}
+              </Stack>
+            </Box>
           )}
         </Box>
       </Box>
