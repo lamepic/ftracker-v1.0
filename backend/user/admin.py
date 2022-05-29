@@ -51,3 +51,11 @@ class UserAdmin(DjangoUserAdmin):
 @admin.register(models.Department)
 class DepartmentAdmin(admin.ModelAdmin):
     list_display = ['name']
+
+
+@admin.register(models.UserGroup)
+class UserGroupAdmin(admin.ModelAdmin):
+    list_display = ['name']
+
+
+admin.site.unregister(Group)
