@@ -868,9 +868,9 @@ class CreateDocument(views.APIView):
                                      sender=sender, document=document, create_code=encrypt)
 
         except IntegrityError as err:
-            raise exceptions.BadRequest(err.args[0])
+            raise exceptions.BadRequest(
+                "Reference already exists, provide a unique reference.")
         except Exception as err:
-            print('create document -->', err)
             raise exceptions.ServerError(err.args[0])
 
         return Response({'message': 'Document sent'}, status=status.HTTP_201_CREATED)
