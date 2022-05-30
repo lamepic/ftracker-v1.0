@@ -199,12 +199,11 @@ class ArchiveAPIView(views.APIView):
                     return Response(serialized_data.data, status=status.HTTP_200_OK)
                 else:
                     carbon_copy_archive_data = [archive for archive in models.CarbonCopyArchive.objects.all().order_by(
-                        'created_by') if archive.closed_by.department == employee.department and archive.folder == None]
+                        'created_by') if archive.closed_by == employee and archive.folder == None]
                     serialized_carbon_copy_archive_data = serializers.ArchiveCopySerializer(
                         carbon_copy_archive_data, many=True)
                     return Response(serialized_carbon_copy_archive_data.data, status=status.HTTP_200_OK)
             except Exception as err:
-                print(err)
                 raise exceptions.DocumentNotFound(err.args[0])
 
         # get all archives in the database
