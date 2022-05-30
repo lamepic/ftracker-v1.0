@@ -113,11 +113,9 @@ function ForwardModal({ document, openModal, setOpenModal, type }) {
             }
           } else {
             const res = await forwardDocumentCopy(store.token, data);
-            // const data = res;
-            console.log(res);
             if (res.status === 201) {
               setOpenModal(false);
-              history.replace("/dashboard/outgoing");
+              // history.replace("/dashboard/outgoing");
               swal("Document has been sent succesfully", {
                 icon: "success",
               });

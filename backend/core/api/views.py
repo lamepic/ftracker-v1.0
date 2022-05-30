@@ -781,14 +781,14 @@ class CreateDocument(views.APIView):
                 user_receiver = models.DocumentCopyReceiver()
                 user_receiver.save()
                 carbon_copy_document_content = None if document.copy == None else document.copy.url
-                carbon_copy_document = models.CarbonCopyDocument.objects.create(
-                    content=carbon_copy_document_content,
-                    subject=document.subject,
-                    filename=document.filename,
-                    ref=document.ref,
-                    created_by=document.created_by,
-                    document_type=document.document_type,
-                )
+                # carbon_copy_document = models.CarbonCopyDocument.objects.create(
+                #     content=carbon_copy_document_content,
+                #     subject=document.subject,
+                #     filename=document.filename,
+                #     ref=document.ref,
+                #     created_by=document.created_by,
+                #     document_type=document.document_type,
+                # )
 
                 for copy in carbon_copy:
                     copy = json.loads(copy)
@@ -814,6 +814,14 @@ class CreateDocument(views.APIView):
                     copy_receiver = get_object_or_404(
                         models.User, staff_id=staff_id)
 
+                    carbon_copy_document = models.CarbonCopyDocument.objects.create(
+                        content=carbon_copy_document_content,
+                        subject=document.subject,
+                        filename=document.filename,
+                        ref=document.ref,
+                        created_by=document.created_by,
+                        document_type=document.document_type,
+                    )
                     document_copy = models.DocumentCopy.objects.create(
                         sender=sender, document=carbon_copy_document, receiver=copy_receiver, forwarded=True, send_id=sender.staff_id)
 
@@ -864,6 +872,7 @@ class CreateDocument(views.APIView):
                                      sender=sender, document=document, create_code=encrypt)
 
         except IntegrityError as err:
+            print(err)
             raise exceptions.BadRequest(
                 "Reference already exists, provide a unique reference.")
         except Exception as err:
