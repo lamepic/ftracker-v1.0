@@ -16,6 +16,7 @@ import Loading from "../../components/Loading/Loading";
 import {
   createMinute,
   fetchDocument,
+  fetchDocumentCopy,
   fetchNextUserToForwardDoc,
   forwardDocument,
   markComplete,
@@ -56,17 +57,29 @@ function ViewDocument() {
   useEffect(() => {
     fetchPreviewCode();
     _fetchDocument();
-    if (type.toLowerCase() !== "copy") _fetchNextUserToForwardDoc();
+    console.log(type);
+    if (
+      type.toLowerCase() !== "copy" &&
+      type.toLowerCase() !== "personalarchive"
+    )
+      _fetchNextUserToForwardDoc();
   }, []);
 
   const _fetchDocument = async () => {
     try {
-      const res = await fetchDocument(store.token, id);
-      const data = res.data;
-      setDocument(data);
-      setFilename(data.filename);
-      setSignatures(data.signature);
-      setStamps(data.stamp);
+      if (type === "personalArchive") {
+        const res = await fetchDocumentCopy(store.token, id);
+        const data = res.data;
+        setDocument(data);
+        setFilename(data.filename);
+      } else {
+        const res = await fetchDocument(store.token, id);
+        const data = res.data;
+        setDocument(data);
+        setFilename(data.filename);
+        setSignatures(data.signature);
+        setStamps(data.stamp);
+      }
     } catch (e) {
       notification.error({
         message: "Error",

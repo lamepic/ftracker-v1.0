@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./ForwardModal.css";
-import { Redirect, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 import { useStateValue } from "../../store/StateProvider";
 import { departments, loadUsers } from "../../http/user";
@@ -116,8 +116,8 @@ function ForwardModal({ document, openModal, setOpenModal, type }) {
             // const data = res;
             console.log(res);
             if (res.status === 201) {
-              // setOpenModal(false);
-              // history.replace("/dashboard/outgoing");
+              setOpenModal(false);
+              history.replace("/dashboard/outgoing");
               swal("Document has been sent succesfully", {
                 icon: "success",
               });

@@ -17,13 +17,13 @@ class DocumentAdmin(admin.ModelAdmin):
 
     def filename(self, obj):
         return obj.content.name[10:]
-    
-@admin.register(models.DocumentFile)
-class DocumentFileAdmin(admin.ModelAdmin):
-    list_display = ['id', 'document', 'current']
-    
-    def document(self, obj):
-        obj.document.subject
+
+# @admin.register(models.DocumentFile)
+# class DocumentFileAdmin(admin.ModelAdmin):
+#     list_display = ['id', 'document', 'current']
+
+#     def document(self, obj):
+#         obj.document.subject
 
 
 @admin.register(models.RelatedDocument)

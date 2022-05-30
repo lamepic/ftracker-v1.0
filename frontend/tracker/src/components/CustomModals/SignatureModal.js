@@ -101,9 +101,7 @@ function SignatureModal({ openSignatureModal, setOpenSignatureModal, doc }) {
      * Asynchronously downloads PDF.
      */
     pdfjsLib
-      .getDocument(
-        `${process.env.REACT_APP_DOCUMENT_PATH}${doc?.content.doc_file}`
-      )
+      .getDocument(`${process.env.REACT_APP_DOCUMENT_PATH}${doc?.content}`)
       .promise.then(function (pdfDoc_) {
         pdfDoc = pdfDoc_;
         document.getElementById("page_count").textContent = pdfDoc.numPages;
@@ -115,6 +113,7 @@ function SignatureModal({ openSignatureModal, setOpenSignatureModal, doc }) {
 
   function showCoordinate(x_pos, y_pos) {
     var selected = pdfViewport.convertToPdfPoint(x_pos, y_pos);
+    // console.log(pdfViewport);
     let x = selected[0];
     let y = selected[1];
     return { x, y };
@@ -126,12 +125,11 @@ function SignatureModal({ openSignatureModal, setOpenSignatureModal, doc }) {
     const pdfCanvas = document
       .getElementsByClassName("pdfCanvas")[0]
       .getBoundingClientRect();
-
     const x = e.clientX - pdfCanvas.left;
     const y = e.clientY - pdfCanvas.top;
-
     const position = showCoordinate(x, y);
     setMousePosition(position);
+    const pageNumber = document.getElementById("page_num").textContent;
     switch (openSignatureModal.type) {
       case "sign":
         setShowSignaturePad(true);
@@ -142,6 +140,7 @@ function SignatureModal({ openSignatureModal, setOpenSignatureModal, doc }) {
             mousePosition: position,
             doc_id: doc.id,
             type: "signature",
+            pageNumber,
           };
           const res = await addSignature(store.token, data);
           if (res.status === 200) {
@@ -164,6 +163,7 @@ function SignatureModal({ openSignatureModal, setOpenSignatureModal, doc }) {
             mousePosition: position,
             doc_id: doc.id,
             type: "stamp",
+            pageNumber,
           };
           const res = await addSignature(store.token, data);
           if (res.status === 200) {
@@ -283,13 +283,14 @@ const SignaturePad = ({
       const signatureImage = signaturePadRef.current
         .getTrimmedCanvas()
         .toDataURL("image/png");
+      const pageNumber = document.getElementById("page_num").textContent;
       const data = {
         mousePosition,
         doc_id: doc.id,
         signatureImage,
+        pageNumber: pageNumber,
       };
       const res = await addSignature(store.token, data);
-      console.log(res.data);
       if (res.status === 200) {
         notification.success({
           message: "Success",

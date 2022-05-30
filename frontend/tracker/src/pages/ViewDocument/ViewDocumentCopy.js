@@ -40,8 +40,6 @@ function ViewDocumentCopy() {
       console.log(data);
       setDocument(data);
       setFilename(data.filename);
-      // setSignatures(data.signature);
-      // setStamps(data.stamp);
     } catch (e) {
       notification.error({
         message: "Error",
@@ -107,6 +105,8 @@ function ViewDocumentCopy() {
       setSubmittingMinute(false);
     }
   };
+
+  console.log(document);
 
   return (
     <>
@@ -213,7 +213,7 @@ function ViewDocumentCopy() {
                             <p>{item?.content}</p>
                             <p className="employee">{item?.user}</p>
                             <p className="date">
-                              Date: {new Date(item?.date).toDateString()}
+                              Date: {new Date(item?.created_at).toDateString()}
                             </p>
                           </div>
                         );
@@ -287,43 +287,6 @@ function ViewDocumentCopy() {
                       display="flex"
                       justifyContent="end"
                     >
-                      {/* {store.user.is_department ? (
-                        <>
-                          {!stamps.find(
-                            (stamp) =>
-                              stamp.user.staff_id === store.user.staff_id
-                          ) && (
-                            <Button
-                              className="file-btn stamp"
-                              marginLeft="auto"
-                              marginRight="10px"
-                              onClick={() => {
-                                handleSignatureStamp("stamp");
-                              }}
-                            >
-                              Add stamp
-                            </Button>
-                          )}
-                        </>
-                      ) : (
-                        <>
-                          {!signatures.find(
-                            (signature) =>
-                              signature.user.staff_id === store.user.staff_id
-                          ) && (
-                            <Button
-                              className="file-btn signature"
-                              marginLeft="auto"
-                              marginRight="10px"
-                              onClick={() => {
-                                handleSignatureStamp("signature");
-                              }}
-                            >
-                              Add signature
-                            </Button>
-                          )}
-                        </>
-                      )} */}
                       <Button
                         type="submit"
                         className="minute-button"

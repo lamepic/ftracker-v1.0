@@ -25,7 +25,6 @@ function UserArchive() {
       const res = await fetchUserArchive(store.token, store.user.staff_id);
       const data = res.data;
       setArchive(data);
-      console.log(data);
       setLoading(false);
     } catch (e) {
       setLoading(false);

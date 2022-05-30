@@ -740,7 +740,7 @@ class CreateDocument(views.APIView):
         data_lst = list(data)  # for attachments
 
         data_document_type = data.get('documentType')
-        document_file = data.get('document')
+        document = data.get('document')
         reference = data.get('reference')
 
         try:
@@ -765,26 +765,22 @@ class CreateDocument(views.APIView):
             models.DocumentType, id=data_document_type)
 
         try:
-            if data_document_type:
+            if document:
                 document = models.Document.objects.create(
-                    subject=subject, created_by=sender,
+                    content=document, subject=subject, created_by=sender,
                     ref=reference, document_type=document_type, encrypt=encrypt, filename=filename)
-                document_file_obj = models.DocumentFile.objects.create(
-                    doc_file=document_file, document=document)
             else:
                 document = models.Document.objects.create(
                     subject=subject, created_by=sender,
                     ref=reference, document_type=document_type, encrypt=encrypt, filename=filename)
-                document_file_obj = models.Document.objects.create(
-                    document=document)
 
             if carbon_copy:
+                document_name = document.content.name.split('/')[1]
+                document.copy.save(document_name, document.content)
                 carbon_copy = json.loads(carbon_copy)
                 user_receiver = models.DocumentCopyReceiver()
                 user_receiver.save()
-                created_document_document_file = document.document_file.all()[
-                    0]
-                carbon_copy_document_content = None if created_document_document_file.doc_file == None else created_document_document_file.doc_file.url
+                carbon_copy_document_content = None if document.copy == None else document.copy.url
                 carbon_copy_document = models.CarbonCopyDocument.objects.create(
                     content=carbon_copy_document_content,
                     subject=document.subject,
@@ -871,6 +867,7 @@ class CreateDocument(views.APIView):
             raise exceptions.BadRequest(
                 "Reference already exists, provide a unique reference.")
         except Exception as err:
+            print(err)
             raise exceptions.ServerError(err.args[0])
 
         return Response({'message': 'Document sent'}, status=status.HTTP_201_CREATED)
@@ -1124,15 +1121,16 @@ class ReferenceAPIView(views.APIView):
 class SignatureView(views.APIView):
     def post(self, request, format=None):
         PPI = 96
+        print(request.data)
         try:
             signature_type = request.data.get('type')
+            page_num = request.data.get('pageNumber')
             document_id = request.data.get('doc_id')
             mouse_position = request.data.get('mousePosition')
             img_file = None
             if signature_type == 'signature':
                 img_file = models.Signature.objects.get(user=request.user)
                 img_file = img_file.signature.path
-                print(img_file)
             elif signature_type == 'stamp':
                 img_file = models.Stamp.objects.get(user=request.user)
                 img_file = img_file.stamp.path
@@ -1140,11 +1138,11 @@ class SignatureView(views.APIView):
                 img_file = request.data.get('signatureImage')
 
             document = get_object_or_404(models.Document, id=document_id)
-            document_file_obj = models.DocumentFile.objects.filter(
-                document__id=document.id, current=True)[0]
 
-            in_pdf_file = document_file_obj.doc_file.path
-            in_pdf_file_name = document_file_obj.doc_file.name.split('/')[1]
+            print(page_num)
+
+            in_pdf_file = document.content.path
+            in_pdf_file_name = document.content.name.split('/')[1]
             out_pdf_file = 'temp_file.pdf'
 
             totalpages = 0
@@ -1161,9 +1159,12 @@ class SignatureView(views.APIView):
             else:
                 y_start = mouse_position['y'] - 135
 
-            can.drawImage(img_file, x_start, y_start, width=120,
-                          preserveAspectRatio=True, mask='auto')
+            # can.drawImage(img_file, x_start, y_start, width=120,
+            #               preserveAspectRatio=True, mask='auto')
             for i in range(totalpages):
+                if int(page_num)-1 == i:
+                    can.drawImage(img_file, x_start, y_start, width=120,
+                                  preserveAspectRatio=True, mask='auto')
                 can.showPage()
             can.save()
 
@@ -1186,12 +1187,13 @@ class SignatureView(views.APIView):
                 output.write(outputStream)
                 outputStream.close()
             with open(out_pdf_file, 'rb') as f:
-                document_file_obj.doc_file.save(in_pdf_file_name, File(f))
+                document.content.save(in_pdf_file_name, File(f))
             os.remove(out_pdf_file)
             q.close()
 
             os.remove(in_pdf_file)
         except Exception as err:
+            print(err)
             raise exceptions.ServerError(err.args[0])
 
         return Response({"status": "success"}, status=status.HTTP_200_OK)
