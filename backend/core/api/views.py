@@ -741,6 +741,7 @@ class CreateDocument(views.APIView):
         data_document_type = data.get('documentType')
         document = data.get('document')
         reference = data.get('reference')
+        print(document)
 
         try:
             reference_id = int(reference)
@@ -764,7 +765,7 @@ class CreateDocument(views.APIView):
             models.DocumentType, id=data_document_type)
 
         try:
-            if document:
+            if document is not None:
                 document = models.Document.objects.create(
                     content=document, subject=subject, created_by=sender,
                     ref=reference, document_type=document_type, encrypt=encrypt, filename=filename)
@@ -780,14 +781,6 @@ class CreateDocument(views.APIView):
                 user_receiver = models.DocumentCopyReceiver()
                 user_receiver.save()
                 carbon_copy_document_content = None if document.copy == None else document.copy.url
-                # carbon_copy_document = models.CarbonCopyDocument.objects.create(
-                #     content=carbon_copy_document_content,
-                #     subject=document.subject,
-                #     filename=document.filename,
-                #     ref=document.ref,
-                #     created_by=document.created_by,
-                #     document_type=document.document_type,
-                # )
 
                 for copy in carbon_copy:
                     copy = json.loads(copy)
@@ -834,12 +827,6 @@ class CreateDocument(views.APIView):
 
                         related_document = models.RelatedDocument.objects.create(
                             subject=sub, content=doc, document=document)
-                        # if carbon_copy:
-                        #     cabon_copy_related_document = models.CarbonCopyRelatedDocument(
-                        #         content=related_document.content.url,
-                        #         subject=related_document.subject,
-                        #         carbon_copy_document=
-                        #         )
                         count += 1
 
             if document_type.name.lower() == 'custom':
@@ -848,8 +835,9 @@ class CreateDocument(views.APIView):
                 trail.forwarded = True
                 trail.send_id = sender.staff_id
                 trail.save()
-                utils.send_email(receiver=receiver,
-                                 sender=sender, document=document, create_code=encrypt)
+                if encrypt:
+                    utils.send_email(receiver=receiver,
+                                     sender=sender, document=document, create_code=encrypt)
             else:
                 document_actions = models.DocumentAction.objects.filter(
                     document_type=document_type)
@@ -867,15 +855,18 @@ class CreateDocument(views.APIView):
                     trail.forwarded = True
                     trail.send_id = sender.staff_id
                     trail.save()
-                    utils.send_email(receiver=receiver,
-                                     sender=sender, document=document, create_code=encrypt)
+                    if encrypt:
+                        utils.send_email(receiver=receiver,
+                                         sender=sender, document=document, create_code=encrypt)
 
         except IntegrityError as err:
             print(err)
+            document.delete()
             raise exceptions.BadRequest(
                 "Reference already exists, provide a unique reference.")
         except Exception as err:
             print(err)
+            document.delete()
             raise exceptions.ServerError(err.args[0])
 
         return Response({'message': 'Document sent'}, status=status.HTTP_201_CREATED)

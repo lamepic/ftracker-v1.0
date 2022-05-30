@@ -112,7 +112,7 @@ class Document(DocumentBase):
             if not filename.endswith(check):
                 raise ValidationError("Unsupported File format")
         else:
-            self.document.filename = self.subject
+            self.filename = self.subject
 
         self.subject = self.subject.strip()
         self.ref = self.ref.strip()

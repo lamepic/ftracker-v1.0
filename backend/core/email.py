@@ -3,6 +3,7 @@ from templated_mail.mail import BaseEmailMessage
 from django.conf import settings as django_settings
 from djoser import utils
 from djoser.conf import settings
+from datetime import date
 
 
 class PasswordResetEmail(BaseEmailMessage):
@@ -17,4 +18,5 @@ class PasswordResetEmail(BaseEmailMessage):
         context["token"] = default_token_generator.make_token(user)
         context["url"] = settings.PASSWORD_RESET_CONFIRM_URL.format(**context)
         context["domain"] = django_settings.WEB_URL
+        context["year"] = date.today().year
         return context

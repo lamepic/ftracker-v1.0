@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "django_celery_results",
     "django_celery_beat",
     'mptt',
+    'django_inlinecss'
 ]
 
 MIDDLEWARE = [
@@ -131,6 +132,10 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'static'),
+# ]
+
 MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -148,7 +153,7 @@ AUTH_USER_MODEL = 'user.User'
 
 CORS_ALLOWED_ORIGINS = env('CORS_ALLOWED_ORIGINS').split()
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 SALT = "CLHGCYF#@klmknlk!@#KNLKLNBUI12jn"
 
@@ -189,7 +194,7 @@ CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
 # EMAIL SETTINGS
 DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL')
-DEFAULT_FROM_NAME = env('DEFAULT_FROM_EMAIL')
+# DEFAULT_FROM_NAME = env('DEFAULT_FROM_EMAIL')
 EMAIL_HOST = env('SMTP_SERVER')
 EMAIL_PORT = env('SMTP_PORT')
 EMAIL_HOST_USER = env('SMTP_USERNAME')
