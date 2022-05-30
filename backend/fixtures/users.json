@@ -1,0 +1,87 @@
+[
+{
+    "model": "user.user",
+    "pk": 1,
+    "fields": {
+        "password": "pbkdf2_sha256$260000$EmF8r2YV6P7q3N8lmGWJTt$Rb9oDDEFAc0m77ujgd3Iq+9/Q59YcK0K52OB9RSrmqc=",
+        "last_login": "2022-05-27T10:44:14.825Z",
+        "email": "root@admin.com",
+        "first_name": "Super",
+        "last_name": "Admin",
+        "date_joined": "2022-05-15T20:49:25.124Z",
+        "is_active": true,
+        "staff_id": "0000000",
+        "department": null,
+        "is_admin": true,
+        "is_department": false
+    }
+},
+{
+    "model": "user.user",
+    "pk": 2,
+    "fields": {
+        "password": "pbkdf2_sha256$260000$e74JS88lqbzhtOkb6KJ8gd$9JRJlYDvZ4vhe+ZsYw9L8nKZ7tXjoTb5elDBk5dlExs=",
+        "last_login": "2022-05-29T12:54:10.699Z",
+        "email": "benaad@gmail.com",
+        "first_name": "Ben",
+        "last_name": "Awad",
+        "date_joined": "2022-05-15T20:51:03.895Z",
+        "is_active": true,
+        "staff_id": "1256837",
+        "department": 1,
+        "is_admin": false,
+        "is_department": false
+    }
+},
+{
+    "model": "user.user",
+    "pk": 3,
+    "fields": {
+        "password": "pbkdf2_sha256$260000$WwkU60W7RjI7XwP0bLzASY$fvpQXp+08nVS1z0UjJzBfq79mMqukbLjRS/LhAc4be8=",
+        "last_login": "2022-05-27T10:42:27.503Z",
+        "email": "isu@gmail.com",
+        "first_name": "Information",
+        "last_name": "System Unit",
+        "date_joined": "2022-05-15T20:51:43.031Z",
+        "is_active": true,
+        "staff_id": "1122334",
+        "department": 1,
+        "is_admin": false,
+        "is_department": true
+    }
+},
+{
+    "model": "user.user",
+    "pk": 4,
+    "fields": {
+        "password": "pbkdf2_sha256$260000$jCqGmQDb6vOwfPmxSuflUB$t8ILRYEChk824DOT8CJaRuLojIsnQomj/uc4FSsyZbg=",
+        "last_login": "2022-05-29T12:48:43.607Z",
+        "email": "brad@gmail.com",
+        "first_name": "Brad",
+        "last_name": "Traversy",
+        "date_joined": "2022-05-29T12:43:57.416Z",
+        "is_active": true,
+        "staff_id": "2374653",
+        "department": 1,
+        "is_admin": false,
+        "is_department": false
+    }
+},
+{
+    "model": "user.user",
+    "pk": 5,
+    "fields": {
+        "password": "pbkdf2_sha256$260000$fyqF6LsPCFy1rABB1FGN0v$2s1CaAOr77e47DQSdJumZCXqDn0eMS2z+BOjrpiQho4=",
+        "last_login": "2022-05-29T12:47:41.640Z",
+        "email": "john@gmail.com",
+        "first_name": "John",
+        "last_name": "Doe",
+        "date_joined": "2022-05-29T12:45:04.881Z",
+        "is_active": true,
+        "staff_id": "2873643",
+        "department": 1,
+        "is_admin": false,
+        "is_department": false
+    }
+}
+]
