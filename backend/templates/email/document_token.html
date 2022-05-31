@@ -1,4 +1,3 @@
-{% load i18n %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -8,12 +7,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ghana Cocoa Board</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap" rel="stylesheet">
-
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap');
+
+        .boring {
+            border: 4px solid red;
+        }
     </style>
 </head>
 
@@ -24,11 +24,11 @@ background-color: #F1F3F4;">
         <header style=" color: white; text-align: left;">
             <img src="https://res.cloudinary.com/ghanacocoaboard/image/upload/v1653569533/HEADER_h1tt5m.png" alt="" />
         </header>
-        <main style="padding: 3rem 2rem;">
+        <main class="boring" style="padding: 3rem 2rem;">
             <p>Dear {{receiver.get_full_name}},</p>
             <p style=" margin: 1rem 0;">
-                {% blocktrans %}You're receiving this email because you have received an encrypted
-                document with details:{% endblocktrans %}
+                You're receiving this email because you have received an encrypted document with
+                details:
             </p>
             <p>
             <p>

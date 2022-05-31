@@ -1,14 +1,7 @@
 import React, { useState } from "react";
-import { Button, Empty, Modal, notification, Skeleton } from "antd";
+import { Button, Empty, Modal, notification } from "antd";
 import GridData from "../DataDisplay/GridData";
-import {
-  Box,
-  CircularProgress,
-  GridItem,
-  Image,
-  Spinner,
-  Text,
-} from "@chakra-ui/react";
+import { Box, GridItem, Image, Spinner, Text } from "@chakra-ui/react";
 import { capitalize, getFolderDifference } from "../../utility/helper";
 import { useStateValue } from "../../store/StateProvider";
 import swal from "sweetalert";
