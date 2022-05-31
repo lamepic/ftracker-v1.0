@@ -23,7 +23,7 @@ def send_email(receiver, sender, document, create_code=False):
     htmly = get_template('email/document_token.html')
     plaintext = get_template('email/document_token.txt')
     context = {'code': code, 'sender': sender,
-               'document': document, 'receiver': receiver, "year": date.today().year, "web_url": settings.WEB_URL}
+               'document': document, 'receiver': receiver, "year": date.today().year, "web_url": f'<a href={settings.WEB_URL}>Go to Website</a>'}
     html_content = htmly.render(context)
     text_content = plaintext.render(context)
     msg = EmailMultiAlternatives(
