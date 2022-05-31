@@ -79,7 +79,9 @@ function TrackingDetail() {
                         </>
                       }
                     >
-                      <Text _hover={{ cursor: "pointer" }}>Forwarded</Text>
+                      <Text _hover={{ cursor: "pointer" }}>
+                        {idx === 0 ? "Sent" : "Forwarded"}
+                      </Text>
                     </Popover>
                   }
                   key={idx}
