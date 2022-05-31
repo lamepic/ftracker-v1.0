@@ -57,7 +57,6 @@ function ViewDocument() {
   useEffect(() => {
     fetchPreviewCode();
     _fetchDocument();
-    console.log(type);
     if (
       type.toLowerCase() !== "copy" &&
       type.toLowerCase() !== "personalarchive"
@@ -464,68 +463,76 @@ function ViewDocument() {
                         display="flex"
                         justifyContent="end"
                       >
-                        {store.user.is_department ? (
-                          <>
-                            {!stamps.find(
-                              (stamp) =>
-                                stamp.user.staff_id === store.user.staff_id
-                            ) && (
-                              <Button
-                                className="file-btn stamp"
-                                marginLeft="auto"
-                                marginRight="10px"
-                                onClick={() => {
-                                  setOpenSignatureModal({
-                                    open: true,
-                                    type: "stamp",
-                                  });
-                                }}
-                              >
-                                Add stamp
-                              </Button>
-                            )}
-                          </>
-                        ) : (
-                          <>
-                            {!signatures.find(
-                              (signature) =>
-                                signature.user.staff_id === store.user.staff_id
-                            ) && (
-                              <Menu _focus={{ outline: "none" }}>
-                                <MenuButton
-                                  as={Button}
-                                  rightIcon={<ChevronDownIcon />}
-                                  className="file-btn signature"
-                                  marginLeft="auto"
-                                  marginRight="10px"
-                                >
-                                  Signature
-                                </MenuButton>
-                                <MenuList>
-                                  <MenuItem
-                                    onClick={() =>
+                        {document.content !== null && (
+                          <Box>
+                            {store.user.is_department ? (
+                              <>
+                                {!stamps.find(
+                                  (stamp) =>
+                                    stamp.user.staff_id === store.user.staff_id
+                                ) && (
+                                  <Button
+                                    className="file-btn stamp"
+                                    marginLeft="auto"
+                                    marginRight="10px"
+                                    onClick={() => {
                                       setOpenSignatureModal({
                                         open: true,
-                                        type: "sign",
-                                      })
-                                    }
+                                        type: "stamp",
+                                      });
+                                    }}
                                   >
-                                    Sign
-                                  </MenuItem>
-                                  <MenuItem
-                                    onClick={() =>
-                                      setOpenSignatureModal({
-                                        open: true,
-                                        type: "append",
-                                      })
-                                    }
-                                  >
-                                    Append Signature
-                                  </MenuItem>
-                                </MenuList>
-                              </Menu>
+                                    Add stamp
+                                  </Button>
+                                )}
+                              </>
+                            ) : (
+                              <>
+                                {!signatures.find(
+                                  (signature) =>
+                                    signature.user.staff_id ===
+                                    store.user.staff_id
+                                ) && (
+                                  <Menu _focus={{ outline: "none" }}>
+                                    <MenuButton
+                                      as={Button}
+                                      rightIcon={<ChevronDownIcon />}
+                                      className="file-btn signature"
+                                      marginLeft="auto"
+                                      marginRight="10px"
+                                      isDisabled={
+                                        code === undefined ? false : !code?.used
+                                      }
+                                    >
+                                      Signature
+                                    </MenuButton>
+                                    <MenuList>
+                                      <MenuItem
+                                        onClick={() =>
+                                          setOpenSignatureModal({
+                                            open: true,
+                                            type: "sign",
+                                          })
+                                        }
+                                      >
+                                        Sign
+                                      </MenuItem>
+                                      <MenuItem
+                                        onClick={() =>
+                                          setOpenSignatureModal({
+                                            open: true,
+                                            type: "append",
+                                          })
+                                        }
+                                      >
+                                        Append Signature
+                                      </MenuItem>
+                                    </MenuList>
+                                  </Menu>
+                                )}
+                              </>
                             )}
-                          </>
+                          </Box>
                         )}
                         <Button
                           type="submit"
