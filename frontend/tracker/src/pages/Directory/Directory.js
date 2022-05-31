@@ -226,7 +226,7 @@ function Directory() {
                   return (
                     <Skeleton.Button
                       active={loading}
-                      size="large"
+                      size="default"
                       shape="square"
                       block={true}
                       key={idx}
