@@ -726,9 +726,13 @@ class SearchAPIView(views.APIView):
         except Exception as err:
             raise exceptions.ServerError(err.args[0])
 
-        data = [doc for doc in documents if term.lower() in doc['document']
-                ['subject'].lower() or documents if term.lower() in doc['document']
-                ['filename'].lower()]
+        print(documents)
+        filename_search = [doc for doc in documents if term.lower() in doc['document']
+                           ['filename'].lower()]
+        subject_search = [doc for doc in documents if term.lower() in doc['document']
+                          ['subject'].lower()]
+
+        data = filename_search + subject_search
 
         return Response(data, status=status.HTTP_200_OK)
 
