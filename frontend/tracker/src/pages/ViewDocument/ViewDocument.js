@@ -174,7 +174,10 @@ function ViewDocument() {
           title: `Are you sure you want to Forward this Document to ${nextReceiver.receiver.first_name} ${nextReceiver.receiver.last_name}?`,
           text: "Forwarding of this Document is irreversible",
           icon: "warning",
-          buttons: true,
+          button: {
+            text: "Forward",
+            closeModal: false,
+          },
           dangerMode: true,
         }).then(async (willSubmit) => {
           if (willSubmit) {
