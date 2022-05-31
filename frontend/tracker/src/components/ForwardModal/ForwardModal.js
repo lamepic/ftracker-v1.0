@@ -97,38 +97,50 @@ function ForwardModal({ document, openModal, setOpenModal, type }) {
       title: `Are you sure you want to Forward this Document to ${receiver_name.first_name} ${receiver_name.last_name}?`,
       text: "Forwarding of this Document is irreversible",
       icon: "warning",
-      buttons: true,
+      button: {
+        text: "Forward",
+        closeModal: false,
+      },
       dangerMode: true,
-    }).then(async (willSubmit) => {
-      if (willSubmit) {
-        try {
-          if (type !== "copy") {
-            const res = await forwardDocument(store.token, data);
-            if (res.status === 201) {
-              setOpenModal(false);
-              history.replace("/dashboard/outgoing");
-              swal("Document has been sent succesfully", {
-                icon: "success",
-              });
+    })
+      .then(async (willSubmit) => {
+        if (willSubmit) {
+          try {
+            if (type !== "copy") {
+              const res = await forwardDocument(store.token, data);
+              if (res.status === 201) {
+                setOpenModal(false);
+                history.replace("/dashboard/outgoing");
+                swal("Document has been sent succesfully", {
+                  icon: "success",
+                });
+              }
+            } else {
+              const res = await forwardDocumentCopy(store.token, data);
+              if (res.status === 201) {
+                setOpenModal(false);
+                // history.replace("/dashboard/outgoing");
+                swal("Document has been sent succesfully", {
+                  icon: "success",
+                });
+              }
             }
-          } else {
-            const res = await forwardDocumentCopy(store.token, data);
-            if (res.status === 201) {
-              setOpenModal(false);
-              // history.replace("/dashboard/outgoing");
-              swal("Document has been sent succesfully", {
-                icon: "success",
-              });
-            }
+          } catch (error) {
+            notification.error({
+              message: "Error",
+              description: error.response.data.detail,
+            });
           }
-        } catch (error) {
-          notification.error({
-            message: "Error",
-            description: error.response.data.detail,
-          });
         }
-      }
-    });
+      })
+      .catch((err) => {
+        if (err) {
+          swal("Oh noes!", "Failed", "error");
+        } else {
+          swal.stopLoading();
+          swal.close();
+        }
+      });
   };
 
   return (
