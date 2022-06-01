@@ -113,7 +113,6 @@ function SignatureModal({ openSignatureModal, setOpenSignatureModal, doc }) {
 
   function showCoordinate(x_pos, y_pos) {
     var selected = pdfViewport.convertToPdfPoint(x_pos, y_pos);
-    // console.log(pdfViewport);
     let x = selected[0];
     let y = selected[1];
     return { x, y };
