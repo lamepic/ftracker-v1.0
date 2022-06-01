@@ -436,8 +436,9 @@ class ForwardDocumentAPIView(views.APIView):
                 trail.send_id = sender.staff_id
                 trail.forwarded = True
                 trail.save()
-                utils.send_email(receiver=receiver,
-                                 sender=sender, document=document, create_code=document.encrypt)
+                if document.encrypt:
+                    utils.send_email(receiver=receiver,
+                                     sender=sender, document=document, create_code=document.encrypt)
             except Exception as err:
                 raise exceptions.ServerError(err.args[0])
         else:
@@ -457,8 +458,9 @@ class ForwardDocumentAPIView(views.APIView):
                 trail.send_id = sender.staff_id
                 trail.forwarded = True
                 trail.save()
-                utils.send_email(receiver=receiver,
-                                 sender=sender, document=document, create_code=document.encrypt)
+                if document.encrypt:
+                    utils.send_email(receiver=receiver,
+                                     sender=sender, document=document, create_code=document.encrypt)
             except Exception as err:
                 raise exceptions.ServerError
 
@@ -487,8 +489,9 @@ class ForwardCopyDocumentAPIView(views.APIView):
             trail.send_id = sender.staff_id
             trail.forwarded = True
             trail.save()
-            utils.send_email(receiver=receiver,
-                             sender=sender, document=document, create_code=False)
+            # if document.encrypt:
+            #     utils.send_email(receiver=receiver,
+            #                     sender=sender, document=document, create_code=False)
         except Exception as err:
             raise exceptions.ServerError(err.args[0])
 
@@ -588,8 +591,8 @@ class ActivateDocument(views.APIView):
             activate_doc = models.ActivateDocument.objects.create(document=document, expire_at=expire_at, document_receiver=receiver,
                                                                   document_sender=sender)
 
-            utils.send_email(receiver=receiver,
-                             sender=sender, document=document, create_code=False)
+            # utils.send_email(receiver=receiver,
+            #                  sender=sender, document=document, create_code=False)
 
             if activate_doc:
                 requested_doc_instance.active = False
@@ -864,12 +867,10 @@ class CreateDocument(views.APIView):
                                          sender=sender, document=document, create_code=encrypt)
 
         except IntegrityError as err:
-            print(err)
             document.delete()
             raise exceptions.BadRequest(
                 "Reference already exists, provide a unique reference.")
         except Exception as err:
-            print(err)
             document.delete()
             raise exceptions.ServerError(err.args[0])
 
