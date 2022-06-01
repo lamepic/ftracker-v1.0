@@ -65,13 +65,6 @@ export async function addSignatureStamp(token, data) {
     },
   };
 
-  // const formData = new FormData();
-
-  // console.log(data);
-
-  // formData.append(`${data.type}`, data.content);
-  // formData.append("type", data.type);
-
   const res = await axios.post(
     `signature-stamp/${data.document_id}/`,
     data,
