@@ -19,7 +19,6 @@ function ConfirmResetPasswordEmail() {
         setEmailSent(true);
       }
     } catch (e) {
-      console.log(e.response);
       notification.error({
         message: "Error",
         description: e.response.data.detail,
