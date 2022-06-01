@@ -253,7 +253,6 @@ class CarbonCopyMarkCompleteAPIView(views.APIView):
             create_archive = models.CarbonCopyArchive.objects.create(
                 created_by=document.created_by, closed_by=request.user, document=document)
         except Exception as err:
-            print(err)
             raise exceptions.DocumentNotFound
 
         return Response({'message': 'marked as complete'}, status=status.HTTP_200_OK)
@@ -383,7 +382,6 @@ class DocumentActionAPIView(views.APIView):
                         "id": document_type_id, "name": "Custom"}}
                     return Response(data, status=status.HTTP_200_OK)
             except Exception as err:
-                print(err)
                 raise exceptions.BadRequest(
                     "Document type is not applicable to this user")
 
@@ -650,7 +648,6 @@ class CreateFlow(views.APIView):
                     document_action = models.DocumentAction.objects.create(
                         user=employee, action='CC', document_type=document_type)
         except Exception as err:
-            print(err)
             raise exceptions.ServerError(err.args[0])
 
         return Response(request.data, status=status.HTTP_200_OK)
@@ -729,7 +726,6 @@ class SearchAPIView(views.APIView):
         except Exception as err:
             raise exceptions.ServerError(err.args[0])
 
-        print(documents)
         filename_search = [doc for doc in documents if term.lower() in doc['document']
                            ['filename'].lower()]
         subject_search = [doc for doc in documents if term.lower() in doc['document']
@@ -748,7 +744,6 @@ class CreateDocument(views.APIView):
         data_document_type = data.get('documentType')
         document = data.get('document')
         reference = data.get('reference')
-        print(document)
 
         try:
             reference_id = int(reference)
@@ -1118,14 +1113,11 @@ class ReferenceAPIView(views.APIView):
                 references, many=True)
             return Response(serialized_data.data, status=status.HTTP_200_OK)
         except Exception as err:
-            print(err)
             raise exceptions.BadRequest(err.args[0])
 
 
 class SignatureView(views.APIView):
     def post(self, request, format=None):
-        PPI = 96
-        print(request.data)
         try:
             signature_type = request.data.get('type')
             page_num = request.data.get('pageNumber')
@@ -1142,8 +1134,6 @@ class SignatureView(views.APIView):
                 img_file = request.data.get('signatureImage')
 
             document = get_object_or_404(models.Document, id=document_id)
-
-            print(page_num)
 
             in_pdf_file = document.content.path
             in_pdf_file_name = document.content.name.split('/')[1]
@@ -1198,7 +1188,6 @@ class SignatureView(views.APIView):
 
             os.remove(in_pdf_file)
         except Exception as err:
-            print(err)
             raise exceptions.ServerError(err.args[0])
 
         return Response({"status": "success"}, status=status.HTTP_200_OK)
