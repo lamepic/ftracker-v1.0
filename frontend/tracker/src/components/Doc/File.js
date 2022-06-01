@@ -3,7 +3,6 @@ import "./DocIcon.css";
 import { Link } from "react-router-dom";
 import { capitalize } from "../../utility/helper";
 import { Box, Image, Text } from "@chakra-ui/react";
-import { Popover } from "antd";
 import useIcon from "../../hooks/useIcon";
 
 function File({ doc, type }) {
@@ -56,7 +55,11 @@ function File({ doc, type }) {
     );
 
     return (
-      <Popover content={popOverContent} title="Details" placement="rightTop">
+      <Popover
+        content={popOverContent}
+        title="Copied Document"
+        placement="rightTop"
+      >
         <Link to={`/dashboard/${type}/document/${doc.document.id}/`}>
           <div className="folder">
             <Image src={icon} alt="folder" w="80%" padding="10px" />
@@ -98,9 +101,28 @@ function File({ doc, type }) {
     );
 
     return (
-      <Popover content={popOverContent} title="Details" placement="rightTop">
+      <Popover
+        content={popOverContent}
+        title="Copied Document"
+        placement="rightTop"
+      >
         <Link to={`/dashboard/copy/${type}/document/${doc.document.id}/`}>
-          <div className="folder">
+          <div className="folder" style={{ position: "relative" }}>
+            <Box
+              position="absolute"
+              top="8px"
+              right="30px"
+              // border="1px solid gray"
+              backgroundColor="#FF4D4F"
+              borderRadius="50%"
+              height="19px"
+              width="19px"
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <p style={{ color: "#fff", fontWeight: "bold" }}>C</p>
+            </Box>
             <Image src={icon} alt="folder" w="80%" padding="10px" />
             <Text className="folder__title" noOfLines={2} maxW="120px">
               {capitalize(doc.document.filename)}
