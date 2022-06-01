@@ -3,7 +3,7 @@ import "./DocIcon.css";
 import { Link } from "react-router-dom";
 import { Box, Image, Text } from "@chakra-ui/react";
 import { capitalize } from "../../utility/helper";
-import { Popover } from "antd";
+import { Badge, Popover } from "antd";
 import MultipleFileIcon from "../../assets/icons/multiple-files.svg";
 
 function Folder({ doc, type }) {
@@ -101,9 +101,28 @@ function Folder({ doc, type }) {
     );
 
     return (
-      <Popover content={popOverContent} title="Details" placement="rightTop">
+      <Popover
+        content={popOverContent}
+        title="Copied Document"
+        placement="rightTop"
+      >
         <Link to={`/dashboard/copy/${type}/document/${doc.document.id}/`}>
-          <div className="folder">
+          <div className="folder" style={{ position: "relative" }}>
+            <Box
+              position="absolute"
+              top="8px"
+              right="30px"
+              // border="1px solid gray"
+              backgroundColor="#FF4D4F"
+              borderRadius="50%"
+              height="19px"
+              width="19px"
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <p style={{ color: "#fff", fontWeight: "bold" }}>C</p>
+            </Box>
             <Image src={MultipleFileIcon} alt="folder" w="80%" padding="10px" />
             <Text className="folder__title" noOfLines={2} maxW="120px">
               {capitalize(doc.document.filename)}
