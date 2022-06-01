@@ -81,7 +81,6 @@ function CreateFileModal({
         }
       }
     } catch (e) {
-      console.log(e);
       setSubmitting(false);
       return notification.error({
         message: "Error",
