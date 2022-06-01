@@ -197,7 +197,6 @@ function ViewDocument() {
         });
       }
     } catch (e) {
-      console.log(e);
       return notification.error({
         message: "Error",
         description: e.repsonse.data.detail,
