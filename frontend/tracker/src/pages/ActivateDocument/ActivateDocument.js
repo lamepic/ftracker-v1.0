@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./ActivateDocument.css";
-import { Box, Text } from "@chakra-ui/react";
+import { Box, Image, Text } from "@chakra-ui/react";
 import { Button, DatePicker, notification, Space } from "antd";
 import { Redirect, useHistory } from "react-router-dom";
 import swal from "sweetalert";
@@ -9,6 +9,7 @@ import pdf from "../../assets/images/pdf-img.png";
 import { useStateValue } from "../../store/StateProvider";
 import Preview from "../../components/Preview/Preview";
 import moment from "moment";
+import useIcon from "../../hooks/useIcon";
 
 const today = new Date();
 const nextweek = new Date(
@@ -32,11 +33,12 @@ function ActivateDocument() {
   };
 
   const request = store.request_details;
+  const document = request.document;
+  const Icon = useIcon(document.filename);
 
   if (!request) {
     return <Redirect to="/" />;
   }
-  const document = request.document;
 
   const handleActivateDocument = () => {
     const new_date = new Date(expireAt);
@@ -138,7 +140,6 @@ function ActivateDocument() {
               h="270px"
               w="250px"
               marginTop="10px"
-              backgroundColor="var(--lightest-brown)"
               display="flex"
               flexDirection="column"
               alignItems="center"
@@ -147,12 +148,7 @@ function ActivateDocument() {
               borderRadius="10px"
               onClick={() => handlePreview(document)}
             >
-              <img
-                src={pdf}
-                alt="logo"
-                className="file-preview-box-img"
-                style={{ width: "80%", opacity: "0.7" }}
-              />
+              <Image src={Icon} alt="file" width="500px" />
             </Box>
             <Box
               display="flex"
@@ -175,7 +171,7 @@ function ActivateDocument() {
               >
                 Activate Document
               </Button>
-              <Space>
+              <Space style={{ marginTop: "10px" }}>
                 <DatePicker
                   width="10px"
                   onChange={(date, dateString) => {
@@ -199,7 +195,7 @@ function ActivateDocument() {
                       <p>{item?.content}</p>
                       <p className="employee">{item?.user}</p>
                       <p className="date">
-                        Date: {new Date(item?.date).toDateString()}
+                        Date: {new Date(item?.created_at).toDateString()}
                       </p>
                     </div>
                   );
