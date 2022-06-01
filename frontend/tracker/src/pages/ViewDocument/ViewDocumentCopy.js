@@ -37,7 +37,6 @@ function ViewDocumentCopy() {
     try {
       const res = await fetchDocumentCopy(store.token, id);
       const data = res.data;
-      console.log(data);
       setDocument(data);
       setFilename(data.filename);
     } catch (e) {
@@ -105,8 +104,6 @@ function ViewDocumentCopy() {
       setSubmittingMinute(false);
     }
   };
-
-  console.log(document);
 
   return (
     <>
