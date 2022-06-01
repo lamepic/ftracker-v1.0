@@ -40,7 +40,7 @@ function Page({ loading, data, type }) {
               </Text>
 
               <Box maxH={{ sm: "100vh", lg: "80vh" }} overflowY="auto">
-                <Grid templateColumns="repeat(6, 1fr)" gap={6}>
+                <Grid templateColumns="repeat(6, 1fr)" gap={6} marginTop="10px">
                   {incoming_data.map((item) => {
                     if (item.document?.related_document?.length > 0) {
                       return (
