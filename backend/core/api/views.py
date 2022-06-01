@@ -1158,7 +1158,8 @@ class SignatureView(views.APIView):
             x_start = mouse_position['x']
             y_start = None
             if signature_type not in ('signature', 'stamp'):
-                y_start = mouse_position['y']
+                y_start = mouse_position['y'] - 20
+                x_start = mouse_position['x'] - 20
             else:
                 y_start = mouse_position['y'] - 135
 
