@@ -83,8 +83,6 @@ function MoveModal({
       setGoBackPages([...goBackPages, modalFolders]);
       setOpenedFolder(item);
       setModalFolders(data.children);
-      console.log(modalFolders);
-      console.log(data.children);
     } catch (e) {
       return notification.error({
         message: "Error",
