@@ -182,7 +182,7 @@ function ViewDocumentCopy() {
                     onClick={() => handleForwardDocument()}
                     marginRight="10px"
                   >
-                    Forward
+                    Forward Copy
                   </Button>
                   <Button
                     className="file-btn submit"
