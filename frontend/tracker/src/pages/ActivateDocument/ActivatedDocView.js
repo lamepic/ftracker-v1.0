@@ -7,6 +7,7 @@ import pdf from "../../assets/images/pdf-img.png";
 import { useStateValue } from "../../store/StateProvider";
 import Preview from "../../components/Preview/Preview";
 import useIcon from "../../hooks/useIcon";
+import { capitalize } from "../../utility/helper";
 
 function ActivateDocView() {
   const [store, dispatch] = useStateValue();
@@ -61,7 +62,7 @@ function ActivateDocView() {
               bg="var(--lighter-brown)"
               borderRadius="50px"
             >
-              {document.subject}
+              {capitalize(document.subject.toLowerCase())}
             </Text>
             {document?.related_document.map((doc) => {
               return (

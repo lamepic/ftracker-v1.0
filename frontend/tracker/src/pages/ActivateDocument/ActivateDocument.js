@@ -9,6 +9,7 @@ import { useStateValue } from "../../store/StateProvider";
 import Preview from "../../components/Preview/Preview";
 import moment from "moment";
 import useIcon from "../../hooks/useIcon";
+import { capitalize } from "../../utility/helper";
 
 const today = new Date();
 const nextweek = new Date(
@@ -109,7 +110,7 @@ function ActivateDocument() {
             bg="var(--lighter-brown)"
             borderRadius="50px"
           >
-            {document.subject}
+            {capitalize(document.subject.toLowerCase())}
           </Text>
           {document?.related_document.map((doc) => {
             return (
