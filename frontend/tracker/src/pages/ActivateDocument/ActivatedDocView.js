@@ -56,7 +56,8 @@ function ActivateDocView() {
               color="var(--dark-brown)"
               _hover={{ cursor: "pointer" }}
               fontSize="15px"
-              padding="3px"
+              paddingLeft="10px"
+              paddingRight="10px"
               bg="var(--lighter-brown)"
               borderRadius="50px"
             >
@@ -73,6 +74,8 @@ function ActivateDocView() {
                   color="var(--dark-brown)"
                   _hover={{ cursor: "pointer" }}
                   fontSize="16px"
+                  paddingLeft="10px"
+                  paddingRight="10px"
                 >
                   {doc.subject}
                 </Text>

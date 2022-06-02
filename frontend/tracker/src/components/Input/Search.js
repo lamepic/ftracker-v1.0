@@ -97,7 +97,7 @@ const searchResult = (
                 <Button
                   size="middle"
                   className="search__btn"
-                  onClick={() => handleRequest(item.document.id)}
+                  onClick={() => handleRequest(item.document)}
                   type="text"
                 >
                   Request
@@ -109,7 +109,7 @@ const searchResult = (
                 <Button
                   size="middle"
                   className="search__btn"
-                  onClick={() => handleRequest(item.document.id)}
+                  onClick={() => handleRequest(item.document)}
                   type="text"
                 >
                   Request
@@ -183,15 +183,19 @@ function Search() {
     setTerm("");
   };
 
-  const handleRequest = async (id) => {
+  const handleRequest = async (document) => {
+    console.log(document);
     const data = {
-      document_id: id,
+      document_id: document.id,
     };
     swal({
       title: "Request this Document?",
-      text: "This action is irreversible",
+      text: `${document.subject} - ${document.ref}`,
       icon: "warning",
-      buttons: true,
+      button: {
+        text: "Ok",
+        closeModal: false,
+      },
       dangerMode: true,
     }).then(async (willSubmit) => {
       if (willSubmit) {

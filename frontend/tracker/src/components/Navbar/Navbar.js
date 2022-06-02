@@ -163,7 +163,7 @@ function NotificationDropDown() {
       )}
       {activatedDocuments.map((doc) => {
         const id = doc.id;
-        const name = `${doc.document_sender.first_name} ${doc.document_sender.last_name}`;
+        const name = `${doc.sender.first_name} ${doc.sender.last_name}`;
         const document = doc.document.subject;
         const date = new Date(doc.date_activated);
 

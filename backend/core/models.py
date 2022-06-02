@@ -254,9 +254,9 @@ class RequestDocument(models.Model):
 
 
 class ActivateDocument(models.Model):
-    document_receiver = models.ForeignKey(
+    receiver = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='activate_document_sender')
-    document_sender = models.ForeignKey(
+    sender = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='activate_document_receiver')
     document = models.ForeignKey(Document, on_delete=models.CASCADE)
     date_activated = models.DateTimeField(auto_now_add=True)

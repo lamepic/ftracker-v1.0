@@ -22,8 +22,12 @@ function Page({ loading, data, type }) {
       item.type = "incoming";
       return item;
     });
+    const activated_document = data.activated_document?.map((item) => {
+      item.type = "activatedDocument";
+      return item;
+    });
 
-    const incoming_data = [...incoming, ...copy];
+    const incoming_data = [...incoming, ...copy, ...activated_document];
 
     return (
       <>

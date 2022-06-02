@@ -5,7 +5,6 @@ import { Button, DatePicker, notification, Space } from "antd";
 import { Redirect, useHistory } from "react-router-dom";
 import swal from "sweetalert";
 import { activateDocument } from "../../http/document";
-import pdf from "../../assets/images/pdf-img.png";
 import { useStateValue } from "../../store/StateProvider";
 import Preview from "../../components/Preview/Preview";
 import moment from "moment";
@@ -61,11 +60,11 @@ function ActivateDocument() {
 
     swal({
       title: "Are you sure you want to Activate and send this Document?",
-      text: "Submission of this Document is irreversible",
+      // text: "Submission of this Document is irreversible",
       icon: "warning",
-      buttons: {
-        cancel: "No",
-        confirm: "Yes",
+      button: {
+        text: "OK",
+        closeModal: false,
       },
     }).then(async (willSubmit) => {
       if (willSubmit) {

@@ -47,8 +47,13 @@ class IncomingAPIView(views.APIView):
                 receiver=user, status='P')
             document_copy = models.DocumentCopy.objects.filter(
                 receiver__staff_id=user.staff_id, forwarded=True, status="P")
+            activated_documents = models.ActivateDocument.objects.filter(
+                expired=False, receiver=user)
         except Exception as err:
             raise exceptions.ServerError(err.args[0])
+
+        activated_document_serialized_data = serializers.ActivateDocumentSerializer(
+            activated_documents, many=True)
 
         incoming_serialized_data = serializers.IncomingSerializer(
             incoming, many=True)
@@ -57,7 +62,9 @@ class IncomingAPIView(views.APIView):
             many=True)
 
         data = {"incoming": incoming_serialized_data.data,
-                "copy": document_copy_serialized_data.data}
+                "copy": document_copy_serialized_data.data,
+                "activated_document": activated_document_serialized_data.data
+                }
 
         return Response(data, status=status.HTTP_200_OK)
 
@@ -521,7 +528,7 @@ class RequestDocumentAPIView(views.APIView):
                 document__id=document.id, requested_by=requested_by, active=True)
 
             sent_document = models.ActivateDocument.objects.filter(
-                document__id=document.id, document_receiver=requested_by, expired=False)
+                document__id=document.id, receiver=requested_by, expired=False)
 
             if len(existing_request) > 0:
                 return Response({'message': 'You already requested this document'}, status=status.HTTP_200_OK)
@@ -556,7 +563,7 @@ class NotificationsCountAPIView(views.APIView):
         pending_document_requests = models.RequestDocument.objects.filter(
             active=True, requested_from=request.user).count()
         activated_documents = models.ActivateDocument.objects.filter(
-            document_receiver=request.user, expired=False).count()
+            receiver=request.user, expired=False).count()
 
         total = pending_document_requests + activated_documents
         data = utils.Count(total)
@@ -586,7 +593,7 @@ class ActivateDocument(views.APIView):
             requested_doc_instance = models.RequestDocument.objects.get(
                 id=data['request_id'])
 
-            activate_doc = models.ActivateDocument.objects.create(document=document, expire_at=expire_at, document_receiver=receiver,
+            activate_doc = models.ActivateDocument.objects.create(document=document, expire_at=expire_at, receiver=receiver,
                                                                   document_sender=sender)
 
             # utils.send_email(receiver=receiver,
@@ -605,7 +612,7 @@ class ActivateDocument(views.APIView):
             employee = models.User.objects.get(
                 staff_id=request.user.staff_id)
             activated_documents = models.ActivateDocument.objects.filter(
-                expired=False, document_receiver=employee)
+                expired=False, receiver=employee)
         except:
             raise exceptions.ServerError
 
@@ -671,7 +678,7 @@ class SearchAPIView(views.APIView):
 
             # activated documents
             activated_documents = models.ActivateDocument.objects.filter(
-                document_receiver=request.user, expired=False)
+                receiver=request.user, expired=False)
             activated_document_lst = [
                 doc.document for doc in activated_documents]
             for item in activated_documents:

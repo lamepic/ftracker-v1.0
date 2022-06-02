@@ -170,13 +170,13 @@ class RequestDocumentSerializer(serializers.ModelSerializer):
 
 class ActivateDocumentSerializer(serializers.ModelSerializer):
     document = DocumentsSerializer()
-    document_receiver = users_serializers.UserSerializer()
-    document_sender = users_serializers.UserSerializer()
+    receiver = users_serializers.UserSerializer()
+    sender = users_serializers.UserSerializer()
 
     class Meta:
         model = models.ActivateDocument
-        fields = ['id', 'document', 'expire_at', 'document_receiver',
-                  'document_sender', 'date_activated', 'expired']
+        fields = ['id', 'document', 'expire_at', 'receiver',
+                  'sender', 'date_activated', 'expired', 'created_at']
 
 
 class CountSerializer(serializers.Serializer):

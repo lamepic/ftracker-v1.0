@@ -1,13 +1,17 @@
 import React from "react";
 import "./DocIcon.css";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { capitalize } from "../../utility/helper";
 import { Box, Image, Text } from "@chakra-ui/react";
 import { Popover } from "antd";
 import useIcon from "../../hooks/useIcon";
+import { useStateValue } from "../../store/StateProvider";
+import * as actionTypes from "../../store/actionTypes";
 
 function File({ doc, type }) {
   const icon = useIcon(doc.document.filename);
+  const [store, dispatch] = useStateValue();
+  const history = useHistory();
 
   if (type === "archive") {
     return (
@@ -130,6 +134,70 @@ function File({ doc, type }) {
             </Text>
           </div>
         </Link>
+      </Popover>
+    );
+  }
+
+  if (type === "activatedDocument") {
+    let type = "incoming";
+    const popOverContent = (
+      <div>
+        <Text fontWeight="500" color="var(--dark-brown)">
+          {`Sent from: ${doc?.sender?.first_name} ${doc?.sender?.last_name}`}
+        </Text>
+        {/* {
+          <Text fontWeight="500" color="var(--dark-brown)">
+            Department: {doc?.sender?.department.name}
+          </Text>
+        } */}
+        <Text fontWeight="500" color="var(--dark-brown)">{`Date: ${new Date(
+          doc.created_at
+        ).toDateString()}`}</Text>
+        <Text fontWeight="500" color="var(--dark-brown)">{`Time: ${new Date(
+          doc.created_at
+        ).toLocaleTimeString()}`}</Text>
+      </div>
+    );
+
+    const handleOpenActivatedDoc = (details) => {
+      dispatch({
+        type: actionTypes.SET_ACTIVATED_DOCUMENTS_DETAILS,
+        payload: details,
+      });
+      history.push("/dashboard/activated-document");
+    };
+
+    return (
+      <Popover
+        content={popOverContent}
+        title="Activated Document"
+        placement="rightTop"
+      >
+        <div
+          className="folder"
+          style={{ position: "relative" }}
+          onClick={() => handleOpenActivatedDoc(doc)}
+        >
+          <Box
+            position="absolute"
+            top="8px"
+            right="30px"
+            // border="1px solid gray"
+            backgroundColor="#FF4D4F"
+            borderRadius="50%"
+            height="19px"
+            width="19px"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+          >
+            <p style={{ color: "#fff", fontWeight: "bold" }}>A</p>
+          </Box>
+          <Image src={icon} alt="folder" w="70%" padding="10px" />
+          <Text className="folder__title" noOfLines={2} maxW="120px">
+            {capitalize(doc.document.filename)}
+          </Text>
+        </div>
       </Popover>
     );
   }
