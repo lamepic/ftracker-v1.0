@@ -30,6 +30,7 @@ import { notification } from "antd";
 import ForwardModal from "../../components/ForwardModal/ForwardModal";
 import useIcon from "../../hooks/useIcon";
 import SignatureModal from "../../components/CustomModals/SignatureModal";
+import { capitalize } from "../../utility/helper";
 
 function ViewDocument() {
   const [store] = useStateValue();
@@ -271,7 +272,7 @@ function ViewDocument() {
               bg="#e4a66c"
               borderRadius="50px"
             >
-              {document.subject}
+              {capitalize(document.subject.toLowerCase())}
             </Text>
             {document?.related_document.map((doc) => {
               return (
