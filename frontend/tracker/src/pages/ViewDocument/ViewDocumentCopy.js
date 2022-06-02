@@ -143,7 +143,7 @@ function ViewDocumentCopy() {
                   _hover={{ cursor: "pointer" }}
                   fontSize="16px"
                 >
-                  {doc.subject}
+                  {capitalize(doc.subject.toLowerCase())}
                 </Text>
               );
             })}
