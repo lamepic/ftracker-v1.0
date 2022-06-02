@@ -13,6 +13,7 @@ import {
   fetchDocumentCopy,
 } from "../../http/document";
 import { useStateValue } from "../../store/StateProvider";
+import { capitalize } from "../../utility/helper";
 
 function ViewDocumentCopy() {
   const [store] = useStateValue();
@@ -128,7 +129,7 @@ function ViewDocumentCopy() {
               bg="#e4a66c"
               borderRadius="50px"
             >
-              {document.subject}
+              {capitalize(document.subject.toLowerCase())}
             </Text>
             {document?.related_document.map((doc) => {
               return (
