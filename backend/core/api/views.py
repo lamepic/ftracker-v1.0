@@ -78,7 +78,10 @@ class IncomingCountAPIView(views.APIView):
                 receiver=user, status='P')
             document_copy = models.DocumentCopy.objects.filter(
                 receiver__staff_id=user.staff_id, forwarded=True, status='P').distinct()
-            data = utils.Count(len(incoming) + len(document_copy))
+            activated_documents = models.ActivateDocument.objects.filter(
+                receiver=request.user, expired=False).count()
+            data = utils.Count(
+                len(incoming) + len(document_copy) + activated_documents)
         except Exception as err:
             raise exceptions.ServerError(err.args[0])
         serialized_data = serializers.CountSerializer(data)
@@ -565,7 +568,7 @@ class NotificationsCountAPIView(views.APIView):
         pending_document_requests = models.RequestDocument.objects.filter(
             active=True, requested_from=request.user).count()
         activated_documents = models.ActivateDocument.objects.filter(
-            receiver=request.user, expired=False).count()
+            receiver=request.user, expired=False, read=False).count()
 
         total = pending_document_requests + activated_documents
         data = utils.Count(total)
@@ -573,6 +576,22 @@ class NotificationsCountAPIView(views.APIView):
         serialized_data = serializers.CountSerializer(data)
 
         return Response(serialized_data.data, status=status.HTTP_200_OK)
+
+
+class MarkNotificationAsReadAPIView(views.APIView):
+    def post(self, request, format=None):
+        document = request.data
+
+        try:
+            activated_document = models.ActivateDocument.objects.get(
+                document__id=document, receiver=request.user)
+            activated_document.read = True
+            activated_document.save()
+        except Exception as e:
+            print(e)
+            raise exceptions.BadRequest(e)
+
+        return Response({'msg': 'success'}, status=status.HTTP_200_OK)
 
 
 class ActivateDocument(views.APIView):
@@ -596,7 +615,7 @@ class ActivateDocument(views.APIView):
                 id=data['request_id'])
 
             activate_doc = models.ActivateDocument.objects.create(document=document, expire_at=expire_at, receiver=receiver,
-                                                                  document_sender=sender)
+                                                                  sender=sender)
 
             # utils.send_email(receiver=receiver,
             #                  sender=sender, document=document, create_code=False)
@@ -604,7 +623,8 @@ class ActivateDocument(views.APIView):
             if activate_doc:
                 requested_doc_instance.active = False
                 requested_doc_instance.save()
-        except:
+        except Exception as err:
+            print(err)
             raise exceptions.ServerError
 
         return Response({'msg': 'Document has been activated and sent'}, status=status.HTTP_201_CREATED)
