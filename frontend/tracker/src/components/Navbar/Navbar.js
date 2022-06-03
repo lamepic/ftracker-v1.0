@@ -166,31 +166,39 @@ function NotificationDropDown() {
         const name = `${doc.sender.first_name} ${doc.sender.last_name}`;
         const document = doc.document.subject;
         const date = new Date(doc.date_activated);
+        const read = doc.read;
 
         return (
           <Menu.Item onClick={() => handleOpenActivatedDoc(doc)} key={id}>
-            <div className="request">
-              <div className="request__content">
-                <div className="request_from">
-                  <Text
-                    color="var(--dark-brown)"
-                    fontWeight="600"
-                    fontSize="15px"
-                    isTruncated
-                    width="150px"
-                  >
-                    {name}
-                  </Text>
+            <div
+              className="request"
+              style={{
+                background: `${!read ? "#d9d9d9" : ""}`,
+              }}
+            >
+              <Box padding="5px">
+                <div className="request__content">
+                  <div className="request_from">
+                    <Text
+                      color="var(--dark-brown)"
+                      fontWeight="600"
+                      fontSize="15px"
+                      isTruncated
+                      width="150px"
+                    >
+                      {name}
+                    </Text>
+                  </div>
+                  <p className="activate__msg">Document request granted</p>
+                  <p className="activate__document__name">{document}</p>
                 </div>
-                <p className="activate__msg">Document request granted</p>
-                <p className="activate__document__name">{document}</p>
-              </div>
-              <p className="request__date">{moment(date).fromNow()}</p>
+                <p className="request__date">{moment(date).fromNow()}</p>
+              </Box>
             </div>
           </Menu.Item>
         );
       })}
-      {!loading && store.notificationsCount === 0 && (
+      {!loading && activatedDocuments === 0 && (
         <Menu.Item key="001">
           <div className="request">
             <p className="empty__request">You have 0 Notifications</p>
@@ -202,11 +210,13 @@ function NotificationDropDown() {
 
   return (
     <Box onClick={handleClick} position="relative" width="fit-content">
-      <CustomBadge
-        count={store.notificationsCount}
-        size="20px"
-        position={{ top: "-5px", right: "-5px" }}
-      />
+      {store.notificationsCount > 0 && (
+        <CustomBadge
+          count={store.notificationsCount}
+          size="20px"
+          position={{ top: "-5px", right: "-5px" }}
+        />
+      )}
       <Dropdown
         overlay={menu}
         trigger={["click"]}
