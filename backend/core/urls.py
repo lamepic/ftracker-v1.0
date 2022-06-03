@@ -86,6 +86,9 @@ urlpatterns = [
          name="signature_stamp"),
     path('reference/<id>/', views.ReferenceAPIView.as_view(),
          name="reference"),
-    path('signature/', views.SignatureView().as_view(),
-         name="signature")
+    path('signature/', views.SignatureView.as_view(),
+         name="signature"),
+    path('markNotificationAsRead/', views.MarkNotificationAsReadAPIView.as_view(),
+         name="mark_notification")
+
 ]
