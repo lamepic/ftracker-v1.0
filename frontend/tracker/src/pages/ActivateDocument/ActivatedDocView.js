@@ -2,12 +2,17 @@ import React, { useEffect, useState } from "react";
 import { Box, Image, Text } from "@chakra-ui/react";
 import { Redirect } from "react-router-dom";
 import Loading from "../../components/Loading/Loading";
-import { fetchDocument } from "../../http/document";
-import pdf from "../../assets/images/pdf-img.png";
+import {
+  fetchDocument,
+  markNotificationAsRead,
+  notificationsCount,
+} from "../../http/document";
 import { useStateValue } from "../../store/StateProvider";
 import Preview from "../../components/Preview/Preview";
 import useIcon from "../../hooks/useIcon";
 import { capitalize } from "../../utility/helper";
+import { notification } from "antd";
+import * as actionTypes from "../../store/actionTypes";
 
 function ActivateDocView() {
   const [store, dispatch] = useStateValue();
@@ -24,11 +29,35 @@ function ActivateDocView() {
   }, [activatedDoc]);
 
   const _fetchDocument = async () => {
-    const res = await fetchDocument(store.token, activatedDoc?.document.id);
-    const data = res.data;
-    setDocument(data);
-    setFilename(data.filename);
-    setLoading(false);
+    try {
+      const res = await fetchDocument(store.token, activatedDoc?.document.id);
+      const data = res.data;
+      if (res.status === 200) {
+        const readRes = await markNotificationAsRead(
+          store.token,
+          activatedDoc?.document.id
+        );
+        if (readRes.status === 200) {
+          const res = await notificationsCount(store.token);
+          const data = res.data;
+          console.log(data);
+          await dispatch({
+            type: actionTypes.SET_NOTIFICATIONS_COUNT,
+            payload: data.count,
+          });
+        }
+      }
+      setDocument(data);
+      setFilename(data.filename);
+    } catch (e) {
+      console.log(e.response);
+      notification.error({
+        message: "Error",
+        description: e.response.data.detail,
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (!activatedDoc) {
@@ -78,7 +107,7 @@ function ActivateDocView() {
                   paddingLeft="10px"
                   paddingRight="10px"
                 >
-                  {doc.subject}
+                  {capitalize(doc.subject.toLowerCase())}
                 </Text>
               );
             })}
