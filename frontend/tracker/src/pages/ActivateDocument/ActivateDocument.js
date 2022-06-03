@@ -67,25 +67,36 @@ function ActivateDocument() {
         text: "OK",
         closeModal: false,
       },
-    }).then(async (willSubmit) => {
-      if (willSubmit) {
-        const _data = JSON.stringify(data);
-        try {
-          const res = await activateDocument(store.token, _data);
-          if (res.status === 201) {
-            history.push("/");
-            swal("Document has been activated succesfully", {
-              icon: "success",
+    })
+      .then(async (willSubmit) => {
+        if (willSubmit) {
+          const _data = JSON.stringify(data);
+          try {
+            const res = await activateDocument(store.token, _data);
+            if (res.status === 201) {
+              history.push("/");
+              swal("Document has been activated succesfully", {
+                icon: "success",
+              });
+            }
+          } catch (e) {
+            notification.error({
+              message: "Error",
+              description: e.response.data.detail,
             });
           }
-        } catch (e) {
-          notification.error({
-            message: "Error",
-            description: e.response.data.detail,
-          });
         }
-      }
-    });
+      })
+      .catch((err) => {
+        if (err) {
+          swal.stopLoading();
+          swal.close();
+        }
+      })
+      .finally((res) => {
+        swal.stopLoading();
+        swal.close();
+      });
   };
 
   return (
@@ -124,7 +135,7 @@ function ActivateDocument() {
                 _hover={{ cursor: "pointer" }}
                 fontSize="16px"
               >
-                {doc.subject}
+                {capitalize(doc.subject.toLowerCase())}
               </Text>
             );
           })}
