@@ -7,29 +7,32 @@ from django.template.loader import get_template
 from django.template import Context
 from datetime import date
 from django.conf import settings
+from . import exceptions
 
 
 def send_email(receiver, sender, document, create_code=False):
+    try:
+        code = None
 
-    code = None
+        if create_code:
+            code = generate_code()
+            models.PreviewCode.objects.create(
+                user=receiver, code=code, document=document)
 
-    if create_code:
-        code = generate_code()
-        models.PreviewCode.objects.create(
-            user=receiver, code=code, document=document)
+        subject = 'New Encrypted Document Received'
 
-    subject = 'New Encrypted Document Received'
-
-    htmly = get_template('email/document_token.html')
-    plaintext = get_template('email/document_token.txt')
-    context = {'code': code, 'sender': sender,
-               'document': document, 'receiver': receiver, "year": date.today().year, "web_url": f'<a href={settings.WEB_URL}>Go to Website</a>'}
-    html_content = htmly.render(context)
-    text_content = plaintext.render(context)
-    msg = EmailMultiAlternatives(
-        subject, text_content, sender.email, [receiver.email])
-    msg.attach_alternative(html_content, "text/html")
-    msg.send()
+        htmly = get_template('email/document_token.html')
+        plaintext = get_template('email/document_token.txt')
+        context = {'code': code, 'sender': sender,
+                   'document': document, 'receiver': receiver, "year": date.today().year, "web_url": f'<a href={settings.WEB_URL}>Go to Website</a>'}
+        html_content = htmly.render(context)
+        text_content = plaintext.render(context)
+        msg = EmailMultiAlternatives(
+            subject, text_content, sender.email, [receiver.email])
+        msg.attach_alternative(html_content, "text/html")
+        msg.send()
+    except Exception as err:
+        raise exceptions.ServerError("Mail Server Error")
 
 
 def generate_code():
