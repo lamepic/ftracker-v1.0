@@ -93,7 +93,7 @@ class CarbonCopyArchiveAdmin(admin.ModelAdmin):
 @admin.register(models.ActivateDocument)
 class ActivateDocumentAdmin(admin.ModelAdmin):
     list_display = ['document', 'receiver',
-                    'sender', 'expire_at', 'date_activated', 'expired']
+                    'sender', 'expire_at', 'date_activated', 'expired', 'read']
 
 
 @admin.register(models.DocumentType)
