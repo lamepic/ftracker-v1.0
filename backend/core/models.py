@@ -263,6 +263,7 @@ class ActivateDocument(models.Model):
     expire_at = models.DateTimeField()
     expired = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+    read = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.document.subject} - {self.expire_at}'
