@@ -305,11 +305,13 @@ class PreviewCodeAPIView(views.APIView):
         user_code = data.get('code')
         try:
             code = models.PreviewCode.objects.filter(
-                user__staff_id=user_id, document__id=document_id).first()
+                user=request.user, document__id=document_id).first()
 
             if user_code == code.code:
                 code.used = True
                 code.save()
+            else:
+                return Response({'message': 'failed'}, status=status.HTTP_400_BAD_REQUEST)
         except:
             raise exceptions.PreviewCodeError
 
@@ -870,10 +872,12 @@ class CreateDocument(views.APIView):
 
         except IntegrityError as err:
             document.delete()
+            print(err)
             raise exceptions.BadRequest(
                 "Reference already exists, provide a unique reference.")
         except Exception as err:
             document.delete()
+            print(err)
             raise exceptions.ServerError(err.args[0])
 
         return Response({'message': 'Document sent'}, status=status.HTTP_201_CREATED)
