@@ -16,9 +16,10 @@ function LoginCard() {
   return (
     <div>
       <Box
+        bg="#fff"
         borderRadius="8px"
         boxShadow="3px 3px 5px 5px #49494929"
-        w={{ sm: "50%", lg: "90%" }}
+        w={{ sm: "50%", lg: "75%" }}
         h="auto"
         margin={{ sm: "auto", lg: "0" }}
         marginTop={{ sm: "10rem", lg: "2.5rem" }}

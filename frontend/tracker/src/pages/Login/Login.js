@@ -1,81 +1,86 @@
 import React from "react";
 import "./Login.css";
 import { Box, Heading, Image, Text } from "@chakra-ui/react";
-import logo from "../../assets/images/logo.png";
-import login_banner from "../../assets/images/landing-page-image.png";
+import LoginImage from "../../assets/icons/login-image.svg";
 import LoginCard from "../../components/LoginCard/LoginCard";
 
 function Login() {
   return (
     <Box
-      bg="var(--semi-dark-brown)"
+      bg="#AF8D70"
       w="100%"
       h="100vh"
       display="flex"
       alignItems="center"
       justifyContent="center"
+      overflow="hidden"
+      position="relative"
     >
       <Box
-        bg="var(--white)"
-        w="80%"
-        h="80%"
-        display={{ sm: "block", lg: "flex" }}
-      >
+        width="15em"
+        height="15em"
+        position="absolute"
+        top="-3em"
+        left="-3em"
+        borderRadius="50%"
+        bg="inherit"
+        zIndex="10"
+      ></Box>
+      <Box
+        width="20em"
+        height="20em"
+        position="absolute"
+        top="-5em"
+        left="-5em"
+        borderRadius="50%"
+        bg="#BB9C81"
+        overflow="hidden"
+      ></Box>
+      <Box w="80%" h="80%" display={{ sm: "block", lg: "flex" }}>
         <Box flex={{ lg: "0.7" }} display={{ sm: "none", lg: "block" }}>
           <Box
             display="flex"
             justifyContent="space-between"
             alignItems="center"
             marginTop="3rem"
-            marginLeft="18%"
+            marginRight="10%"
           >
-            <Box display="flex" flexDirection="column" alignItems="center">
-              <Image src={logo} alt="logo" w="90px" objectFit="contain" />
-              <Box
-                display="flex"
-                flexDirection="column"
-                alignItems="center"
-                color="var(--dark-brown)"
-              >
-                <Text fontSize={{ lg: "sm", sm: "xs" }} fontWeight="700">
-                  Ghana Cocoa Board
-                </Text>
-                <Text fontSize={{ sm: "0.5rem" }} fontWeight="600">
-                  Poised to Maintain Premium Quality Cocoa
-                </Text>
-              </Box>
-            </Box>
             <Box
               fontSize={{ lg: "8.4rem" }}
-              marginRight={{ lg: "3rem" }}
+              // marginRight={{ lg: "3rem" }}
+              marginLeft="40px"
               textTransform="uppercase"
               marginTop="auto"
+              color="#fff"
             >
               <Heading
                 as="h2"
-                color="var(--dark-brown)"
+                // color="var(--dark-brown)"
+                color="#fff"
                 textAlign="end"
-                fontSize={{ lg: "2.3rem", md: "1.5rem", sm: "1rem" }}
+                fontSize={{ lg: "3.5rem", md: "1.5rem", sm: "1rem" }}
               >
-                Manage
+                Cocoa Papers
               </Heading>
-              <Heading
-                as="h2"
-                color="var(--light-brown)"
+              <Text
+                as="p"
+                // color="var(--light-brown)"
+                textTransform="capitalize"
+                color="#fff"
                 fontWeight="500"
-                fontSize={{ lg: "2.3rem", md: "1.5rem", sm: "1rem" }}
+                fontSize={{ lg: "1rem" }}
               >
-                Your Files here.
-              </Heading>
+                The paperless solution.
+              </Text>
             </Box>
           </Box>
           <Box marginTop="25px">
             <Image
-              src={login_banner}
+              src={LoginImage}
               alt="logo"
               objectFit="contain"
               marginLeft="50px"
-              w="80%"
+              w="70%"
               h="auto"
             />
           </Box>
@@ -83,6 +88,35 @@ function Login() {
         <Box flex={{ lg: "0.3", sm: "1" }} h={{ sm: "100%", lg: "auto" }}>
           <LoginCard />
         </Box>
+      </Box>
+      <Box display={{ lg: "block", md: "none" }}>
+        <Box
+          width="3em"
+          height="40em"
+          bg="#BB9C81"
+          position="absolute"
+          bottom="-6em"
+          right="10em"
+          transform="rotate(40deg)"
+        ></Box>
+        <Box
+          width="3em"
+          height="30em"
+          bg="#BB9C81"
+          position="absolute"
+          bottom="-6em"
+          right="7em"
+          transform="rotate(40deg)"
+        ></Box>
+        <Box
+          width="3em"
+          height="20em"
+          bg="#BB9C81"
+          position="absolute"
+          bottom="-6em"
+          right="4em"
+          transform="rotate(40deg)"
+        ></Box>
       </Box>
     </Box>
   );
