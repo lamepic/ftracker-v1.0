@@ -176,7 +176,7 @@ class ActivateDocumentSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ActivateDocument
         fields = ['id', 'document', 'expire_at', 'receiver',
-                  'sender', 'date_activated', 'expired', 'created_at']
+                  'sender', 'date_activated', 'expired', 'created_at', 'read']
 
 
 class CountSerializer(serializers.Serializer):
