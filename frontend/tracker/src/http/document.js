@@ -487,3 +487,15 @@ export async function references(token, id) {
   const res = await axios.get(`reference/${id}`, config);
   return res;
 }
+
+export async function markNotificationAsRead(token, data) {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Token ${token}`,
+    },
+  };
+
+  const res = await axios.post(`markNotificationAsRead/`, data, config);
+  return res;
+}
