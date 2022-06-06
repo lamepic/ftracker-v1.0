@@ -7,7 +7,8 @@ import LoginCard from "../../components/LoginCard/LoginCard";
 function Login() {
   return (
     <Box
-      bg="#AF8D70"
+      background="rgb(138,93,59);"
+      bg="linear-gradient(247deg, rgba(138,93,59,1) 6%, rgba(164,120,81,1) 84%)"
       w="100%"
       h="100vh"
       display="flex"
@@ -17,7 +18,7 @@ function Login() {
       position="relative"
     >
       <Box
-        width="15em"
+        width={{ md: "15em" }}
         height="15em"
         position="absolute"
         top="-3em"
@@ -48,7 +49,7 @@ function Login() {
             <Box
               fontSize={{ lg: "8.4rem" }}
               // marginRight={{ lg: "3rem" }}
-              marginLeft="40px"
+              marginLeft="70px"
               textTransform="uppercase"
               marginTop="auto"
               color="#fff"
@@ -58,7 +59,7 @@ function Login() {
                 // color="var(--dark-brown)"
                 color="#fff"
                 textAlign="end"
-                fontSize={{ lg: "3.5rem", md: "1.5rem", sm: "1rem" }}
+                fontSize={{ lg: "3rem", md: "1rem", sm: "1rem" }}
               >
                 Cocoa Papers
               </Heading>
