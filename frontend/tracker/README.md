@@ -19,3 +19,5 @@
 # handle reference exception
 
 # duplicate raw file and save path in copy.
+
+# fetch user before making wesocket connection to avoid getting anonymous user

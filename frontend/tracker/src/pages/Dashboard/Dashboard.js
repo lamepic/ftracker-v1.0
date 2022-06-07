@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Home from "../Home/Home";
 import Flow from "../Flow/Flow";
 import Archive from "../Archive/Archive";
@@ -21,12 +21,43 @@ import useFetchUser from "../../hooks/useFetchUser";
 import { Route } from "react-router-dom";
 import ViewDocumentCopy from "../ViewDocument/ViewDocumentCopy";
 import UserArchive from "../UserArchive/UserArchive";
+import useWebSocket, { ReadyState } from "react-use-websocket";
+import addNotification from "react-push-notification";
+import * as actionTypes from "../../store/actionTypes";
 
 function Dashboard() {
   // useFetchCount(true, true, true, true);
   const [store, dispatch] = useStateValue();
   const user = useFetchUser();
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const [socketUrl, setSocketUrl] = useState(
+    `ws://192.168.40.9:8000/push-notification/?token=${store?.token}`
+  );
+  // const [messageHistory, setMessageHistory] = useState([]);
+
+  const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
+    shouldReconnect: (e) => true,
+    reconnectInterval: 4000,
+  });
+
+  useEffect(() => {
+    if (lastMessage !== null) {
+      const msg = JSON.parse(lastMessage.data);
+      const status = JSON.parse(msg.status);
+      dispatch({
+        type: actionTypes.NEW_INCOMING,
+      });
+      addNotification({
+        title: "Cocoa Papers | Ghana Cocoa Board",
+        subtitle: msg.message,
+        message: `Sender: ${status.sender}\nDescription: ${status.subject}`,
+        theme: "darkblue",
+        native: true,
+        duration: 15000,
+      });
+    }
+  }, [lastMessage]);
 
   return (
     <Box bg="var(--background-color)" h="100vh">

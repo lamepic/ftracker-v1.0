@@ -15,6 +15,9 @@ from django.core.files.base import File
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.hashers import make_password
 
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
+
 from rest_framework import views
 from rest_framework import status
 from rest_framework.response import Response
@@ -543,6 +546,16 @@ class RequestDocumentAPIView(views.APIView):
 
             create_request = models.RequestDocument.objects.create(
                 requested_by=requested_by, document=document, requested_from=requested_from)
+
+            socket_message = {
+                "sender": requested_by.get_full_name(),
+                "subject": "New Document Request",
+            }
+            channel_layer = get_channel_layer()
+            async_to_sync(channel_layer.group_send)(
+                f"{requested_from.staff_id}", {"type": "send_activated_document_notification",
+                                               "text": json.dumps(socket_message)}
+            )
         except:
             raise exceptions.ServerError
 
@@ -623,6 +636,16 @@ class ActivateDocument(views.APIView):
             if activate_doc:
                 requested_doc_instance.active = False
                 requested_doc_instance.save()
+
+            socket_message = {
+                "sender": sender.get_full_name(),
+                "subject": "Document Request Granted",
+            }
+            channel_layer = get_channel_layer()
+            async_to_sync(channel_layer.group_send)(
+                f"{receiver.staff_id}", {"type": "send_activated_document_notification",
+                                         "text": json.dumps(socket_message)}
+            )
         except Exception as err:
             print(err)
             raise exceptions.ServerError
@@ -770,6 +793,7 @@ class CreateDocument(views.APIView):
         data = request.data
         data_lst = list(data)  # for attachments
 
+        print(data)
         data_document_type = data.get('documentType')
         document = data.get('document')
         reference = data.get('reference')
@@ -889,6 +913,16 @@ class CreateDocument(views.APIView):
                     if encrypt:
                         utils.send_email(receiver=receiver,
                                          sender=sender, document=document, create_code=encrypt)
+
+            socket_message = {
+                "sender": self.request.user.get_full_name(),
+                "subject": data.get('subject')
+            }
+            channel_layer = get_channel_layer()
+            async_to_sync(channel_layer.group_send)(
+                f"{receiver.staff_id}", {"type": "send_notification",
+                                         "text": json.dumps(socket_message)}
+            )
 
         except IntegrityError as err:
             document.delete()

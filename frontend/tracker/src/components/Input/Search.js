@@ -184,7 +184,6 @@ function Search() {
   };
 
   const handleRequest = async (document) => {
-    console.log(document);
     const data = {
       document_id: document.id,
     };

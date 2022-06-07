@@ -17,7 +17,7 @@ function useFetchCount(incoming, outgoing, archive, notifications) {
     if (outgoing) fetchOutgoing();
     if (archive) fetchArchive();
     if (notifications) fetchNotifications();
-  }, []);
+  }, [store.newIncoming]);
 
   const fetchIncoming = async () => {
     try {

@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     "django_celery_results",
     "django_celery_beat",
     'mptt',
-    'django_inlinecss'
+    'django_inlinecss',
+    'channels'
 ]
 
 MIDDLEWARE = [
@@ -75,6 +76,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'tracker.wsgi.application'
+
+ASGI_APPLICATION = "tracker.asgi.application"
 
 
 # Database
@@ -200,3 +203,13 @@ EMAIL_PORT = env('SMTP_PORT')
 EMAIL_HOST_USER = env('SMTP_USERNAME')
 EMAIL_HOST_PASSWORD = env('SMTP_PASSWORD')
 EMAIL_USE_TLS = True
+
+# CHANNELS
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [('192.168.40.9', 6379)],
+        },
+    },
+}

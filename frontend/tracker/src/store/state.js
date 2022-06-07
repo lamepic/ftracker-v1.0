@@ -15,6 +15,7 @@ const initialState = {
   request_details: null,
   activatedDocumentDetails: null,
   openPasswordModal: false,
+  newIncoming: false,
 };
 
 export default initialState;

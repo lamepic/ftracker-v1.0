@@ -22,6 +22,11 @@ const reducer = (state, action) => {
         ...state,
         incomingCount: action.payload,
       };
+    case actionTypes.NEW_INCOMING:
+      return {
+        ...state,
+        newIncoming: !state.newIncoming,
+      };
     case actionTypes.SET_OUTGOING_COUNT:
       return {
         ...state,
