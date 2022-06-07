@@ -32,7 +32,7 @@ function Dashboard() {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [socketUrl, setSocketUrl] = useState(
-    `ws://192.168.40.9:8000/push-notification/?token=${store?.token}`
+    `ws://${process.env.BASE_PATH}/push-notification/?token=${store?.token}`
   );
   // const [messageHistory, setMessageHistory] = useState([]);
 

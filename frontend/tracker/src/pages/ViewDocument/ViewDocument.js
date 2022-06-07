@@ -401,7 +401,7 @@ function ViewDocument() {
                           return (
                             <div className="minute" key={signature.id}>
                               <Image
-                                src={`${process.env.REACT_APP_DOCUMENT_PATH}${signature.signature}`}
+                                src={`${process.env.BASE_PATH}${signature.signature}`}
                                 width="50%"
                               />
                               <p className="employee">
@@ -428,7 +428,7 @@ function ViewDocument() {
                             return (
                               <div className="minute" key={stamp.id}>
                                 <Image
-                                  src={`${process.env.REACT_APP_DOCUMENT_PATH}${stamp.stamp}`}
+                                  src={`${process.env.BASE_PATH}${stamp.stamp}`}
                                   width="50%"
                                 />
                                 <p className="employee">

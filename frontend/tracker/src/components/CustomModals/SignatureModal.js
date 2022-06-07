@@ -101,7 +101,7 @@ function SignatureModal({ openSignatureModal, setOpenSignatureModal, doc }) {
      * Asynchronously downloads PDF.
      */
     pdfjsLib
-      .getDocument(`${process.env.REACT_APP_DOCUMENT_PATH}${doc?.content}`)
+      .getDocument(`${process.env.BASE_PATH}${doc?.content}`)
       .promise.then(function (pdfDoc_) {
         pdfDoc = pdfDoc_;
         document.getElementById("page_count").textContent = pdfDoc.numPages;

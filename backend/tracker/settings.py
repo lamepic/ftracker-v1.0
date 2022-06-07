@@ -22,7 +22,7 @@ ALLOWED_HOSTS = env('ALLOWED_HOSTS').split()
 
 # Application definition
 INSTALLED_APPS = [
-    # 'grappelli',
+    'grappelli',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -213,3 +213,6 @@ CHANNEL_LAYERS = {
         },
     },
 }
+
+# GRAPELLI ADMIN SETTINGS
+GRAPPELLI_ADMIN_TITLE = "Ghana Cocoa Board | Cocoa Papers"
