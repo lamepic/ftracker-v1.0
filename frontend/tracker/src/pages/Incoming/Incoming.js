@@ -12,7 +12,6 @@ function Incoming() {
 
   useEffect(() => {
     fetchData();
-    console.log(store.newIncoming);
   }, [store.newIncoming]);
 
   const fetchData = async () => {

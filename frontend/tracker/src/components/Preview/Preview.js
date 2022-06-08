@@ -12,7 +12,7 @@ function Preview({ setOpenPreview, doc }) {
     path = null;
   }
 
-  const docs = [{ uri: `${process.env.BASE_PATH}${doc?.content}` }];
+  const docs = [{ uri: `${process.env.REACT_APP_BASE_PATH}${doc?.content}` }];
 
   const openPreview = (e) => {
     e.stopPropagation();

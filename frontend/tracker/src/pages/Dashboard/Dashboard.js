@@ -32,7 +32,7 @@ function Dashboard() {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [socketUrl, setSocketUrl] = useState(
-    `ws://${process.env.BASE_PATH}/push-notification/?token=${store?.token}`
+    `ws://${process.env.REACT_APP_SOCKET_PATH}/push-notification/?token=${store?.token}`
   );
   // const [messageHistory, setMessageHistory] = useState([]);
 
@@ -58,6 +58,18 @@ function Dashboard() {
       });
     }
   }, [lastMessage]);
+
+  const connectionStatus = {
+    [ReadyState.CONNECTING]: "Connecting",
+    [ReadyState.OPEN]: "Open",
+    [ReadyState.CLOSING]: "Closing",
+    [ReadyState.CLOSED]: "Closed",
+    [ReadyState.UNINSTANTIATED]: "Uninstantiated",
+  }[readyState];
+
+  useEffect(() => {
+    console.log(connectionStatus);
+  });
 
   return (
     <Box bg="var(--background-color)" h="100vh">

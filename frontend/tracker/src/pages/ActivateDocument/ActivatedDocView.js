@@ -40,7 +40,6 @@ function ActivateDocView() {
         if (readRes.status === 200) {
           const res = await notificationsCount(store.token);
           const data = res.data;
-          console.log(data);
           await dispatch({
             type: actionTypes.SET_NOTIFICATIONS_COUNT,
             payload: data.count,
@@ -50,7 +49,6 @@ function ActivateDocView() {
       setDocument(data);
       setFilename(data.filename);
     } catch (e) {
-      console.log(e.response);
       notification.error({
         message: "Error",
         description: e.response.data.detail,
