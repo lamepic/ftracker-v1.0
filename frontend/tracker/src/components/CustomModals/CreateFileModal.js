@@ -5,7 +5,7 @@ import React, { useRef, useState } from "react";
 import { createFile } from "../../http/directory";
 import { useStateValue } from "../../store/StateProvider";
 import { Box } from "@chakra-ui/react";
-import { uploadRules } from "../../utility/helper";
+import { archiveUploadRules } from "../../utility/helper";
 
 const validateMessages = {
   required: "This field is required!",
@@ -175,7 +175,7 @@ function CreateFileModal({
               },
             ]}
           >
-            <Upload maxCount={1} customRequest={dummyRequest} {...uploadRules}>
+            <Upload maxCount={1} customRequest={dummyRequest} {...archiveUploadRules}>
               <Button icon={<UploadOutlined />} style={{ width: "275px" }}>
                 Upload
               </Button>
