@@ -29,6 +29,8 @@ function Incoming() {
     }
   };
 
+  console.log(data);
+
   return <Page type="incoming" data={data} loading={loading} />;
 }
 
