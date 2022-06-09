@@ -20,4 +20,6 @@
 
 # duplicate raw file and save path in copy.
 
-# fetch user before making wesocket connection to avoid getting anonymous user
+# fetch user before making wesocket connection to avoid getting anonymous user - done
+
+# put date above the button in activate document
