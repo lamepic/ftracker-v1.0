@@ -204,12 +204,17 @@ EMAIL_HOST_USER = env('SMTP_USERNAME')
 EMAIL_HOST_PASSWORD = env('SMTP_PASSWORD')
 EMAIL_USE_TLS = True
 
+
+host = [{
+        'address': f"redis://{env('REDIS_HOST')}:{env('REDIS_PORT')}", 
+    }]
+
 # CHANNELS
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [('192.168.40.8', 6379)],
+            "hosts": host,
         },
     },
 }
