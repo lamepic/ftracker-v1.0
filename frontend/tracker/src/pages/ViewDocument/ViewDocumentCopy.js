@@ -46,7 +46,6 @@ function ViewDocumentCopy() {
       const data = res.data;
       setDocument(data);
       setFilename(data.filename);
-      console.log(data);
     } catch (e) {
       notification.error({
         message: "Error",

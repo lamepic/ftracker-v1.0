@@ -15,8 +15,6 @@ function SignatureModal({ openSignatureModal, setOpenSignatureModal, doc }) {
   const [mousePosition, setMousePosition] = useState({});
   const history = useHistory();
 
-  console.log(doc);
-
   useEffect(() => {
     var pdfjsLib = window["pdfjs-dist/build/pdf"];
 
