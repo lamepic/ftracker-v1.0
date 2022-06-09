@@ -90,6 +90,8 @@ function ViewDocument() {
     }
   };
 
+  console.log(document);
+
   const _fetchNextUserToForwardDoc = async () => {
     try {
       const res = await fetchNextUserToForwardDoc(store.token, id);

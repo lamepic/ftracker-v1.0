@@ -601,7 +601,6 @@ class MarkNotificationAsReadAPIView(views.APIView):
             activated_document.read = True
             activated_document.save()
         except Exception as e:
-            print(e)
             raise exceptions.BadRequest(e)
 
         return Response({'msg': 'success'}, status=status.HTTP_200_OK)
@@ -647,7 +646,6 @@ class ActivateDocument(views.APIView):
                                          "text": json.dumps(socket_message)}
             )
         except Exception as err:
-            print(err)
             raise exceptions.ServerError
 
         return Response({'msg': 'Document has been activated and sent'}, status=status.HTTP_201_CREATED)
@@ -793,9 +791,8 @@ class CreateDocument(views.APIView):
         data = request.data
         data_lst = list(data)  # for attachments
 
-        print(data)
         data_document_type = data.get('documentType')
-        document = data.get('document')
+        document_obj = data.get('document')
         reference = data.get('reference')
 
         try:
@@ -820,9 +817,9 @@ class CreateDocument(views.APIView):
             models.DocumentType, id=data_document_type)
 
         try:
-            if document is not None:
+            if document_obj is not None:
                 document = models.Document.objects.create(
-                    content=document, subject=subject, created_by=sender,
+                    content=document_obj, subject=subject, created_by=sender,
                     ref=reference, document_type=document_type, encrypt=encrypt, filename=filename)
             else:
                 document = models.Document.objects.create(
@@ -831,11 +828,11 @@ class CreateDocument(views.APIView):
 
             if carbon_copy:
                 document_name = document.content.name.split('/')[1]
-                document.copy.save(document_name, document.content)
+                # document.copy.save(document_name, document.content)
                 carbon_copy = json.loads(carbon_copy)
                 user_receiver = models.DocumentCopyReceiver()
                 user_receiver.save()
-                carbon_copy_document_content = None if document.copy == None else document.copy.url
+                # carbon_copy_document_content = None if document.copy == None else document.copy.url
 
                 for copy in carbon_copy:
                     copy = json.loads(copy)
@@ -862,7 +859,7 @@ class CreateDocument(views.APIView):
                         models.User, staff_id=staff_id)
 
                     carbon_copy_document = models.CarbonCopyDocument.objects.create(
-                        content=carbon_copy_document_content,
+                        content=document_obj,
                         subject=document.subject,
                         filename=document.filename,
                         ref=document.ref,
@@ -926,12 +923,10 @@ class CreateDocument(views.APIView):
 
         except IntegrityError as err:
             document.delete()
-            print(err)
             raise exceptions.BadRequest(
                 "Reference already exists, provide a unique reference.")
         except Exception as err:
             document.delete()
-            print(err)
             raise exceptions.ServerError(err.args[0])
 
         return Response({'message': 'Document sent'}, status=status.HTTP_201_CREATED)
@@ -1192,14 +1187,18 @@ class SignatureView(views.APIView):
             if signature_type == 'signature':
                 img_file = models.Signature.objects.get(user=request.user)
                 img_file = img_file.signature.path
-            elif signature_type == 'stamp':
+            elif signature_type == 'stamp' or signature_type == 'copyDocumentStamp':
                 img_file = models.Stamp.objects.get(user=request.user)
                 img_file = img_file.stamp.path
             else:
                 img_file = request.data.get('signatureImage')
 
-            document = get_object_or_404(models.Document, id=document_id)
-
+            document = None
+            if signature_type == 'copyDocumentStamp':
+                document = get_object_or_404(
+                    models.CarbonCopyDocument, id=document_id)
+            else:
+                document = get_object_or_404(models.Document, id=document_id)
             in_pdf_file = document.content.path
             in_pdf_file_name = document.content.name.split('/')[1]
             out_pdf_file = 'temp_file.pdf'
@@ -1213,7 +1212,7 @@ class SignatureView(views.APIView):
             can = canvas.Canvas(packet, pagesize=A4)
             x_start = mouse_position['x']
             y_start = None
-            if signature_type not in ('signature', 'stamp'):
+            if signature_type not in ('signature', 'stamp', 'copyDocumentStamp'):
                 y_start = mouse_position['y'] - 20
                 x_start = mouse_position['x'] - 20
             else:

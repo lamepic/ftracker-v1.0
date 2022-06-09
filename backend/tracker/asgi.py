@@ -9,16 +9,17 @@ https://docs.djangoproject.com/en/3.2/howto/deployment/asgi/
 
 import os
 
-from django.core.asgi import get_asgi_application
-from channels.routing import ProtocolTypeRouter
-from core.middlewares import TokenAuthMiddleware
-from channels.routing import ProtocolTypeRouter, URLRouter
-from channels.security.websocket import AllowedHostsOriginValidator
-from core.consumers import NotificationConsumer
-from core import routing
-
-
+import django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tracker.settings')
+django.setup()
+
+from core import routing
+from channels.security.websocket import AllowedHostsOriginValidator
+from channels.routing import ProtocolTypeRouter, URLRouter
+from core.middlewares import TokenAuthMiddleware
+from channels.routing import ProtocolTypeRouter
+from django.core.asgi import get_asgi_application
+
 
 application = ProtocolTypeRouter({
     "http": get_asgi_application(),

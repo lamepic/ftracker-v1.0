@@ -183,7 +183,7 @@ function File({ doc, type }) {
             top="8px"
             right="30px"
             // border="1px solid gray"
-            backgroundColor="#FF4D4F"
+            backgroundColor="#1DB954"
             borderRadius="50%"
             height="19px"
             width="19px"

@@ -15,6 +15,8 @@ function SignatureModal({ openSignatureModal, setOpenSignatureModal, doc }) {
   const [mousePosition, setMousePosition] = useState({});
   const history = useHistory();
 
+  console.log(doc);
+
   useEffect(() => {
     var pdfjsLib = window["pdfjs-dist/build/pdf"];
 
@@ -101,7 +103,7 @@ function SignatureModal({ openSignatureModal, setOpenSignatureModal, doc }) {
      * Asynchronously downloads PDF.
      */
     pdfjsLib
-      .getDocument(`${process.env.BASE_PATH}${doc?.content}`)
+      .getDocument(`${process.env.REACT_APP_BASE_PATH}${doc?.content}`)
       .promise.then(function (pdfDoc_) {
         pdfDoc = pdfDoc_;
         document.getElementById("page_count").textContent = pdfDoc.numPages;
@@ -157,11 +159,12 @@ function SignatureModal({ openSignatureModal, setOpenSignatureModal, doc }) {
         }
         break;
       case "stamp":
+      case "copyDocumentStamp":
         try {
           const data = {
             mousePosition: position,
             doc_id: doc.id,
-            type: "stamp",
+            type: openSignatureModal.type,
             pageNumber,
           };
           const res = await addSignature(store.token, data);

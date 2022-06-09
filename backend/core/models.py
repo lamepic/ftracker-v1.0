@@ -90,7 +90,7 @@ class DocumentBase(models.Model):
 
 class Document(DocumentBase):
     content = models.FileField(upload_to='documents/', blank=True, null=True)
-    copy = models.FileField(upload_to='copy/', blank=True, null=True)
+    # copy = models.FileField(upload_to='copy/', blank=True, null=True)
     encrypt = models.BooleanField(default=False)
     password = models.CharField(max_length=100, null=True, blank=True)
     created_by = models.ForeignKey(
@@ -360,7 +360,7 @@ class DocumentCopy(models.Model):
 
 
 class CarbonCopyDocument(DocumentBase):
-    content = models.CharField(max_length=200, blank=True, null=True)
+    content = models.FileField(upload_to='copy/', blank=True, null=True)
     created_by = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='document_copy_creator')
     ref = models.CharField(max_length=60, blank=True, null=True, unique=False)

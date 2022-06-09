@@ -37,6 +37,8 @@ class NotificationConsumer(AsyncWebsocketConsumer):
             "message": "You have a recieved a new document",
         }
 
+        return message
+
     @database_sync_to_async
     def get_activated_document_message(self, user_id):
         message = {

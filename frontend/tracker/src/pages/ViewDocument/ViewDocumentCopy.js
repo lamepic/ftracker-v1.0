@@ -3,6 +3,7 @@ import { notification } from "antd";
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import swal from "sweetalert";
+import SignatureModal from "../../components/CustomModals/SignatureModal";
 import ForwardModal from "../../components/ForwardModal/ForwardModal";
 import Loading from "../../components/Loading/Loading";
 import Preview from "../../components/Preview/Preview";
@@ -27,6 +28,11 @@ function ViewDocumentCopy() {
   const [previewDoc, setPreviewDoc] = useState({});
   const [filename, setFilename] = useState("");
   const [submittingMinute, setSubmittingMinute] = useState(false);
+  const [openSignatureModal, setOpenSignatureModal] = useState({
+    open: false,
+    type: "",
+  });
+  const [stamps, setStamps] = useState([]);
 
   const icon = useIcon(filename);
 
@@ -40,6 +46,7 @@ function ViewDocumentCopy() {
       const data = res.data;
       setDocument(data);
       setFilename(data.filename);
+      console.log(data);
     } catch (e) {
       notification.error({
         message: "Error",
@@ -285,6 +292,32 @@ function ViewDocumentCopy() {
                       display="flex"
                       justifyContent="end"
                     >
+                      {document.content !== null && (
+                        <Box>
+                          {store.user.is_department && (
+                            <>
+                              {!stamps.find(
+                                (stamp) =>
+                                  stamp.user.staff_id === store.user.staff_id
+                              ) && (
+                                <Button
+                                  className="file-btn stamp"
+                                  marginLeft="auto"
+                                  marginRight="10px"
+                                  onClick={() => {
+                                    setOpenSignatureModal({
+                                      open: true,
+                                      type: "copyDocumentStamp",
+                                    });
+                                  }}
+                                >
+                                  Add stamp
+                                </Button>
+                              )}
+                            </>
+                          )}
+                        </Box>
+                      )}
                       <Button
                         type="submit"
                         className="minute-button"
@@ -312,6 +345,13 @@ function ViewDocumentCopy() {
           openModal={openModal}
           setOpenModal={setOpenModal}
           type="copy"
+        />
+      )}
+      {openSignatureModal.open && (
+        <SignatureModal
+          openSignatureModal={openSignatureModal}
+          setOpenSignatureModal={setOpenSignatureModal}
+          doc={document}
         />
       )}
     </>

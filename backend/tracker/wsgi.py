@@ -9,8 +9,11 @@ https://docs.djangoproject.com/en/3.2/howto/deployment/wsgi/
 
 import os
 
+import django
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tracker.settings')
+django.setup()
+
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tracker.settings')
 
 application = get_wsgi_application()
