@@ -60,7 +60,7 @@ function ActivateDocument() {
     };
 
     swal({
-      title: "Are you sure you want to Activate and send this Document?",
+      title: "Are you sure you want to Grant access?",
       // text: "Submission of this Document is irreversible",
       icon: "warning",
       button: {
@@ -117,7 +117,7 @@ function ActivateDocument() {
             color="var(--dark-brown)"
             _hover={{ cursor: "pointer" }}
             fontSize="15px"
-            padding="3px"
+            padding="3px 8px"
             bg="var(--lighter-brown)"
             borderRadius="50px"
           >
@@ -134,6 +134,7 @@ function ActivateDocument() {
                 color="var(--dark-brown)"
                 _hover={{ cursor: "pointer" }}
                 fontSize="16px"
+                padding="3px 8px"
               >
                 {capitalize(doc.subject.toLowerCase())}
               </Text>
@@ -164,24 +165,11 @@ function ActivateDocument() {
             <Box
               display="flex"
               flexDirection="column"
-              width="200px"
+              width="fit-content"
               margin="auto"
               marginTop="20px"
               alignItems="center"
             >
-              <Button
-                className="file-btn submit"
-                style={{
-                  marginTop: "5px",
-                  width: "100%",
-                  color: "var(--white)",
-                  backgroundColor: "#009014",
-                  borderColor: "none",
-                }}
-                onClick={handleActivateDocument}
-              >
-                Activate Document
-              </Button>
               <Space style={{ marginTop: "10px" }}>
                 <DatePicker
                   width="10px"
@@ -193,6 +181,19 @@ function ActivateDocument() {
                   className="date"
                 />
               </Space>
+              <Button
+                className="file-btn submit"
+                style={{
+                  marginTop: "5px",
+                  width: "100%",
+                  color: "var(--white)",
+                  backgroundColor: "#009014",
+                  borderColor: "none",
+                }}
+                onClick={handleActivateDocument}
+              >
+                Grant Access
+              </Button>
             </Box>
           </Box>
           <div className="vr vr-sm"></div>
