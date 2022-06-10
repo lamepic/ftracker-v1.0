@@ -24,12 +24,14 @@ import UserArchive from "../UserArchive/UserArchive";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import addNotification from "react-push-notification";
 import * as actionTypes from "../../store/actionTypes";
+import { useHistory } from "react-router-dom";
 
 function Dashboard() {
   // useFetchCount(true, true, true, true);
   const [store, dispatch] = useStateValue();
   const user = useFetchUser();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const history = useHistory();
 
   const [socketUrl, setSocketUrl] = useState(
     `${process.env.REACT_APP_SOCKET_PATH}/push-notification/?bzq=${store?.token}`
@@ -38,6 +40,7 @@ function Dashboard() {
   const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
     shouldReconnect: (e) => true,
     reconnectInterval: 4000,
+    // onClick: (e) => window.open(process.env.REACT_APP_BASE_PATH),
   });
 
   useEffect(() => {
@@ -53,7 +56,7 @@ function Dashboard() {
         message: `Sender: ${status.sender}\nDescription: ${status.subject}`,
         theme: "darkblue",
         native: true,
-        duration: 15000,
+        duration: 30000,
       });
     }
   }, [lastMessage]);
