@@ -14,15 +14,16 @@ backend/media
 backend/static
 backend/signature
 backend/stamp
+backend/env.prod
 /.pnp
 .pnp.js
 .env
-
+env.prod
 # testings
 /coverage
 
 # production
-/build
+frontend/tracker/build
 
 # misc
 .DS_Store
