@@ -4,7 +4,6 @@ import "./Navbar.css";
 import Search from "../Input/Search";
 import { BellFilled, DownOutlined, MenuOutlined } from "@ant-design/icons";
 import { useStateValue } from "../../store/StateProvider";
-import { logout } from "../../http/auth";
 import * as actionTypes from "../../store/actionTypes";
 import { useHistory } from "react-router-dom";
 import {
