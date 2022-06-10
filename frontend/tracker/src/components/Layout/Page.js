@@ -7,8 +7,13 @@ import { capitalize } from "../../utility/helper";
 import { Box, Grid, GridItem, Image, Text } from "@chakra-ui/react";
 import addIcon from "../../assets/icons/add-icon.svg";
 import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 function Page({ loading, data, type }) {
+  const history = useHistory();
+
+  const onBack = () => history.goBack();
+
   if (loading) {
     return <Loading />;
   }
@@ -34,14 +39,37 @@ function Page({ loading, data, type }) {
         {incoming_data.length > 0 ? (
           <Box>
             <Box marginTop="10px">
-              <Text
-                as="h2"
-                fontSize={{ sm: "1.5rem", lg: "1.7rem" }}
-                color="var(--dark-brown)"
-                fontWeight="600"
+              <Box
+                display="flex"
+                alignItems="center"
+                cursor="pointer"
+                onClick={onBack}
               >
-                {capitalize(type)}
-              </Text>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  style={{ width: "1.5rem", height: "1.5rem" }}
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="var(--dark-brown)"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M7 16l-4-4m0 0l4-4m-4 4h18"
+                  />
+                </svg>
+                <Text
+                  as="h2"
+                  fontSize={{ sm: "1.5rem", lg: "1.7rem" }}
+                  color="var(--dark-brown)"
+                  fontWeight="600"
+                  marginLeft="10px"
+                >
+                  {capitalize(type)}
+                </Text>
+              </Box>
 
               <Box maxH={{ sm: "100vh", lg: "80vh" }} overflowY="auto">
                 <Grid templateColumns="repeat(6, 1fr)" gap={6} marginTop="10px">
@@ -84,14 +112,37 @@ function Page({ loading, data, type }) {
         {data.length > 0 ? (
           <Box>
             <Box marginTop="10px">
-              <Text
-                as="h2"
-                fontSize={{ sm: "1.5rem", lg: "1.7rem" }}
-                color="var(--dark-brown)"
-                fontWeight="600"
+              <Box
+                display="flex"
+                alignItems="center"
+                cursor="pointer"
+                onClick={onBack}
               >
-                {capitalize(type)}
-              </Text>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  style={{ width: "1.5rem", height: "1.5rem" }}
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="var(--dark-brown)"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M7 16l-4-4m0 0l4-4m-4 4h18"
+                  />
+                </svg>
+                <Text
+                  as="h2"
+                  fontSize={{ sm: "1.5rem", lg: "1.7rem" }}
+                  color="var(--dark-brown)"
+                  fontWeight="600"
+                  marginLeft="10px"
+                >
+                  {capitalize(type)}
+                </Text>
+              </Box>
 
               <Box maxH={{ sm: "100vh", lg: "80vh" }} overflowY="auto">
                 <Grid templateColumns="repeat(6, 1fr)" gap={6}>
