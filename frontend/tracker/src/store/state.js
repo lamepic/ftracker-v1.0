@@ -1,5 +1,5 @@
 const initialState = {
-  token: localStorage.getItem("token"),
+  token: localStorage.getItem("beans"),
   breadcrumbs: JSON.parse(localStorage.getItem("breadcrumbs")),
   isAuthenticated: false,
   isLoading: true,
