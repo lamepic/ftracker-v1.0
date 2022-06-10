@@ -31,8 +31,10 @@ import moment from "moment";
 import RenameModal from "../../components/CustomModals/RenameModal";
 import MoveModal from "../../components/CustomModals/MoveModal";
 import swal from "sweetalert";
+import { useHistory } from "react-router-dom";
 
 function Archive() {
+  const history = useHistory();
   const [store, dispatch] = useStateValue();
   const [archive, setArchive] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -186,19 +188,43 @@ function Archive() {
   // if (folderLoading || loading) {
   //   return <Loading />;
   // }
+  const onBack = () => history.goBack();
 
   return (
     <>
       <Box>
         <Box marginTop="10px">
-          <Text
-            as="h2"
-            fontSize={{ sm: "1.5rem", lg: "1.7rem" }}
-            color="var(--dark-brown)"
-            fontWeight="600"
+          <Box
+            display="flex"
+            alignItems="center"
+            cursor="pointer"
+            onClick={onBack}
           >
-            Archive
-          </Text>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              style={{ width: "1.5rem", height: "1.5rem" }}
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="var(--dark-brown)"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M7 16l-4-4m0 0l4-4m-4 4h18"
+              />
+            </svg>
+            <Text
+              as="h2"
+              fontSize={{ sm: "1.5rem", lg: "1.7rem" }}
+              color="var(--dark-brown)"
+              fontWeight="600"
+              marginLeft="10px"
+            >
+              Archive
+            </Text>
+          </Box>
           <Toolbar>
             <ToolbarOption
               text="New Folder"
