@@ -477,6 +477,16 @@ class ForwardDocumentAPIView(views.APIView):
             except Exception as err:
                 raise exceptions.ServerError
 
+            socket_message = {
+                "sender": self.request.user.get_full_name(),
+                "subject": document.subject
+            }
+            channel_layer = get_channel_layer()
+            async_to_sync(channel_layer.group_send)(
+                f"{receiver.staff_id}", {"type": "send_notification",
+                                         "text": json.dumps(socket_message)}
+            )
+
         return Response({'message': 'Document forwarded'}, status=status.HTTP_201_CREATED)
 
 
@@ -507,6 +517,16 @@ class ForwardCopyDocumentAPIView(views.APIView):
             #                     sender=sender, document=document, create_code=False)
         except Exception as err:
             raise exceptions.ServerError(err.args[0])
+
+        socket_message = {
+            "sender": self.request.user.get_full_name(),
+            "subject": document.subject
+        }
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.group_send)(
+            f"{receiver.staff_id}", {"type": "send_notification",
+                                     "text": json.dumps(socket_message)}
+        )
 
         return Response({'message': 'Document forwarded'}, status=status.HTTP_201_CREATED)
 
