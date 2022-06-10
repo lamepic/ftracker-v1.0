@@ -12,20 +12,24 @@
   align-items: center;
 }
 
-.request__header > .MuiSvgIcon-root {
+/* .request__header > .MuiSvgIcon-root {
   flex: 0.1;
   color: var(--dark-brown) !important;
-}
+} */
 
 .request__header p {
-  flex: 0.9;
-  margin-left: 3rem;
+  /* flex: 0.9; */
+  /* margin-left: 3rem; */
   font-weight: 600;
+  text-align: center;
+  width: 100%;
 }
 
 .request {
-  width: 250px;
+  width: 290px;
+  /* width: 100%; */
   position: relative;
+  line-height: 20px;
 }
 
 .request__content {

@@ -119,16 +119,16 @@ function NotificationDropDown() {
   };
 
   const menu = (
-    <Menu>
+    <Menu style={{ borderRadius: "8px" }}>
       <Menu.Item key="0101">
         <div className="request__header" key="00">
-          <BellFilled
+          {/* <BellFilled
             style={{
               fontSize: "22px",
               color: "var(--dark-brown)",
               pointerEvents: "none",
             }}
-          />
+          /> */}
           <p>Notifications</p>
         </div>
       </Menu.Item>
@@ -140,7 +140,10 @@ function NotificationDropDown() {
           const department = request.requested_by.department.name;
           const date = new Date(request.created_at);
           return (
-            <Menu.Item onClick={() => handleRequest(request)} key={id}>
+            <Menu.Item
+              onClick={() => handleRequest(request)}
+              key={document.id.toString()}
+            >
               <div className="request">
                 <div className="request__content">
                   <div className="request_from">
@@ -175,35 +178,56 @@ function NotificationDropDown() {
         const document = doc.document.subject;
         const date = new Date(doc.date_activated);
         const read = doc.read;
-
         return (
-          <Menu.Item onClick={() => handleOpenActivatedDoc(doc)} key={id}>
-            <div
-              className="request"
+          <Box
+            display="flex"
+            justifyContent="space-around"
+            alignItems="center"
+            width="100%"
+            background={`${!read ? "#d9d9d9" : ""}`}
+            padding="5px 8px 5px 5px"
+            height="75px"
+          >
+            {!read && (
+              <Box
+                width="7px"
+                height="7px"
+                background="var(--dark-brown)"
+                borderRadius="50%"
+                marginRight="5px"
+              ></Box>
+            )}
+            <Menu.Item
+              onClick={() => handleOpenActivatedDoc(doc)}
+              key={id.toString()}
               style={{
                 background: `${!read ? "#d9d9d9" : ""}`,
+                padding: "0px",
               }}
             >
-              <Box padding="5px">
-                <div className="request__content">
-                  <div className="request_from">
-                    <Text
-                      color="var(--dark-brown)"
-                      fontWeight="600"
-                      fontSize="15px"
-                      isTruncated
-                      width="150px"
-                    >
-                      {name}
-                    </Text>
+              <div className="request">
+                <Box padding="5px">
+                  <div className="request__content">
+                    <div className="request_from">
+                      <Text
+                        color="var(--dark-brown)"
+                        fontWeight="600"
+                        fontSize="15px"
+                        isTruncated
+                        width="150px"
+                      >
+                        {name}
+                      </Text>
+                    </div>
+
+                    <p className="activate__msg">Document request granted</p>
+                    <p className="activate__document__name">{document}</p>
                   </div>
-                  <p className="activate__msg">Document request granted</p>
-                  <p className="activate__document__name">{document}</p>
-                </div>
-                <p className="request__date">{moment(date).fromNow()}</p>
-              </Box>
-            </div>
-          </Menu.Item>
+                  <p className="request__date">{moment(date).fromNow()}</p>
+                </Box>
+              </div>
+            </Menu.Item>
+          </Box>
         );
       })}
       {!loading &&
@@ -211,7 +235,7 @@ function NotificationDropDown() {
         activatedDocuments.length === 0 && (
           <Menu.Item key="001">
             <div className="request">
-              <p className="empty__request">You have 0 Notifications</p>
+              <p className="empty__request">You have no notifications</p>
             </div>
           </Menu.Item>
         )}
