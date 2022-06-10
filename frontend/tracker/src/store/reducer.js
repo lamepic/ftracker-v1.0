@@ -3,7 +3,7 @@ import * as actionTypes from "./actionTypes";
 const reducer = (state, action) => {
   switch (action.type) {
     case actionTypes.SET_TOKEN:
-      localStorage.setItem("token", action.payload);
+      localStorage.setItem("beans", action.payload);
       return {
         ...state,
         token: action.payload,
@@ -113,7 +113,7 @@ const reducer = (state, action) => {
     case actionTypes.LOGIN_FAIL:
     case actionTypes.AUTH_ERROR:
     case actionTypes.LOGOUT_SUCCESS:
-      localStorage.removeItem("token");
+      localStorage.removeItem("beans");
       return {
         ...state,
         token: null,
