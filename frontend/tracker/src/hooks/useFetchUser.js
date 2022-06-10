@@ -15,7 +15,7 @@ function useFetchUser() {
     try {
       const config = {
         headers: {
-          Authorization: `Token ${localStorage.getItem("token")}`,
+          Authorization: `Token ${localStorage.getItem("beans")}`,
         },
       };
 
