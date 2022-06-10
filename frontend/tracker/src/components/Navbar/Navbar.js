@@ -76,13 +76,21 @@ function NotificationDropDown() {
   };
 
   const fetchPendingRequest = async () => {
-    const requestRes = await fetchRequest(store.token);
-    const requestData = requestRes.data;
-    setPendingRequest(requestData);
-    const activatedDocumentRes = await fetchActivateDocument(store.token);
-    const activatedDocumentData = activatedDocumentRes.data;
-    setActivatedDocuments(activatedDocumentData);
-    setLoading(false);
+    try {
+      const requestRes = await fetchRequest(store.token);
+      const requestData = requestRes.data;
+      setPendingRequest(requestData);
+      const activatedDocumentRes = await fetchActivateDocument(store.token);
+      const activatedDocumentData = activatedDocumentRes.data;
+      setActivatedDocuments(activatedDocumentData);
+    } catch (err) {
+      notification.error({
+        message: "Error",
+        description: err.data.details,
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const fetchNotifications = async () => {
@@ -198,13 +206,15 @@ function NotificationDropDown() {
           </Menu.Item>
         );
       })}
-      {!loading && activatedDocuments === 0 && (
-        <Menu.Item key="001">
-          <div className="request">
-            <p className="empty__request">You have 0 Notifications</p>
-          </div>
-        </Menu.Item>
-      )}
+      {!loading &&
+        pendingRequest.length === 0 &&
+        activatedDocuments.length === 0 && (
+          <Menu.Item key="001">
+            <div className="request">
+              <p className="empty__request">You have 0 Notifications</p>
+            </div>
+          </Menu.Item>
+        )}
     </Menu>
   );
 
