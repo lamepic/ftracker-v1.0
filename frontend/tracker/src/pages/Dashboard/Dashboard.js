@@ -32,9 +32,8 @@ function Dashboard() {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [socketUrl, setSocketUrl] = useState(
-    `wss://${process.env.REACT_APP_SOCKET_PATH}/push-notification/?token=${store?.token}`
+    `${process.env.REACT_APP_SOCKET_PATH}/push-notification/?bzq=${store?.token}`
   );
-  // const [messageHistory, setMessageHistory] = useState([]);
 
   const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
     shouldReconnect: (e) => true,
