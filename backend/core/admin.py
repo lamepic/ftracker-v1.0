@@ -138,7 +138,7 @@ admin.site.register(models.Folder, CustomMPTTModelAdmin)
 
 @admin.register(models.CarbonCopyDocument)
 class CarbonCopyDocumentAdmin(admin.ModelAdmin):
-    list_display = ['id', 'subject', ]
+    list_display = ['id', 'subject', 'content', ]
 
 
 @admin.register(models.CarbonCopyMinute)
