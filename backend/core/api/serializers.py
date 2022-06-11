@@ -240,8 +240,6 @@ class CarbonCopyDocument(serializers.ModelSerializer):
     created_by = users_serializers.UserSerializer()
     document_type = DocumentTypeSerializer()
     minute = serializers.SerializerMethodField()
-    signature = SignatureSerializer(many=True)
-    stamp = StampSerializer(many=True)
 
     class Meta:
         model = models.CarbonCopyDocument
@@ -250,7 +248,7 @@ class CarbonCopyDocument(serializers.ModelSerializer):
                   "filename",
                   "ref",
                   "created_by",
-                  "document_type", "related_document", "minute", 'stamp', 'signature']
+                  "document_type", "related_document", "minute"]
 
     def get_related_document(self, obj):
         related_document = obj.carboncopyrelateddocument_set
