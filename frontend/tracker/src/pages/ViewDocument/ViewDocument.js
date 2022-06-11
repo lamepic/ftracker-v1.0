@@ -480,6 +480,9 @@ function ViewDocument() {
                                     type: "stamp",
                                   });
                                 }}
+                                isDisabled={
+                                  code === undefined ? false : !code?.used
+                                }
                               >
                                 Add stamp
                               </Button>
