@@ -58,34 +58,9 @@ class DocumentBase(models.Model):
     folder = models.ForeignKey(
         "Folder", on_delete=models.SET_NULL, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    signature = models.ManyToManyField("Signature", blank=True)
-    stamp = models.ManyToManyField("Stamp", blank=True)
 
     class Meta:
         abstract = True
-
-
-# class DocumentFile(models.Model):
-#     doc_file = models.FileField(upload_to='documents/', blank=True, null=True)
-#     current = models.BooleanField(default=True)
-#     document = models.ForeignKey(
-#         "Document", on_delete=models.CASCADE, related_name='document_file', blank=True, null=True)
-
-#     def __str__(self):
-#         return self.document.subject
-
-#     def save(self, *args, **kwargs):
-
-#         if self.doc_file:
-#             filename = self.doc_file.name
-#             check = (".pdf", ".docx", ".doc", ".xls", ".xlsx",
-#                      ".ppt", ".pptx", ".txt", ".jpeg", ".jpg")
-#             if not filename.endswith(check):
-#                 raise ValidationError("Unsupported File format")
-#         else:
-#             self.document.filename = self.subject
-
-#         super(DocumentFile, self).save(*args, **kwargs)
 
 
 class Document(DocumentBase):
