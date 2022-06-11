@@ -36,6 +36,11 @@ class NotificationConsumer(AsyncWebsocketConsumer):
         last_msg["status"] = event["text"]
         await self.send(text_data=json.dumps(last_msg))
 
+    async def send_add_signature_signal(self, event):
+        last_msg = await self.get_add_signature_message(self.user_id)
+        last_msg["status"] = event["text"]
+        await self.send(text_data=json.dumps(last_msg))
+
     @database_sync_to_async
     def get_message(self, user_id):
         message = {
@@ -54,6 +59,12 @@ class NotificationConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
     def get_mark_complete_message(self, user_id):
+        message = {
+            "message": "Document has been marked as complete and Archived",
+        }
+
+    @database_sync_to_async
+    def get_add_signature_message(self, user_id):
         message = {
             "message": "Document has been marked as complete and Archived",
         }
