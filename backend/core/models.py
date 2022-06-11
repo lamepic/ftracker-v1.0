@@ -399,11 +399,9 @@ class CarbonCopyRelatedDocument(models.Model):
 
 
 class Signature(models.Model):
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     signature = models.FileField(
-        upload_to='signature/', null=True, blank=True)
-    # document = models.ForeignKey(
-    #     Document, on_delete=models.SET_NULL, null=True)
+        upload_to='signature/')
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -411,10 +409,8 @@ class Signature(models.Model):
 
 
 class Stamp(models.Model):
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    stamp = models.FileField(upload_to='stamps/', null=True, blank=True)
-    # document = models.ForeignKey(
-    #     Document, on_delete=models.SET_NULL, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    stamp = models.FileField(upload_to='stamps/')
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
