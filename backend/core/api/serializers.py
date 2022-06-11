@@ -68,15 +68,13 @@ class DocumentsSerializer(serializers.ModelSerializer):
     related_document = serializers.SerializerMethodField()
     preview_code = serializers.SerializerMethodField()
     document_type = DocumentTypeSerializer()
-    signature = SignatureSerializer(many=True)
-    stamp = StampSerializer(many=True)
+    created_by = users_serializers.UserSerializer()
 
     class Meta:
         model = models.Document
         fields = ['id', 'content', 'subject', 'minute',
-                  'related_document', 'preview_code', 'ref', 'document_type', "filename", "created_at",
-                  "signature",
-                  "stamp"]
+                  'related_document', 'preview_code', 'ref', 'document_type', "filename", "created_at", "created_by"
+                  ]
 
     def get_related_document(self, obj):
         related_document = obj.relateddocument_set
