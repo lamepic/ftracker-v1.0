@@ -121,28 +121,18 @@ function NotificationDropDown() {
     <Menu style={{ borderRadius: "8px" }}>
       <Menu.Item key="0101">
         <div className="request__header" key="00">
-          {/* <BellFilled
-            style={{
-              fontSize: "22px",
-              color: "var(--dark-brown)",
-              pointerEvents: "none",
-            }}
-          /> */}
           <p>Notifications</p>
         </div>
       </Menu.Item>
       {!loading ? (
-        pendingRequest.map((request) => {
+        pendingRequest.map((request, idx) => {
           const id = request.id;
           const name = `${request.requested_by.first_name} ${request.requested_by.last_name}`;
           const document = request.document.subject;
           const department = request.requested_by.department.name;
           const date = new Date(request.created_at);
           return (
-            <Menu.Item
-              onClick={() => handleRequest(request)}
-              key={document.id.toString()}
-            >
+            <Menu.Item onClick={() => handleRequest(request)} key={idx}>
               <div className="request">
                 <div className="request__content">
                   <div className="request_from">
@@ -171,7 +161,7 @@ function NotificationDropDown() {
           </div>
         </Menu.Item>
       )}
-      {activatedDocuments.map((doc) => {
+      {activatedDocuments.map((doc, idx) => {
         const id = doc.id;
         const name = `${doc.sender.first_name} ${doc.sender.last_name}`;
         const document = doc.document.subject;
@@ -198,7 +188,7 @@ function NotificationDropDown() {
             )}
             <Menu.Item
               onClick={() => handleOpenActivatedDoc(doc)}
-              key={id.toString()}
+              key={idx}
               style={{
                 background: `${!read ? "#d9d9d9" : ""}`,
                 padding: "0px",
