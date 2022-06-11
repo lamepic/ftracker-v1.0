@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     "django_celery_beat",
     'mptt',
     'django_inlinecss',
-    'channels'
+    'channels',
+    'django_cleanup.apps.CleanupConfig',
 ]
 
 MIDDLEWARE = [
@@ -209,9 +210,9 @@ EMAIL_USE_TLS = True
 
 # ADD THE REDIS PASSWORD
 host = [{
-        'address': f"redis://{env('REDIS_HOST')}:{env('REDIS_PORT')}", 
+        'address': f"redis://{env('REDIS_HOST')}:{env('REDIS_PORT')}",
         # 'password': ''
-    }]
+        }]
 
 # CHANNELS
 CHANNEL_LAYERS = {
