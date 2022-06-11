@@ -831,7 +831,16 @@ class CreateDocument(views.APIView):
             document.content.save(filename, File(file))
             document.filename = filename
             document.save()
+            carbonCopyDocument = models.CarbonCopyDocument.objects.filter(
+                document_id=document.id)
+            if len(carbonCopyDocument) > 0:
+                for copy in carbonCopyDocument:
+                    os.remove(copy.content.path)
+                    copy.content.save(filename, File(file))
+                    copy.filename = filename
+                    copy.save()
         except Exception as err:
+            print(err)
             raise exceptions.ServerError(err.args[0])
 
         return Response({'message': 'Document updated successfully'}, status=status.HTTP_200_OK)
@@ -914,6 +923,7 @@ class CreateDocument(views.APIView):
                         ref=document.ref,
                         created_by=document.created_by,
                         document_type=document.document_type,
+                        document=document
                     )
                     document_copy = models.DocumentCopy.objects.create(
                         sender=sender, document=carbon_copy_document, receiver=copy_receiver, forwarded=True, send_id=sender.staff_id)
