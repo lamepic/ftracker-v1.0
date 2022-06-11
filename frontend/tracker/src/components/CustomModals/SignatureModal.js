@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Box, CircularProgress, Spinner } from "@chakra-ui/react";
+import { Box, Spinner } from "@chakra-ui/react";
 import { Button, Modal, notification } from "antd";
 import SignatureCanvas from "react-signature-canvas";
 import { addSignature } from "../../http/document";
