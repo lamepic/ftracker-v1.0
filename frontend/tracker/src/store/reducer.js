@@ -27,6 +27,11 @@ const reducer = (state, action) => {
         ...state,
         newIncoming: !state.newIncoming,
       };
+    case actionTypes.SET_SOCKET_SIGNAL:
+      return {
+        ...state,
+        socketSignal: !state.socketSignal,
+      };
     case actionTypes.SET_OUTGOING_COUNT:
       return {
         ...state,

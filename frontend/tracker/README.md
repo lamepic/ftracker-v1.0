@@ -18,8 +18,10 @@
 
 # handle reference exception
 
-# duplicate raw file and save path in copy.
+# duplicate raw file and save path in copy. - done
 
 # fetch user before making wesocket connection to avoid getting anonymous user - done
 
-# put date above the button in activate document
+# put date above the button in activate document - done
+
+# delete document if mail server fails to send document

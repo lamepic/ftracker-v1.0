@@ -29,3 +29,4 @@ export const OPEN_PASSWORD_MODAL = "OPEN_PASSWORD_MODAL";
 
 // Websocket
 export const NEW_INCOMING = "NEW_INCOMING";
+export const SET_SOCKET_SIGNAL = "SET_SOCKET_SIGNAL";

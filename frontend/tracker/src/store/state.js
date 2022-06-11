@@ -16,6 +16,7 @@ const initialState = {
   activatedDocumentDetails: null,
   openPasswordModal: false,
   newIncoming: false,
+  socketSignal: false,
 };
 
 export default initialState;
