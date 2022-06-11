@@ -31,6 +31,7 @@ import ForwardModal from "../../components/ForwardModal/ForwardModal";
 import useIcon from "../../hooks/useIcon";
 import SignatureModal from "../../components/CustomModals/SignatureModal";
 import { capitalize } from "../../utility/helper";
+import UpdateDocumentModal from "../../components/CustomModals/UpdateDocumentModal";
 
 function ViewDocument() {
   const [store] = useStateValue();
@@ -44,13 +45,13 @@ function ViewDocument() {
   const [openModal, setOpenModal] = useState(false);
   const [nextReceiver, setNextReceiver] = useState(null);
   const [previewDoc, setPreviewDoc] = useState({});
-  const [signatures, setSignatures] = useState([]);
-  const [stamps, setStamps] = useState([]);
   const [submittingMinute, setSubmittingMinute] = useState(false);
   const [openSignatureModal, setOpenSignatureModal] = useState({
     open: false,
     type: "",
   });
+  const [openUpdateDocumentModal, setOpenUpdateDocumentModal] = useState(false);
+  const [documentUpdated, setDocumentUpdated] = useState(false);
 
   const [filename, setFilename] = useState("");
   const icon = useIcon(filename);
@@ -63,7 +64,7 @@ function ViewDocument() {
       type.toLowerCase() !== "personalarchive"
     )
       _fetchNextUserToForwardDoc();
-  }, []);
+  }, [documentUpdated]);
 
   const _fetchDocument = async () => {
     try {
@@ -77,8 +78,6 @@ function ViewDocument() {
         const data = res.data;
         setDocument(data);
         setFilename(data.filename);
-        setSignatures(data.signature);
-        setStamps(data.stamp);
       }
     } catch (e) {
       notification.error({
@@ -310,11 +309,39 @@ function ViewDocument() {
                 flexDirection="column"
                 alignItems="center"
                 justifyContent="center"
-                cursor="pointer"
                 borderRadius="10px"
-                onClick={() => handlePreview(document)}
               >
-                <Image src={icon} alt="file" width="500px" />
+                {document.created_by.staff_id === store.user.staff_id && (
+                  <Box
+                    marginLeft="auto"
+                    cursor="pointer"
+                    onClick={() => setOpenUpdateDocumentModal(true)}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="1.5rem"
+                      height="1.5rem"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="var(--dark-brown)"
+                      strokeWidth={2}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                      />
+                    </svg>
+                  </Box>
+                )}
+
+                <Image
+                  src={icon}
+                  alt="file"
+                  width="500px"
+                  onClick={() => handlePreview(document)}
+                  cursor="pointer"
+                />
               </Box>
               <Box margin="auto" marginTop="20px">
                 {type === "incoming" && (
@@ -382,7 +409,7 @@ function ViewDocument() {
                     <div
                       className={`minute-box-preview ${
                         type !== "incoming" && "minute-box-preview-lg"
-                      } ${stamps?.length > 0 && "stamp-box-preview"}`}
+                      }`}
                     >
                       <div>
                         {document?.minute?.map((item) => {
@@ -397,54 +424,8 @@ function ViewDocument() {
                             </div>
                           );
                         })}
-                        {signatures?.map((signature) => {
-                          return (
-                            <div className="minute" key={signature.id}>
-                              <Image
-                                src={`${process.env.BASE_PATH}${signature.signature}`}
-                                width="50%"
-                              />
-                              <p className="employee">
-                                {signature?.user.first_name}{" "}
-                                {signature?.user.last_name}
-                              </p>
-                              <p className="date">
-                                Date:{" "}
-                                {new Date(signature?.created_at).toDateString()}
-                              </p>
-                            </div>
-                          );
-                        })}
                       </div>
                     </div>
-                    {stamps.length > 0 && (
-                      <div
-                        className={`minute-box-preview ${
-                          type !== "incoming" && "minute-box-preview-lg"
-                        } ${stamps?.length > 0 && "stamp-box-preview"}`}
-                      >
-                        <div>
-                          {stamps.map((stamp) => {
-                            return (
-                              <div className="minute" key={stamp.id}>
-                                <Image
-                                  src={`${process.env.BASE_PATH}${stamp.stamp}`}
-                                  width="50%"
-                                />
-                                <p className="employee">
-                                  {stamp?.user.first_name}{" "}
-                                  {stamp?.user.last_name}
-                                </p>
-                                <p className="date">
-                                  Date:{" "}
-                                  {new Date(stamp.created_at).toDateString()}
-                                </p>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    )}
                   </Box>
                   {type === "incoming" && (
                     <form
@@ -469,71 +450,56 @@ function ViewDocument() {
                         {document.content !== null && (
                           <Box>
                             {store.user.is_department ? (
-                              <>
-                                {!stamps.find(
-                                  (stamp) =>
-                                    stamp.user.staff_id === store.user.staff_id
-                                ) && (
-                                  <Button
-                                    className="file-btn stamp"
-                                    marginLeft="auto"
-                                    marginRight="10px"
-                                    onClick={() => {
+                              <Button
+                                className="file-btn stamp"
+                                marginLeft="auto"
+                                marginRight="10px"
+                                onClick={() => {
+                                  setOpenSignatureModal({
+                                    open: true,
+                                    type: "stamp",
+                                  });
+                                }}
+                              >
+                                Add stamp
+                              </Button>
+                            ) : (
+                              <Menu _focus={{ outline: "none" }}>
+                                <MenuButton
+                                  as={Button}
+                                  rightIcon={<ChevronDownIcon />}
+                                  className="file-btn signature"
+                                  marginLeft="auto"
+                                  marginRight="10px"
+                                  isDisabled={
+                                    code === undefined ? false : !code?.used
+                                  }
+                                >
+                                  Signature
+                                </MenuButton>
+                                <MenuList>
+                                  <MenuItem
+                                    onClick={() =>
                                       setOpenSignatureModal({
                                         open: true,
-                                        type: "stamp",
-                                      });
-                                    }}
+                                        type: "sign",
+                                      })
+                                    }
                                   >
-                                    Add stamp
-                                  </Button>
-                                )}
-                              </>
-                            ) : (
-                              <>
-                                {!signatures.find(
-                                  (signature) =>
-                                    signature.user.staff_id ===
-                                    store.user.staff_id
-                                ) && (
-                                  <Menu _focus={{ outline: "none" }}>
-                                    <MenuButton
-                                      as={Button}
-                                      rightIcon={<ChevronDownIcon />}
-                                      className="file-btn signature"
-                                      marginLeft="auto"
-                                      marginRight="10px"
-                                      isDisabled={
-                                        code === undefined ? false : !code?.used
-                                      }
-                                    >
-                                      Signature
-                                    </MenuButton>
-                                    <MenuList>
-                                      <MenuItem
-                                        onClick={() =>
-                                          setOpenSignatureModal({
-                                            open: true,
-                                            type: "sign",
-                                          })
-                                        }
-                                      >
-                                        Sign
-                                      </MenuItem>
-                                      <MenuItem
-                                        onClick={() =>
-                                          setOpenSignatureModal({
-                                            open: true,
-                                            type: "append",
-                                          })
-                                        }
-                                      >
-                                        Append Signature
-                                      </MenuItem>
-                                    </MenuList>
-                                  </Menu>
-                                )}
-                              </>
+                                    Sign
+                                  </MenuItem>
+                                  <MenuItem
+                                    onClick={() =>
+                                      setOpenSignatureModal({
+                                        open: true,
+                                        type: "append",
+                                      })
+                                    }
+                                  >
+                                    Append Signature
+                                  </MenuItem>
+                                </MenuList>
+                              </Menu>
                             )}
                           </Box>
                         )}
@@ -571,6 +537,15 @@ function ViewDocument() {
           openSignatureModal={openSignatureModal}
           setOpenSignatureModal={setOpenSignatureModal}
           doc={document}
+        />
+      )}
+      {openUpdateDocumentModal && (
+        <UpdateDocumentModal
+          setOpenUpdateDocumentModal={setOpenUpdateDocumentModal}
+          openUpdateDocumentModal={openUpdateDocumentModal}
+          document={document}
+          setDocumentUpdated={setDocumentUpdated}
+          documentUpdated={documentUpdated}
         />
       )}
     </>
