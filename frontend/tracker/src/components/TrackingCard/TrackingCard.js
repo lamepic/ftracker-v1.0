@@ -43,7 +43,7 @@ function TrackingCard({ receiver, deparment, document, id }) {
               size="small"
               style={{ marginBottom: "5px" }}
             >
-              Track
+              Locate
             </Button>
             <Button onClick={() => setOpenPreviewModal(true)} size="small">
               View
