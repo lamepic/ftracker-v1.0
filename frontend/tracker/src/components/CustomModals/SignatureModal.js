@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Box } from "@chakra-ui/react";
+import { Box, CircularProgress, Spinner } from "@chakra-ui/react";
 import { Button, Modal, notification } from "antd";
 import SignatureCanvas from "react-signature-canvas";
 import { addSignature } from "../../http/document";
@@ -7,13 +7,19 @@ import { useStateValue } from "../../store/StateProvider";
 import { useHistory } from "react-router-dom";
 import { ArrowLeftOutlined, ArrowRightOutlined } from "@ant-design/icons";
 
-function SignatureModal({ openSignatureModal, setOpenSignatureModal, doc }) {
+function SignatureModal({
+  openSignatureModal,
+  setOpenSignatureModal,
+  doc,
+  setOpenPreview,
+}) {
+  const history = useHistory();
   const [store, dispatch] = useStateValue();
   const docViewerRef = useRef(null);
   const [pdfViewport, setPdfViewport] = useState();
   const [showSignaturePad, setShowSignaturePad] = useState(false);
   const [mousePosition, setMousePosition] = useState({});
-  const history = useHistory();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     var pdfjsLib = window["pdfjs-dist/build/pdf"];
@@ -135,6 +141,7 @@ function SignatureModal({ openSignatureModal, setOpenSignatureModal, doc }) {
         break;
       case "append":
         try {
+          setLoading(true);
           const data = {
             mousePosition: position,
             doc_id: doc.id,
@@ -147,18 +154,22 @@ function SignatureModal({ openSignatureModal, setOpenSignatureModal, doc }) {
               message: "Success",
               description: "Signature added",
             });
-            history.go(0);
+            setOpenSignatureModal(false);
           }
         } catch (e) {
           notification.error({
             description: "Error",
             message: e.response.data.detail,
           });
+        } finally {
+          setLoading(false);
+          // setOpenPreview(true);
         }
         break;
       case "stamp":
       case "copyDocumentStamp":
         try {
+          setLoading(true);
           const data = {
             mousePosition: position,
             doc_id: doc.id,
@@ -171,13 +182,14 @@ function SignatureModal({ openSignatureModal, setOpenSignatureModal, doc }) {
               message: "Success",
               description: "Stamp added",
             });
-            history.go(0);
           }
         } catch (e) {
           notification.error({
             description: "Error",
             message: e.response.data.detail,
           });
+        } finally {
+          setLoading(false);
         }
         break;
       default:
@@ -201,6 +213,16 @@ function SignatureModal({ openSignatureModal, setOpenSignatureModal, doc }) {
         zIndex="100"
         onClick={() => setOpenSignatureModal({ open: false, type: "" })}
       >
+        {loading && (
+          <Spinner
+            size="xl"
+            color="var(--dark-brown)"
+            position="absolute"
+            left="40rem"
+            zIndex="1000"
+            thickness="4px"
+          />
+        )}
         <Box
           ref={docViewerRef}
           style={{ width: "70%", height: "100%", overflowY: "scroll" }}
@@ -252,9 +274,8 @@ function SignatureModal({ openSignatureModal, setOpenSignatureModal, doc }) {
         <SignaturePad
           showSignaturePad={showSignaturePad}
           setShowSignaturePad={setShowSignaturePad}
-          pdfViewport={pdfViewport}
-          openSignatureModal={openSignatureModal}
           doc={doc}
+          setOpenSignatureModal={setOpenSignatureModal}
           mousePosition={mousePosition}
         />
       )}
@@ -269,6 +290,7 @@ const SignaturePad = ({
   setShowSignaturePad,
   doc,
   mousePosition,
+  setOpenSignatureModal,
 }) => {
   const [loading, setLoading] = useState(false);
   const canvas = useRef(null);
@@ -297,7 +319,7 @@ const SignaturePad = ({
           description: "Signature added",
         });
         setShowSignaturePad(false);
-        history.go(0);
+        setOpenSignatureModal(false);
       }
     } catch (e) {
       notification.error({
