@@ -1303,4 +1303,13 @@ class SignatureView(views.APIView):
         except Exception as err:
             raise exceptions.ServerError(err.args[0])
 
+        socket_message = {
+            "notification": False
+        }
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.group_send)(
+            f"{request.user.staff_id}", {"type": "send_add_signature_signal",
+                                         "text": json.dumps(socket_message)}
+        )
+
         return Response({"status": "success"}, status=status.HTTP_200_OK)
