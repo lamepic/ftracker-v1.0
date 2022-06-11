@@ -68,7 +68,7 @@ function UpdateDocumentModal({
     } catch (err) {
       notification.error({
         mesage: "Error",
-        description: "err.data.detail",
+        description: err.data.detail,
       });
     } finally {
       setSubmitting(false);
