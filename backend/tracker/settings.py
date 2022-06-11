@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     'mptt',
     'django_inlinecss',
     'channels',
-    'django_cleanup.apps.CleanupConfig',
 ]
 
 MIDDLEWARE = [
