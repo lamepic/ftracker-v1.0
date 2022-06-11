@@ -47,17 +47,23 @@ function Dashboard() {
     if (lastMessage !== null) {
       const msg = JSON.parse(lastMessage.data);
       const status = JSON.parse(msg.status);
-      dispatch({
-        type: actionTypes.NEW_INCOMING,
-      });
-      addNotification({
-        title: "Cocoa Papers | Ghana Cocoa Board",
-        subtitle: msg.message,
-        message: `Sender: ${status.sender}\nDescription: ${status.subject}`,
-        theme: "darkblue",
-        native: true,
-        duration: 30000,
-      });
+      if (status.notification) {
+        dispatch({
+          type: actionTypes.NEW_INCOMING,
+        });
+        addNotification({
+          title: "Cocoa Papers | Ghana Cocoa Board",
+          subtitle: msg.message,
+          message: `Sender: ${status.sender}\nDescription: ${status.subject}`,
+          theme: "darkblue",
+          native: true,
+          duration: 30000,
+        });
+      } else {
+        dispatch({
+          type: actionTypes.SET_SOCKET_SIGNAL,
+        });
+      }
     }
   }, [lastMessage]);
 
