@@ -64,7 +64,7 @@ function ViewDocument() {
       type.toLowerCase() !== "personalarchive"
     )
       _fetchNextUserToForwardDoc();
-  }, [documentUpdated]);
+  }, [documentUpdated, store.socketSignal]);
 
   const _fetchDocument = async () => {
     try {
@@ -260,6 +260,26 @@ function ViewDocument() {
             overflowX="auto"
             whiteSpace="nowrap"
           >
+            <span
+              style={{ marginRight: "10px", cursor: "pointer" }}
+              onClick={() => history.goBack()}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="1.5rem"
+                height="1.5rem"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="var(--dark-brown)"
+                strokeWidth={2}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M7 16l-4-4m0 0l4-4m-4 4h18"
+                />
+              </svg>
+            </span>
             <Text
               fontWeight="600"
               marginRight="20px"
@@ -537,6 +557,7 @@ function ViewDocument() {
           openSignatureModal={openSignatureModal}
           setOpenSignatureModal={setOpenSignatureModal}
           doc={document}
+          setOpenPreview={setOpenPreview}
         />
       )}
       {openUpdateDocumentModal && (
