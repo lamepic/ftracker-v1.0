@@ -182,6 +182,7 @@ function SignatureModal({
               message: "Success",
               description: "Stamp added",
             });
+            setOpenSignatureModal(false);
           }
         } catch (e) {
           notification.error({
@@ -214,14 +215,20 @@ function SignatureModal({
         onClick={() => setOpenSignatureModal({ open: false, type: "" })}
       >
         {loading && (
-          <Spinner
-            size="xl"
-            color="var(--dark-brown)"
+          <Box
             position="absolute"
-            left="40rem"
+            left="37rem"
             zIndex="1000"
-            thickness="4px"
-          />
+            width="150px"
+            height="100px"
+            borderRadius="8px"
+            backgroundColor="#e2e2e2"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+          >
+            <Spinner size="xl" color="var(--dark-brown)" thickness="4px" />
+          </Box>
         )}
         <Box
           ref={docViewerRef}
