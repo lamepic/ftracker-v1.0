@@ -821,13 +821,13 @@ class SearchAPIView(views.APIView):
 
 class CreateDocument(views.APIView):
     def put(self, request):
-        print(request.data)
         try:
             document_id = request.data.get('document_id')
             file = request.data.get('file')
             filename = request.data.get('filename')
 
             document = get_object_or_404(models.Document, id=document_id)
+            os.remove(document.content.path)
             document.content.save(filename, File(file))
             document.filename = filename
             document.save()
