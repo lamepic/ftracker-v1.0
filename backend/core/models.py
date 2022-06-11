@@ -339,6 +339,8 @@ class CarbonCopyDocument(DocumentBase):
     created_by = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='document_copy_creator')
     ref = models.CharField(max_length=60, blank=True, null=True, unique=False)
+    document = models.ForeignKey(
+        Document, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.subject
