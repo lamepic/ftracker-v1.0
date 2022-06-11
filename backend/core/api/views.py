@@ -807,6 +807,22 @@ class SearchAPIView(views.APIView):
 
 
 class CreateDocument(views.APIView):
+    def put(self, request):
+        print(request.data)
+        try:
+            document_id = request.data.get('document_id')
+            file = request.data.get('file')
+            filename = request.data.get('filename')
+
+            document = get_object_or_404(models.Document, id=document_id)
+            document.content.save(filename, File(file))
+            document.filename = filename
+            document.save()
+        except Exception as err:
+            raise exceptions.ServerError(err.args[0])
+
+        return Response({'message': 'Document updated successfully'}, status=status.HTTP_200_OK)
+
     def post(self, request, format=None):
         data = request.data
         data_lst = list(data)  # for attachments
