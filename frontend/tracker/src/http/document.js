@@ -46,6 +46,23 @@ export async function createDocument(token, data) {
   return res;
 }
 
+export async function updateDocument(token, data) {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Token ${token}`,
+    },
+  };
+
+  const formData = new FormData();
+  formData.append("file", data.file);
+  formData.append("filename", data.filename);
+  formData.append("document_id", data.document_id);
+
+  const res = await axios.put("create-document/", formData, config);
+  return res;
+}
+
 export async function addSignature(token, data) {
   const config = {
     headers: {
