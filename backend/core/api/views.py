@@ -245,6 +245,15 @@ class MarkCompleteAPIView(views.APIView):
         except:
             raise exceptions.DocumentNotFound
 
+        socket_message = {
+            "notification": False
+        }
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.group_send)(
+            "general", {"type": "send_mark_complete_signal",
+                        "text": json.dumps(socket_message)}
+        )
+
         return Response({'message': 'marked as complete'}, status=status.HTTP_200_OK)
 
 
@@ -479,7 +488,8 @@ class ForwardDocumentAPIView(views.APIView):
 
         socket_message = {
             "sender": self.request.user.get_full_name(),
-            "subject": document.subject
+            "subject": document.subject,
+            "notification": True
         }
         channel_layer = get_channel_layer()
         async_to_sync(channel_layer.group_send)(
@@ -520,7 +530,8 @@ class ForwardCopyDocumentAPIView(views.APIView):
 
         socket_message = {
             "sender": self.request.user.get_full_name(),
-            "subject": document.subject
+            "subject": document.subject,
+            "notification": True
         }
         channel_layer = get_channel_layer()
         async_to_sync(channel_layer.group_send)(
@@ -570,6 +581,7 @@ class RequestDocumentAPIView(views.APIView):
             socket_message = {
                 "sender": requested_by.get_full_name(),
                 "subject": "New Document Request",
+                "notification": True
             }
             channel_layer = get_channel_layer()
             async_to_sync(channel_layer.group_send)(
@@ -659,6 +671,7 @@ class ActivateDocument(views.APIView):
             socket_message = {
                 "sender": sender.get_full_name(),
                 "subject": "Document Request Granted",
+                "Notification": True
             }
             channel_layer = get_channel_layer()
             async_to_sync(channel_layer.group_send)(
@@ -949,7 +962,8 @@ class CreateDocument(views.APIView):
 
             socket_message = {
                 "sender": self.request.user.get_full_name(),
-                "subject": data.get('subject')
+                "subject": data.get('subject'),
+                "notification": True
             }
             channel_layer = get_channel_layer()
             async_to_sync(channel_layer.group_send)(
