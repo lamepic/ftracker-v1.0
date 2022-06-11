@@ -25,3 +25,5 @@
 # put date above the button in activate document - done
 
 # delete document if mail server fails to send document
+
+# Django cleanup breaks when appending signature
