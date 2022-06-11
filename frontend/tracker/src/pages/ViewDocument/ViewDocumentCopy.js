@@ -38,7 +38,7 @@ function ViewDocumentCopy() {
 
   useEffect(() => {
     _fetchDocument();
-  }, []);
+  }, [store.socketSignal]);
 
   const _fetchDocument = async () => {
     try {
