@@ -4,7 +4,6 @@ import { useStateValue } from "../../store/StateProvider";
 import Folder from "../../components/Doc/Folder";
 import File from "../../components/Doc/File";
 import { fetchUserArchive } from "../../http/document";
-import Loading from "../../components/Loading/Loading";
 import { Box, Stack, Text } from "@chakra-ui/react";
 import {
   FolderAddOutlined,
@@ -185,9 +184,6 @@ function Archive() {
     }
   };
 
-  // if (folderLoading || loading) {
-  //   return <Loading />;
-  // }
   const onBack = () => history.goBack();
 
   return (
