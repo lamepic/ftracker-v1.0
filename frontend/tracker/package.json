@@ -27,7 +27,6 @@
     "react-scripts": "5.0.0",
     "react-signature-canvas": "^1.0.5",
     "react-use-websocket": "^4.2.0",
-    "reconnecting-websocket": "^4.4.0",
     "stream": "^0.0.2",
     "sweetalert": "^2.1.2",
     "web-vitals": "^2.1.4",
