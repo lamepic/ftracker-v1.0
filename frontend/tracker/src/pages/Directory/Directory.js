@@ -11,7 +11,6 @@ import { useHistory, useParams } from "react-router-dom";
 import CreateFileModal from "../../components/CustomModals/CreateFileModal";
 import CreateFolderModal from "../../components/CustomModals/CreateFolderModal";
 import DirectoryFolderIcon from "../../components/Doc/DirectoryFolderIcon";
-import Loading from "../../components/Loading/Loading";
 import ToolbarOption from "../../components/Navbar/ToolbarOption";
 import { fetchSubfolders } from "../../http/directory";
 import { useStateValue } from "../../store/StateProvider";
@@ -122,10 +121,6 @@ function Directory() {
       subject: "-",
     };
   });
-
-  // if (loading) {
-  //   return <Loading />;
-  // }
 
   return (
     <>
