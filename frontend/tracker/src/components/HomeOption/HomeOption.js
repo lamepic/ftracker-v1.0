@@ -18,7 +18,7 @@ function HomeOption({ icon, text, count }) {
     >
       <div className="homeOption__icon">
         <img src={icon} alt={`${text}-icon`} />
-        {count >= 0 && <CustomBadge count={count} size="28px" />}
+        {count > 0 && <CustomBadge count={count} size="28px" />}
       </div>
       <p className="homeOption__text">{text}</p>
     </Box>
