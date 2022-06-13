@@ -162,7 +162,10 @@ class Trail(models.Model):
         ordering = ('-created_at', 'status')
 
     def __str__(self):
-        return f'{self.sender} ==> {self.receiver}'
+        return self.document.subject
+
+    def __unicode__(self):
+        return self.document.filename
 
 
 class PreviewCode(models.Model):

@@ -749,16 +749,13 @@ class CreateFlow(views.APIView):
 
 class SearchAPIView(views.APIView):
     def get(self, request, term, format=None):
-        print(term)
         try:
-            # results = watson.filter(models.Trail, term).filter(
-            #     status='C').filter(forwarded=True).filter(
-            #     receiver=request.user)
-
-            results = watson.search(term, models=(models.Document,))
+            results = watson.filter(models.Trail, term).filter(
+                status='P').filter(forwarded=True).filter(
+                receiver=request.user)
 
             for result in results:
-                print(result.document.subject)
+                print(result)
             # print(models.Trail.objects.filter(
             #     forwarded=True, status='C', document__subject__icontains="confuse").count())
 
