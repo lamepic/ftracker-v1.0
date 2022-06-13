@@ -1,6 +1,8 @@
+import re
 import json
 import io
 import os
+from binascii import a2b_base64
 from reportlab.pdfgen import canvas
 from reportlab.lib.units import mm
 from reportlab.lib.pagesizes import A4
@@ -15,6 +17,7 @@ from django.core.files.base import File
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.hashers import make_password
 
+from PIL import Image, ImageEnhance
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 
@@ -1238,11 +1241,14 @@ class ReferenceAPIView(views.APIView):
 class SignatureView(views.APIView):
     def post(self, request, format=None):
         try:
+            TMP_IMG = "tmp-image.png"
+            BASE_WIDTH = 10
+            BASE_HEIGHT = 10
+            img_file = None
             signature_type = request.data.get('type')
             page_num = request.data.get('pageNumber')
             document_id = request.data.get('doc_id')
             mouse_position = request.data.get('mousePosition')
-            img_file = None
             if signature_type == 'signature':
                 img_file = models.Signature.objects.get(user=request.user)
                 img_file = img_file.signature.path
@@ -1251,6 +1257,26 @@ class SignatureView(views.APIView):
                 img_file = img_file.stamp.path
             else:
                 img_file = request.data.get('signatureImage')
+                image_data = re.sub('^data:image/.+;base64,', '', img_file)
+
+                binary_data = a2b_base64(image_data)
+
+                fd = open(TMP_IMG, 'wb')
+                fd.write(binary_data)
+                fd.close()
+
+                image = Image.open(TMP_IMG)
+                w_percent = (BASE_WIDTH/float(image.size[0]))
+                # h_size = int((float(image.size[1])*float(w_percent)))
+                image = image.resize(
+                    (BASE_WIDTH, BASE_HEIGHT), Image.ANTIALIAS)
+
+                # save resized image
+                image.save(TMP_IMG, format='png')
+
+                enhancer = ImageEnhance.Sharpness(image)
+                factor = 8.0
+                enhancer.enhance(factor).save(TMP_IMG)
 
             document = None
             if signature_type == 'copyDocumentStamp':
@@ -1272,10 +1298,11 @@ class SignatureView(views.APIView):
             x_start = mouse_position['x']
             y_start = None
             if signature_type not in ('signature', 'stamp', 'copyDocumentStamp'):
-                y_start = mouse_position['y'] - 20
-                x_start = mouse_position['x'] - 20
+                y_start = mouse_position['y'] - 60
+                x_start = mouse_position['x'] - 60
             else:
                 y_start = mouse_position['y'] - 135
+                x_start = mouse_position['x'] - 60
 
             # can.drawImage(img_file, x_start, y_start, width=120,
             #               preserveAspectRatio=True, mask='auto')
@@ -1309,8 +1336,12 @@ class SignatureView(views.APIView):
             os.remove(out_pdf_file)
             q.close()
 
+            if request.data.get('signatureImage'):
+                os.remove(TMP_IMG)
+
             os.remove(in_pdf_file)
         except Exception as err:
+            print(err)
             raise exceptions.ServerError(err.args[0])
 
         socket_message = {
