@@ -325,7 +325,6 @@ const SignaturePad = ({
           message: "Success",
           description: "Signature added",
         });
-        setOpenSignatureModal(false);
       }
     } catch (e) {
       notification.error({
@@ -336,6 +335,7 @@ const SignaturePad = ({
       signaturePadRef.current?.clear();
       setLoading(false);
       setShowSignaturePad(false);
+      setOpenSignatureModal(false);
     }
   };
 
@@ -376,7 +376,7 @@ const SignaturePad = ({
           penColor={colors}
           canvasProps={{ width: 500, height: 200, className: "sigCanvas" }}
           ref={signaturePadRef}
-          maxWidth="1.4"
+          maxWidth="1.5"
         />
       </div>
       <Box display="flex">
