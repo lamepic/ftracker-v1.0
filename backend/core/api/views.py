@@ -888,7 +888,8 @@ class CreateDocument(views.APIView):
                     ref=reference, document_type=document_type, encrypt=encrypt, filename=filename)
 
             if carbon_copy:
-                document_name = document.content.name.split('/')[1]
+                document_name = document.subject if document.content.name == None else document.content.name.split(
+                    '/')[1]
                 # document.copy.save(document_name, document.content)
                 carbon_copy = json.loads(carbon_copy)
                 user_receiver = models.DocumentCopyReceiver()
@@ -985,9 +986,11 @@ class CreateDocument(views.APIView):
             )
 
         except IntegrityError as err:
+            document.delete()
             raise exceptions.BadRequest(
                 "Reference already exists, provide a unique reference.")
         except Exception as err:
+            print(err)
             document.delete()
             raise exceptions.ServerError(err.args[0])
 
