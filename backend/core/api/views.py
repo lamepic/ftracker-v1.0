@@ -28,6 +28,7 @@ from rest_framework.permissions import AllowAny
 
 from .. import models
 from . import serializers
+from watson import search as watson
 from ..libs import exceptions, utils
 from user.api import serializers as user_serializers
 from user import models as user_models
@@ -748,78 +749,91 @@ class CreateFlow(views.APIView):
 
 class SearchAPIView(views.APIView):
     def get(self, request, term, format=None):
+        print(term)
         try:
+            # results = watson.filter(models.Trail, term).filter(
+            #     status='C').filter(forwarded=True).filter(
+            #     receiver=request.user)
+
+            results = watson.search(term, models=(models.Document,))
+
+            for result in results:
+                print(result.document.subject)
+            # print(models.Trail.objects.filter(
+            #     forwarded=True, status='C', document__subject__icontains="confuse").count())
+
             documents = []
-            active_requested_document = models.RequestDocument.objects.filter(
-                requested_by=request.user, active=True)
-            active_requested_document_lst = [
-                doc.document for doc in active_requested_document]
+            # active_requested_document = models.RequestDocument.objects.filter(
+            #     requested_by=request.user, active=True)
+            # active_requested_document_lst = [
+            #     doc.document for doc in active_requested_document]
 
-            # activated documents
-            activated_documents = models.ActivateDocument.objects.filter(
-                receiver=request.user, expired=False)
-            activated_document_lst = [
-                doc.document for doc in activated_documents]
-            for item in activated_documents:
-                document_serializer = serializers.DocumentsSerializer(
-                    item.document)
-                activated_data = {
-                    "document": document_serializer.data, "route": "activated"}
-                documents.append(activated_data)
+            # # activated documents
+            # activated_documents = models.ActivateDocument.objects.filter(
+            #     receiver=request.user, expired=False)
+            # activated_document_lst = [
+            #     doc.document for doc in activated_documents]
+            # for item in activated_documents:
+            #     document_serializer = serializers.DocumentsSerializer(
+            #         item.document)
+            #     activated_data = {
+            #         "document": document_serializer.data, "route": "activated"}
+            #     documents.append(activated_data)
 
-            # pending documents
-            for item in active_requested_document:
-                document_serializer = serializers.DocumentsSerializer(
-                    item.document)
-                pending_data = {
-                    "document": document_serializer.data, "route": "pending"}
-                documents.append(pending_data)
+            # # pending documents
+            # for item in active_requested_document:
+            #     document_serializer = serializers.DocumentsSerializer(
+            #         item.document)
+            #     pending_data = {
+            #         "document": document_serializer.data, "route": "pending"}
+            #     documents.append(pending_data)
 
-            # incoming documents
-            incoming = models.Trail.objects.filter(
-                forwarded=True,
-                receiver=request.user, status='P')
-            for item in incoming:
-                document_serializer = serializers.DocumentsSerializer(
-                    item.document)
-                incoming_data = {
-                    "document": document_serializer.data, "route": "incoming"}
-                documents.append(incoming_data)
+            # # incoming documents
+            # incoming = models.Trail.objects.filter(
+            #     forwarded=True,
+            #     receiver=request.user, status='P')
+            # for item in incoming:
+            #     document_serializer = serializers.DocumentsSerializer(
+            #         item.document)
+            #     incoming_data = {
+            #         "document": document_serializer.data, "route": "incoming"}
+            #     documents.append(incoming_data)
 
-            # outgoing documents
-            outgoing = models.Trail.objects.filter(
-                send_id=request.user.staff_id,
-                sender=request.user, status='P').order_by('-document__id').distinct('document__id')
-            for item in outgoing:
-                document_serializer = serializers.DocumentsSerializer(
-                    item.document)
-                outgoing_data = {
-                    "document": document_serializer.data, "route": "outgoing"}
-                documents.append(outgoing_data)
+            # # outgoing documents
+            # outgoing = models.Trail.objects.filter(
+            #     send_id=request.user.staff_id,
+            #     sender=request.user, status='P').order_by('-document__id').distinct('document__id')
+            # for item in outgoing:
+            #     document_serializer = serializers.DocumentsSerializer(
+            #         item.document)
+            #     outgoing_data = {
+            #         "document": document_serializer.data, "route": "outgoing"}
+            #     documents.append(outgoing_data)
 
-            # created archived documents
-            archive = [archive for archive in models.Archive.objects.all()]
-            for item in archive:
-                if item.document not in active_requested_document_lst and item.document not in activated_document_lst:
-                    document_serializer = serializers.DocumentsSerializer(
-                        item.document)
-                    archive_data = {
-                        "document": document_serializer.data,
-                        "route": "archive",
-                        "department": item.created_by.department.name
-                    }
-                    documents.append(archive_data)
+            # # created archived documents
+            # archive = [archive for archive in models.Archive.objects.all()]
+            # for item in archive:
+            #     if item.document not in active_requested_document_lst and item.document not in activated_document_lst:
+            #         document_serializer = serializers.DocumentsSerializer(
+            #             item.document)
+            #         archive_data = {
+            #             "document": document_serializer.data,
+            #             "route": "archive",
+            #             "department": item.created_by.department.name
+            #         }
+            #         documents.append(archive_data)
         except Exception as err:
+            print(err)
             raise exceptions.ServerError(err.args[0])
 
-        filename_search = [doc for doc in documents if term.lower() in doc['document']
-                           ['filename'].lower()]
-        subject_search = [doc for doc in documents if term.lower() in doc['document']
-                          ['subject'].lower()]
+        # filename_search = [doc for doc in documents if term.lower() in doc['document']
+        #                    ['filename'].lower()]
+        # subject_search = [doc for doc in documents if term.lower() in doc['document']
+        #                   ['subject'].lower()]
 
-        data = filename_search + subject_search
+        # data = filename_search + subject_search
 
-        return Response(data, status=status.HTTP_200_OK)
+        return Response([], status=status.HTTP_200_OK)
 
 
 class CreateDocument(views.APIView):
