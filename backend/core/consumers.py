@@ -63,6 +63,8 @@ class NotificationConsumer(AsyncWebsocketConsumer):
             "message": "Document has been marked as complete and Archived",
         }
 
+        return message
+
     @database_sync_to_async
     def get_add_signature_message(self, user_id):
         message = {

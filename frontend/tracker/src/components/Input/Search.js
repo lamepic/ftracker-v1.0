@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import "./Search.css";
 import { Box, Text } from "@chakra-ui/react";
-import { AutoComplete, Button, Input } from "antd";
+import { AutoComplete, Button, Input, notification } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import { useStateValue } from "../../store/StateProvider";
 import { SearchDocument, requestDocument } from "../../http/document";
@@ -127,12 +127,21 @@ const searchResult = (
   });
 };
 
+const loadingSearch = (loading) => {
+  if (loading) {
+    return {
+      label: <Box>Loading...</Box>,
+    };
+  }
+};
+
 function Search() {
   const [store, dispatch] = useStateValue();
   const [options, setOptions] = useState([]);
   const [term, setTerm] = useState("");
   const [debouncedTerm, setDebouncedTerm] = useState(term);
   const history = useHistory();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => setTerm(debouncedTerm), 500);
@@ -146,20 +155,31 @@ function Search() {
   }, [term]);
 
   const _search = useCallback(async (term) => {
-    const res = await SearchDocument(store.token, term);
-    const data = res.data;
-    setOptions(
-      data
-        ? searchResult(
-            data,
-            handleTrack,
-            handleRequest,
-            handleView,
-            handleOpenActivatedDoc,
-            store
-          )
-        : []
-    );
+    setLoading(true);
+    try {
+      const res = await SearchDocument(store.token, term);
+      loadingSearch(loading);
+      const data = res.data;
+      setOptions(
+        data
+          ? searchResult(
+              data,
+              handleTrack,
+              handleRequest,
+              handleView,
+              handleOpenActivatedDoc,
+              store
+            )
+          : []
+      );
+    } catch (e) {
+      notification.error({
+        message: "Error",
+        description: e.data.details,
+      });
+    } finally {
+      setLoading(false);
+    }
   });
 
   const handleSearch = async (value) => {
