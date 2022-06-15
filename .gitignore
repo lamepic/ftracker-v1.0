@@ -15,6 +15,7 @@ backend/static
 backend/signature
 backend/stamp
 backend/env.prod
+backend/tracker/settings.py.orig
 /.pnp
 .pnp.js
 .env

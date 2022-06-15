@@ -837,6 +837,7 @@ class CreateDocument(views.APIView):
             document = get_object_or_404(models.Document, id=document_id)
             os.remove(document.content.path)
             document.content.save(filename, File(file))
+            document.content.close()
             document.filename = filename
             document.save()
             carbonCopyDocument = models.CarbonCopyDocument.objects.filter(
