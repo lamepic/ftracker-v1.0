@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import "./Search.css";
-import { Box, Text } from "@chakra-ui/react";
-import { AutoComplete, Button, Input, notification } from "antd";
+import { Box, Spinner, Text } from "@chakra-ui/react";
+import { AutoComplete, Button, Input, notification, Spin } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import { useStateValue } from "../../store/StateProvider";
 import { SearchDocument, requestDocument } from "../../http/document";
@@ -11,12 +11,13 @@ import swal from "sweetalert";
 import { Empty } from "antd";
 
 const searchResult = (
-  query,
+  query = [],
   handleTrack,
   handleRequest,
   handleView,
   handleOpenActivatedDoc,
-  store
+  store,
+  loading
 ) => {
   if (query.length === 0) {
     return new Array(query.length)
@@ -127,14 +128,6 @@ const searchResult = (
   });
 };
 
-const loadingSearch = (loading) => {
-  if (loading) {
-    return {
-      label: <Box>Loading...</Box>,
-    };
-  }
-};
-
 function Search() {
   const [store, dispatch] = useStateValue();
   const [options, setOptions] = useState([]);
@@ -156,10 +149,29 @@ function Search() {
 
   const _search = useCallback(async (term) => {
     setLoading(true);
+    let data;
+    setOptions(
+      data
+        ? searchResult(
+            handleTrack,
+            handleRequest,
+            handleView,
+            handleOpenActivatedDoc,
+            store,
+            loading
+          )
+        : []
+    );
     try {
       const res = await SearchDocument(store.token, term);
-      loadingSearch(loading);
-      const data = res.data;
+      data = res.data;
+    } catch (e) {
+      notification.error({
+        message: "Error",
+        description: e.data.details,
+      });
+    } finally {
+      setLoading(false);
       setOptions(
         data
           ? searchResult(
@@ -168,17 +180,11 @@ function Search() {
               handleRequest,
               handleView,
               handleOpenActivatedDoc,
-              store
+              store,
+              loading
             )
           : []
       );
-    } catch (e) {
-      notification.error({
-        message: "Error",
-        description: e.data.details,
-      });
-    } finally {
-      setLoading(false);
     }
   });
 
@@ -246,13 +252,18 @@ function Search() {
   };
 
   return (
-    <Box overflow="hidden">
+    <Box
+      // overflow="hidden"
+      s
+      _focus={{ border: "1px solid red", paddingTop: "10px" }}
+      position="relative"
+    >
       <AutoComplete
         dropdownMatchSelectWidth={252}
         style={{
           width: "100%",
           overflow: "hidden",
-          borderRadius: "20px",
+          borderRadius: "10px 10px 0px 0px",
           border: "none",
           outline: "none",
         }}
@@ -273,6 +284,7 @@ function Search() {
               style={{ paddingRight: "15px", paddingLeft: "5px" }}
             />
           }
+          suffix={loading && <Spinner size="md" />}
         />
       </AutoComplete>
     </Box>

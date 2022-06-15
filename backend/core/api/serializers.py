@@ -297,3 +297,52 @@ class ReferenceSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Reference
         fields = ['id', 'name', 'document_type']
+
+
+class DocumentSearchSerializer(serializers.ModelSerializer):
+    document = DocumentsSerializer(read_only=True)
+
+    class Meta:
+        model = models.Trail
+        fields = ['id', 'document']
+
+
+class OutgoingDocumentSearchSerializer(DocumentSearchSerializer):
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['route'] = "outgoing"
+        return representation
+
+
+class IncomingDocumentSearchSerializer(DocumentSearchSerializer):
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['route'] = "incoming"
+        return representation
+
+
+class RequestDocumentSearchSerializer(DocumentSearchSerializer):
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['route'] = "pending"
+        return representation
+
+
+class ActivateDocumentSearchSerializer(DocumentSearchSerializer):
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['route'] = "activated"
+        return representation
+
+
+class ArchiveDocumentSearchSerializer(DocumentSearchSerializer):
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['route'] = "archive"
+        representation['department'] = instance.created_by.department.name
+        return representation
