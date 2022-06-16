@@ -92,6 +92,13 @@ class DocumentsSerializer(serializers.ModelSerializer):
         serialized_data = PreviewCodeSerializer(code, many=True)
         return serialized_data.data
 
+    @staticmethod
+    def setup_eager_loading(queryset):
+        """ Perform necessary eager loading of data. """
+        queryset = queryset.prefetch_related('document_type')
+        queryset = queryset.prefetch_related('created_by')
+        return queryset
+
 
 class IncomingSerializer(serializers.ModelSerializer):
     sender = users_serializers.UserSerializer()
@@ -118,13 +125,20 @@ class OutgoingSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Trail
         fields = ['id', 'receiver', 'document',
-                  'created_at', 'related_document', ]
+                  'created_at', 'related_document']
 
     def get_related_document(self, obj):
-        related_document = obj.document.relateddocument_set
-        serialized_related_document = RelatedDocumentSerializer(
-            related_document, many=True)
-        return serialized_related_document.data
+        related_document = obj.document.relateddocument_set.count()
+        # serialized_related_document = RelatedDocumentSerializer(
+        #     related_document, many=True)
+        return related_document
+
+    @staticmethod
+    def setup_eager_loading(queryset):
+        """ Perform necessary eager loading of data. """
+        queryset = queryset.prefetch_related('receiver')
+        queryset = queryset.prefetch_related('document')
+        return queryset
 
 
 class TrailSerializer(serializers.ModelSerializer):

@@ -39,20 +39,20 @@ function Page({ loading, data, type }) {
         {incoming_data.length > 0 ? (
           <Box>
             <Box marginTop="10px">
-              <Box
-                display="flex"
-                alignItems="center"
-                cursor="pointer"
-                onClick={onBack}
-              >
+              <Box display="flex" alignItems="center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-6 w-6"
-                  style={{ width: "1.5rem", height: "1.5rem" }}
+                  style={{
+                    width: "1.5rem",
+                    height: "1.5rem",
+                    cursor: "pointer",
+                  }}
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="var(--dark-brown)"
                   strokeWidth={2}
+                  onClick={onBack}
                 >
                   <path
                     strokeLinecap="round"
@@ -74,7 +74,7 @@ function Page({ loading, data, type }) {
               <Box maxH={{ sm: "100vh", lg: "80vh" }} overflowY="auto">
                 <Grid templateColumns="repeat(6, 1fr)" gap={6} marginTop="10px">
                   {incoming_data.map((item) => {
-                    if (item.document?.related_document?.length > 0) {
+                    if (item.document?.related_document > 0) {
                       return (
                         <GridItem key={item.document.id}>
                           <Folder doc={item} type={item.type} />
@@ -112,20 +112,20 @@ function Page({ loading, data, type }) {
         {data.length > 0 ? (
           <Box>
             <Box marginTop="10px">
-              <Box
-                display="flex"
-                alignItems="center"
-                cursor="pointer"
-                onClick={onBack}
-              >
+              <Box display="flex" alignItems="center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-6 w-6"
-                  style={{ width: "1.5rem", height: "1.5rem" }}
+                  style={{
+                    width: "1.5rem",
+                    height: "1.5rem",
+                    cursor: "pointer",
+                  }}
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="var(--dark-brown)"
                   strokeWidth={2}
+                  onClick={onBack}
                 >
                   <path
                     strokeLinecap="round"
@@ -147,7 +147,7 @@ function Page({ loading, data, type }) {
               <Box maxH={{ sm: "100vh", lg: "80vh" }} overflowY="auto">
                 <Grid templateColumns="repeat(6, 1fr)" gap={6}>
                   {data.map((item) => {
-                    if (item.related_document.length > 0) {
+                    if (item.related_document > 0) {
                       return (
                         <GridItem key={item.document.id}>
                           <Folder doc={item} type={type} />

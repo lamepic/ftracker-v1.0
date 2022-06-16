@@ -19,6 +19,7 @@ function Outgoing() {
       const res = await fetchOutgoing(store.token);
       const data = res.data;
       setData(data);
+      console.log(data);
     } catch (e) {
       notification.error({
         message: "Error",
