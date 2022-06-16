@@ -92,7 +92,6 @@ class DocumentsSerializer(serializers.ModelSerializer):
         serialized_data = PreviewCodeSerializer(code, many=True)
         return serialized_data.data
 
-    @staticmethod
     def setup_eager_loading(queryset):
         """ Perform necessary eager loading of data. """
         queryset = queryset.prefetch_related('document_type')
@@ -111,10 +110,14 @@ class IncomingSerializer(serializers.ModelSerializer):
                   'created_at', 'related_document']
 
     def get_related_document(self, obj):
-        related_document = obj.document.relateddocument_set
-        serialized_related_document = RelatedDocumentSerializer(
-            related_document, many=True)
-        return serialized_related_document.data
+        related_document = obj.document.relateddocument_set.count()
+        return related_document
+
+    def setup_eager_loading(queryset):
+        """ Perform necessary eager loading of data. """
+        queryset = queryset.prefetch_related('sender')
+        queryset = queryset.prefetch_related('document')
+        return queryset
 
 
 class OutgoingSerializer(serializers.ModelSerializer):
@@ -129,11 +132,8 @@ class OutgoingSerializer(serializers.ModelSerializer):
 
     def get_related_document(self, obj):
         related_document = obj.document.relateddocument_set.count()
-        # serialized_related_document = RelatedDocumentSerializer(
-        #     related_document, many=True)
         return related_document
 
-    @staticmethod
     def setup_eager_loading(queryset):
         """ Perform necessary eager loading of data. """
         queryset = queryset.prefetch_related('receiver')
@@ -189,6 +189,13 @@ class ActivateDocumentSerializer(serializers.ModelSerializer):
         model = models.ActivateDocument
         fields = ['id', 'document', 'expire_at', 'receiver',
                   'sender', 'date_activated', 'expired', 'created_at', 'read']
+
+    def setup_eager_loading(queryset):
+        """ Perform necessary eager loading of data. """
+        queryset = queryset.prefetch_related('receiver')
+        queryset = queryset.prefetch_related('sender')
+        queryset = queryset.prefetch_related('document')
+        return queryset
 
 
 class CountSerializer(serializers.Serializer):
@@ -293,6 +300,12 @@ class DocumentCopySerializer(serializers.ModelSerializer):
         model = models.DocumentCopy
         fields = ['id', 'sender', 'document',
                   'created_at']
+
+    def setup_eager_loading(queryset):
+        """ Perform necessary eager loading of data. """
+        queryset = queryset.prefetch_related('sender')
+        queryset = queryset.prefetch_related('document')
+        return queryset
 
 
 class ArchiveCopySerializer(serializers.ModelSerializer):

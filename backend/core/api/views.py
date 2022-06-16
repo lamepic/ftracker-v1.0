@@ -49,21 +49,28 @@ class IncomingAPIView(views.APIView):
                 return Response(serialized_data.data, status=status.HTTP_200_OK)
 
             user = models.User.objects.get(staff_id=request.user.staff_id)
-            incoming = models.Trail.objects.filter(
+            incoming_qs = models.Trail.objects.filter(
                 forwarded=True,
                 receiver=user, status='P')
-            document_copy = models.DocumentCopy.objects.filter(
+            document_copy_qs = models.DocumentCopy.objects.filter(
                 receiver__staff_id=user.staff_id, forwarded=True, status="P")
-            activated_documents = models.ActivateDocument.objects.filter(
+            activated_document_qs = models.ActivateDocument.objects.filter(
                 expired=False, receiver=user)
         except Exception as err:
             raise exceptions.ServerError(err.args[0])
 
+        activated_documents = serializers.ActivateDocumentSerializer.setup_eager_loading(
+            activated_document_qs)
         activated_document_serialized_data = serializers.ActivateDocumentSerializer(
             activated_documents, many=True)
 
+        incoming = serializers.IncomingSerializer.setup_eager_loading(
+            incoming_qs)
         incoming_serialized_data = serializers.IncomingSerializer(
             incoming, many=True)
+
+        document_copy = serializers.ActivateDocumentSerializer.setup_eager_loading(
+            document_copy_qs)
         document_copy_serialized_data = serializers.DocumentCopySerializer(
             document_copy,
             many=True)
@@ -103,7 +110,8 @@ class OutgoingAPIView(views.APIView):
                 send_id=user.staff_id,
                 sender=user, status='P').order_by('-document__id').distinct('document__id')
 
-            outgoing_qs = serializers.OutgoingSerializer.setup_eager_loading(outgoing)
+            outgoing_qs = serializers.OutgoingSerializer.setup_eager_loading(
+                outgoing)
             serialized_data = serializers.OutgoingSerializer(
                 outgoing_qs, many=True)
 
