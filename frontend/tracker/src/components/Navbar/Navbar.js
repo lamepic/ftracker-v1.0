@@ -1,4 +1,10 @@
-import { Box, CircularProgress, Heading, Text } from "@chakra-ui/react";
+import {
+  Box,
+  CircularProgress,
+  Heading,
+  Spinner,
+  Text,
+} from "@chakra-ui/react";
 import React, { useState } from "react";
 import "./Navbar.css";
 import Search from "../Input/Search";
@@ -16,13 +22,16 @@ import CustomBadge from "../Badge/CustomBadge";
 import moment from "moment";
 import { auth_axios } from "../../utility/axios";
 
-const MenuDropDown = ({ userInfo, handleLogout }) => {
+const MenuDropDown = ({ userInfo, handleLogout, loading }) => {
   const menu = (
     <Menu>
       <Menu.Item key="000" onClick={handleLogout}>
-        <Text color="var(--light-brown)" fontWeight="400" fontSize="16px">
-          Logout
-        </Text>
+        <Box display="flex" justifyContent="space-between" alignItems="center">
+          <Text color="var(--light-brown)" fontWeight="400" fontSize="16px">
+            Logout
+          </Text>
+          {loading && <Spinner size="sm" color="var(--dark-brown)" />}
+        </Box>
       </Menu.Item>
     </Menu>
   );
@@ -266,10 +275,12 @@ const getMonth = () => {
 
 function Navbar({ onOpen }) {
   const [store, dispatch] = useStateValue();
+  const [loading, setLoading] = useState(false);
 
   const userInfo = store.user;
 
   const handleLogout = async () => {
+    setLoading(true);
     try {
       const config = {
         headers: {
@@ -287,6 +298,8 @@ function Navbar({ onOpen }) {
         message: "Error",
         description: error.request,
       });
+    } finally {
+      setLoading(false);
     }
   };
   return (
@@ -343,7 +356,11 @@ function Navbar({ onOpen }) {
           fontWeight="600"
           fontSize="17px"
         >{`${userInfo.first_name[0]}${userInfo.last_name[0]}`}</Text>
-        <MenuDropDown userInfo={userInfo} handleLogout={handleLogout} />
+        <MenuDropDown
+          userInfo={userInfo}
+          handleLogout={handleLogout}
+          loading={loading}
+        />
       </Box>
     </Box>
   );
