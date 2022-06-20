@@ -166,7 +166,7 @@ function NotificationDropDown() {
       ) : (
         <Menu.Item key="01">
           <div className="notification__loading">
-            <CircularProgress color="inherit" />
+            <Spinner color="var(--dark-brown)" size="lg" />
           </div>
         </Menu.Item>
       )}
