@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { fetchOutgoing } from "../../http/document";
-import useFetchData from "../../hooks/useFetchData";
 import Page from "../../components/Layout/Page";
 import { useStateValue } from "../../store/StateProvider";
 import { notification } from "antd";
