@@ -1231,8 +1231,8 @@ class SignatureView(views.APIView):
     def post(self, request, format=None):
         try:
             TMP_IMG = "tmp-image.png"
-            BASE_WIDTH = 10
-            BASE_HEIGHT = 10
+            BASE_WIDTH = 500
+            BASE_HEIGHT = 200
             img_file = None
             signature_type = request.data.get('type')
             page_num = request.data.get('pageNumber')
@@ -1255,10 +1255,9 @@ class SignatureView(views.APIView):
                 fd.close()
 
                 image = Image.open(TMP_IMG)
-                w_percent = (BASE_WIDTH/float(image.size[0]))
-                # h_size = int((float(image.size[1])*float(w_percent)))
-                image = image.resize(
-                    (BASE_WIDTH, BASE_HEIGHT), Image.ANTIALIAS)
+                wpercent = (BASE_WIDTH / float(image.size[0]))
+                hsize = int((float(image.size[1]) * float(wpercent)))
+                image = image.resize((BASE_WIDTH, hsize), Image.ANTIALIAS)
 
                 # save resized image
                 image.save(TMP_IMG, format='png')
