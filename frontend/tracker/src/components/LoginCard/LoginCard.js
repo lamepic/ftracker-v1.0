@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Box, Heading, Image, Text } from "@chakra-ui/react";
-import logo from "../../assets/images/logo.png";
+import logo from "../../assets/images/highways.png";
 import LoginForm from "./LoginForm";
 import { useStateValue } from "../../store/StateProvider";
 import { Redirect } from "react-router-dom";
@@ -49,13 +49,14 @@ function LoginCard() {
               w="1px"
               bg="var(--light-brown)"
               marginRight="7px"
+              marginLeft="7px"
             ></Box>
-            <Box padding="2px" color="var(--light-brown)">
+            <Box padding="2px" color="var(--light-brown)" textAlign="left">
               <Text fontSize={{ lg: "1rem", md: "0.8rem" }} fontWeight="700">
-                Ghana Cocoa Board
+                Ghana Highway Authority
               </Text>
-              <Text fontSize="0.49rem" fontWeight="600">
-                Poised to Maintain Premium Quality Cocoa
+              <Text fontSize="0.90rem" fontWeight="600">
+                Hall of Technology
               </Text>
             </Box>
           </Box>

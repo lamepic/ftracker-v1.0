@@ -199,7 +199,7 @@ function Flow() {
                               block
                               icon={<PlusOutlined />}
                               style={{
-                                backgroundColor: "var(--light-brown)",
+                                backgroundColor: "#00526E",
                                 color: "var(--white)",
                                 border: "none",
                                 marginTop: "15px",
@@ -220,7 +220,7 @@ function Flow() {
                       style={{
                         display: "block",
                         marginLeft: "auto",
-                        backgroundColor: "var(--light-brown)",
+                        backgroundColor: "#00526E",
                         color: "var(--white)",
                         border: "none",
                       }}
@@ -308,7 +308,7 @@ function Flow() {
                             style={{
                               display: "block",
                               // marginLeft: "auto",
-                              backgroundColor: "var(--light-brown)",
+                              backgroundColor: "#00526E",
                               color: "var(--white)",
                               border: "none",
                               width: "67%",

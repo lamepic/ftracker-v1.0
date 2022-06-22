@@ -43,7 +43,7 @@ function Home() {
             w="100%"
             h={{ sm: "130px", lg: "220px" }}
             borderRadius="10px"
-            bg="#E3BC97"
+            bg="#0281A4"
             marginTop={{ lg: "2rem" }}
           >
             <Box
@@ -57,12 +57,20 @@ function Home() {
                 as="h3"
                 fontSize={{ sm: "2rem", lg: "2.5rem" }}
                 fontWeight="600"
+                // opacity="0.7"
                 isTruncated
+                color="#fff"
               >
-                {/* Hi, {userInfo.first_name} */}Cocoa Papers
+                {/* Hi, {userInfo.first_name} */}Highway Papers
               </Text>
-              <Text as="h4" fontSize={{ lg: "1rem" }} fontWeight="500">
-                Ready to start your day with Cocoa Papers?
+              <Text
+                as="h4"
+                fontSize={{ lg: "1rem" }}
+                fontWeight="500"
+                // opacity="0.7"
+                color="#fff"
+              >
+                Ready to start your day with Highway Papers?
               </Text>
             </Box>
             <Image

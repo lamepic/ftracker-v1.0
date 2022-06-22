@@ -972,7 +972,7 @@ class CreateDocument(views.APIView):
             )
 
         except IntegrityError as err:
-            document.delete()
+            # document.delete()
             raise exceptions.BadRequest(
                 "Reference already exists, provide a unique reference.")
         except Exception as err:

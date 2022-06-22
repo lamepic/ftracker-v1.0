@@ -51,7 +51,7 @@ const MenuDropDown = ({ userInfo, handleLogout, loading }) => {
           <Text
             isTruncated
             fontSize="1.1rem"
-            color="#9D4D01"
+            // color="#9D4D01"
             fontWeight="600"
             maxW="150px"
           >
@@ -60,7 +60,7 @@ const MenuDropDown = ({ userInfo, handleLogout, loading }) => {
           <DownOutlined
             style={{
               fontSize: "0.8rem",
-              color: "#9D4D01",
+              // color: "#9D4D01",
               fontWeight: "600",
               marginLeft: "2px",
             }}
@@ -348,11 +348,11 @@ function Navbar({ onOpen }) {
         <Text
           className="initials"
           display="inline"
-          bg="var(--lighter-brown)"
+          bg="#005475"
           padding="5px 8px"
           borderRadius="5px"
           textTransform="uppercase"
-          color="var(--dark-brown)"
+          color="#fff"
           fontWeight="600"
           fontSize="17px"
         >{`${userInfo.first_name[0]}${userInfo.last_name[0]}`}</Text>

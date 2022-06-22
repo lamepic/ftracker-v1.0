@@ -7,8 +7,8 @@ import LoginCard from "../../components/LoginCard/LoginCard";
 function Login() {
   return (
     <Box
-      background="rgb(138,93,59);"
-      bg="linear-gradient(247deg, rgba(138,93,59,1) 6%, rgba(164,120,81,1) 84%)"
+      background="rgb(2,129,164)"
+      bg="radial-gradient(circle, rgba(2,129,164,1) 22%, rgba(2,120,164,0.9051995798319328) 93%)"
       w="100%"
       h="100vh"
       display="flex"
@@ -34,7 +34,7 @@ function Login() {
         top="-5em"
         left="-5em"
         borderRadius="50%"
-        bg="#BB9C81"
+        bg="#f4f4f4"
         overflow="hidden"
       ></Box>
       <Box w="80%" h="80%" display={{ sm: "block", lg: "flex" }}>
@@ -61,7 +61,7 @@ function Login() {
                 textAlign="end"
                 fontSize={{ lg: "3rem", md: "1rem", sm: "1rem" }}
               >
-                Cocoa Papers
+                The Highway Papers
               </Heading>
               <Text
                 as="p"
@@ -94,7 +94,7 @@ function Login() {
         <Box
           width="3em"
           height="40em"
-          bg="#BB9C81"
+          bg="#f4f4f4"
           position="absolute"
           bottom="-6em"
           right="10em"
@@ -103,7 +103,7 @@ function Login() {
         <Box
           width="3em"
           height="30em"
-          bg="#BB9C81"
+          bg="#f4f4f4"
           position="absolute"
           bottom="-6em"
           right="7em"
@@ -112,7 +112,7 @@ function Login() {
         <Box
           width="3em"
           height="20em"
-          bg="#BB9C81"
+          bg="#f4f4f4"
           position="absolute"
           bottom="-6em"
           right="4em"

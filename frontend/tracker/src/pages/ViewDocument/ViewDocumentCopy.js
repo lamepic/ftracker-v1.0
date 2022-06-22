@@ -148,11 +148,12 @@ function ViewDocumentCopy() {
               fontWeight="600"
               marginRight="20px"
               textTransform="capitalize"
-              color="var(--dark-brown)"
+              color="#fff"
               _hover={{ cursor: "pointer" }}
               fontSize="15px"
               padding="2px 8px"
-              bg="#e4a66c"
+              bg="#005475
+              "
               borderRadius="50px"
             >
               {capitalize(document.subject.toLowerCase())}

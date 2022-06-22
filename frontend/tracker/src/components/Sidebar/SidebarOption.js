@@ -18,7 +18,7 @@ function SidebarOption({ icon, name }) {
       <img src={icon} style={{ width: "2rem" }} alt="" />
       <Text
         textTransform="capitalize"
-        color="var(--lighter-brown)"
+        color="#f1f1f3"
         fontSize="0.7rem"
         fontWeight="600"
         marginTop="1px"

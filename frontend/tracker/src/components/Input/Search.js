@@ -263,7 +263,7 @@ function Search() {
         style={{
           width: "100%",
           overflow: "hidden",
-          borderRadius: "10px 10px 0px 0px",
+          // borderRadius: "10px 10px 0px 0px",
           border: "none",
           outline: "none",
         }}
@@ -276,7 +276,7 @@ function Search() {
           placeholder="Search files and documents"
           style={{
             // borderRadius: "20px",
-            border: "none",
+            border: "1px solid #0281A4",
             outline: "none",
           }}
           prefix={

@@ -8,9 +8,9 @@
 
 :root {
   --white: #fff;
-  --dark-brown: #582f08;
+  --dark-brown: #005475;
   --semi-dark-brown: #603814;
-  --light-brown: #9d4d01;
+  --light-brown: #005475;
   --lighter-brown: #e3bc97;
   --lightest-brown: #f9eeda;
   --background-color: #eadfd5;
@@ -78,7 +78,7 @@ a {
 }
 
 .swal-button.swal-button--confirm {
-  background-color: var(--light-brown) !important;
+  background-color: #00526e !important;
 }
 
 .ant-table .ant-table-fixed-header svg {
@@ -86,11 +86,11 @@ a {
 }
 
 .data-display-table thead[class*="ant-table-thead"] th {
-  background-color: var(--background-color) !important;
+  /* background-color: var(--background-color) !important; */
 }
 
 .data-display-table .ant-table-tbody {
-  background-color: var(--background-color);
+  /* background-color: #f4f4f4; */
 }
 
 .anticon.anticon-search svg {
@@ -112,7 +112,7 @@ a {
 }
 
 .ant-btn.ant-btn-primary {
-  background-color: var(--dark-brown) !important;
+  background-color: #00526e !important;
   border: none;
 }
 

@@ -357,10 +357,10 @@ function CreateDocument() {
                   rules={[{ required: true }]}
                 >
                   <Input
-                    style={{
-                      borderColor: "var(--dark-brown)",
-                      outline: "none",
-                    }}
+                  // style={{
+                  //   borderColor: "var(--dark-brown)",
+                  //   outline: "none",
+                  // }}
                   />
                 </Form.Item>
                 <Form.Item
@@ -373,10 +373,10 @@ function CreateDocument() {
                 >
                   <Select
                     placeholder="Select Document type"
-                    style={{
-                      borderColor: "var(--dark-brown)",
-                      outline: "none",
-                    }}
+                    // style={{
+                    //   borderColor: "var(--dark-brown)",
+                    //   outline: "none",
+                    // }}
                     onChange={(value) => onDocumentTypeChange(value)}
                   >
                     {documentTypes.map((documentType) => {
@@ -399,19 +399,19 @@ function CreateDocument() {
                 >
                   {selectedDocumentType?.name?.toLowerCase() === "custom" ? (
                     <Input
-                      style={{
-                        borderColor: "var(--dark-brown)",
-                        outline: "none",
-                      }}
+                      // style={{
+                      //   borderColor: "var(--dark-brown)",
+                      //   outline: "none",
+                      // }}
                       placeholder="eg. AAA/BBB/CCC"
                     />
                   ) : (
                     <Select
                       placeholder="Select Reference"
-                      style={{
-                        borderColor: "var(--dark-brown)",
-                        outline: "none",
-                      }}
+                      // style={{
+                      //   borderColor: "var(--dark-brown)",
+                      //   outline: "none",
+                      // }}
                     >
                       {documentTypeReferences.map((reference) => {
                         return (
@@ -435,12 +435,12 @@ function CreateDocument() {
                     rules={[{ required: true }]}
                   >
                     <Input
-                      style={{
-                        borderColor: "var(--dark-brown)",
-                        backgroundColor: "var(--lightest-brown)",
-                        outline: "none",
-                        color: "#000",
-                      }}
+                      // style={{
+                      //   borderColor: "var(--dark-brown)",
+                      //   backgroundColor: "var(--lightest-brown)",
+                      //   outline: "none",
+                      //   color: "#000",
+                      // }}
                       disabled
                     />
                   </Form.Item>
@@ -482,13 +482,13 @@ function CreateDocument() {
                     rules={[{ required: true }]}
                   >
                     <Input
-                      style={{
-                        borderRadius: "3px",
-                        borderColor: "var(--dark-brown)",
-                        backgroundColor: "var(--lightest-brown)",
-                        outline: "none",
-                        color: "#000",
-                      }}
+                      // style={{
+                      //   borderRadius: "3px",
+                      //   borderColor: "var(--dark-brown)",
+                      //   backgroundColor: "var(--lightest-brown)",
+                      //   outline: "none",
+                      //   color: "#000",
+                      // }}
                       disabled
                     />
                   </Form.Item>
@@ -591,7 +591,7 @@ function CreateDocument() {
                     htmlType="submit"
                     style={{
                       width: "100px",
-                      backgroundColor: "var(--light-brown)",
+                      // backgroundColor: "var(--light-brown)",
                       border: "none",
                     }}
                   >

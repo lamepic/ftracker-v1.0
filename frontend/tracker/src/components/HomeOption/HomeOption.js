@@ -12,7 +12,7 @@ function HomeOption({ icon, text, count }) {
       alignItems="center"
       justifyContent="center"
       padding="10px"
-      _hover={{ bg: "#e3bc97" }}
+      _hover={{ bg: "#0281A422" }}
       borderRadius="10px"
       transition="all 0.3s ease-in"
     >

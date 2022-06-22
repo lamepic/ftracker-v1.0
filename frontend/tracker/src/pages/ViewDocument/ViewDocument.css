@@ -5,15 +5,15 @@
 .forward,
 .signature,
 .stamp {
-  background-color: var(--light-brown) !important;
+  background-color: #028183 !important;
 }
 
 .submit {
-  background-color: var(--dark-brown) !important;
+  background-color: #00526e !important;
 }
 
 .minute-box-preview {
-  background-color: var(--lightest-brown);
+  background-color: #f4f4f4;
   height: 200px;
   width: 100%;
   margin-top: 10px;
@@ -57,6 +57,7 @@ textarea {
   width: 100%;
   border-radius: 10px;
   padding: 10px !important;
+  border: 1px solid #00526e;
 }
 
 textarea::placeholder {
@@ -67,7 +68,7 @@ textarea::placeholder {
   /* margin-left: auto; */
   /* margin-top: 15px; */
   padding: 10px;
-  background-color: var(--light-brown) !important;
+  background-color: #00526e !important;
   border: none;
   color: var(--white);
   cursor: pointer;

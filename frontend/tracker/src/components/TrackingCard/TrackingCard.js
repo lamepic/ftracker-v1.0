@@ -25,7 +25,7 @@ function TrackingCard({ receiver, deparment, document, id }) {
       <Card
         style={{
           // minWidth: 450,
-          backgroundColor: "var(--lightest-brown)",
+          backgroundColor: "#f4f4f4",
           marginBottom: "10px",
         }}
       >

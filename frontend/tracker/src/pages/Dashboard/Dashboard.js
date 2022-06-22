@@ -80,7 +80,7 @@ function Dashboard() {
   // });
 
   return (
-    <Box bg="var(--background-color)" h="100vh">
+    <Box bg="#F1F1F3)" h="100vh">
       {user !== null && (
         <Box
           display="flex"
