@@ -12,11 +12,11 @@
 
 # Add price to route the type document depending on the price on the document
 
-# Add amount input to document creation. Search document by amount
+# Add amount input to document creation. Search document by amount - deferred
 
 # Automatic archiving
 
-# handle reference exception
+# handle reference exception - done
 
 # duplicate raw file and save path in copy. - done
 
@@ -26,4 +26,4 @@
 
 # delete document if mail server fails to send document
 
-# Django cleanup breaks when appending signature
+# Django cleanup breaks when appending signature - removed
