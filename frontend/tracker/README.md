@@ -27,3 +27,7 @@
 # delete document if mail server fails to send document
 
 # Django cleanup breaks when appending signature - removed
+
+# Add pdftron
+
+# add office
