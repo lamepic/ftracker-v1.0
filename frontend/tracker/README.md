@@ -6,7 +6,7 @@
 
 # remove folder being moved from move folder modal - done
 
-# list copied users in trail popup
+# list copied users in trail popup - deferred
 
 # archive copy of document to user department - in progres
 
@@ -14,7 +14,7 @@
 
 # Add amount input to document creation. Search document by amount - deferred
 
-# Automatic archiving
+# Automatic archiving - deferred
 
 # handle reference exception - done
 
