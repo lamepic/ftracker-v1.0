@@ -4,7 +4,7 @@
         "pk": 1,
         "fields": {
             "password": "pbkdf2_sha256$260000$EmF8r2YV6P7q3N8lmGWJTt$Rb9oDDEFAc0m77ujgd3Iq+9/Q59YcK0K52OB9RSrmqc=",
-            "last_login": "2022-05-27T10:44:14.825Z",
+            "last_login": "2022-07-18T08:38:41.462Z",
             "email": "root@admin.com",
             "first_name": "Super",
             "last_name": "Admin",
@@ -21,7 +21,7 @@
         "pk": 2,
         "fields": {
             "password": "pbkdf2_sha256$260000$e74JS88lqbzhtOkb6KJ8gd$9JRJlYDvZ4vhe+ZsYw9L8nKZ7tXjoTb5elDBk5dlExs=",
-            "last_login": "2022-05-29T12:54:10.699Z",
+            "last_login": "2022-07-13T11:00:45.342Z",
             "email": "benaad@gmail.com",
             "first_name": "Ben",
             "last_name": "Awad",
@@ -38,8 +38,8 @@
         "pk": 3,
         "fields": {
             "password": "pbkdf2_sha256$260000$WwkU60W7RjI7XwP0bLzASY$fvpQXp+08nVS1z0UjJzBfq79mMqukbLjRS/LhAc4be8=",
-            "last_login": "2022-05-27T10:42:27.503Z",
-            "email": "isu@gmail.com",
+            "last_login": "2022-07-14T11:17:18.039Z",
+            "email": "cocoahouseisu@gmail.com",
             "first_name": "Information",
             "last_name": "System Unit",
             "date_joined": "2022-05-15T20:51:43.031Z",
@@ -55,7 +55,7 @@
         "pk": 4,
         "fields": {
             "password": "pbkdf2_sha256$260000$jCqGmQDb6vOwfPmxSuflUB$t8ILRYEChk824DOT8CJaRuLojIsnQomj/uc4FSsyZbg=",
-            "last_login": "2022-05-29T12:48:43.607Z",
+            "last_login": "2022-07-04T12:26:58Z",
             "email": "brad@gmail.com",
             "first_name": "Brad",
             "last_name": "Traversy",
@@ -72,7 +72,7 @@
         "pk": 5,
         "fields": {
             "password": "pbkdf2_sha256$260000$fyqF6LsPCFy1rABB1FGN0v$2s1CaAOr77e47DQSdJumZCXqDn0eMS2z+BOjrpiQho4=",
-            "last_login": "2022-05-29T12:47:41.640Z",
+            "last_login": "2022-06-22T14:32:21.773Z",
             "email": "john@gmail.com",
             "first_name": "John",
             "last_name": "Doe",
@@ -88,8 +88,8 @@
         "model": "user.user",
         "pk": 6,
         "fields": {
-            "password": "pbkdf2_sha256$260000$fyqF6LsPCFy1rABB1FGN0v$2s1CaAOr77e47DQSdJumZCXqDn0eMS2z+BOjrpiQho4=",
-            "last_login": "2022-05-29T12:47:41.640Z",
+            "password": "pbkdf2_sha256$260000$MsqHj5vAmMgvUp6SMi0xrT$f6f9XpDNKsSO0Hlqvcim2WD3/tnwGVFq1AN2bMMlZvw=",
+            "last_login": "2022-06-22T08:48:58.037Z",
             "email": "barhin49@gmail.com",
             "first_name": "Bright",
             "last_name": "Arhin",
@@ -105,9 +105,9 @@
         "model": "user.user",
         "pk": 7,
         "fields": {
-            "password": "pbkdf2_sha256$260000$fyqF6LsPCFy1rABB1FGN0v$2s1CaAOr77e47DQSdJumZCXqDn0eMS2z+BOjrpiQho4=",
-            "last_login": "2022-05-29T12:47:41.640Z",
-            "email": "kyeiyaw437@gmail.com",
+            "password": "pbkdf2_sha256$260000$JF7ECIkSOjmB4fgSNWbKmy$aKCeoipGbmJ6bpPBVFy4fZyr5bjrM0hHs6OKtHJA3Ec=",
+            "last_login": "2022-05-31T15:47:17.052Z",
+            "email": "yawboahene129@gmail.com",
             "first_name": "Yaw",
             "last_name": "Kyei Boahene",
             "date_joined": "2022-05-29T12:45:04.881Z",
@@ -122,8 +122,8 @@
         "model": "user.user",
         "pk": 8,
         "fields": {
-            "password": "pbkdf2_sha256$260000$fyqF6LsPCFy1rABB1FGN0v$2s1CaAOr77e47DQSdJumZCXqDn0eMS2z+BOjrpiQho4=",
-            "last_login": "2022-05-29T12:47:41.640Z",
+            "password": "pbkdf2_sha256$260000$ydG2XgYC5R0ifbSx1D6FUR$97g2mMQMgYAEB52QJOAD6zs6i0I1hzF+XPwI7orhyJA=",
+            "last_login": "2022-05-31T15:47:26.650Z",
             "email": "pevangelist516@gmail.com",
             "first_name": "Paul",
             "last_name": "Obitrim",
@@ -139,8 +139,8 @@
         "model": "user.user",
         "pk": 9,
         "fields": {
-            "password": "pbkdf2_sha256$260000$fyqF6LsPCFy1rABB1FGN0v$2s1CaAOr77e47DQSdJumZCXqDn0eMS2z+BOjrpiQho4=",
-            "last_login": "2022-05-29T12:47:41.640Z",
+            "password": "pbkdf2_sha256$260000$VdJXMnWWVlhirOoO6FX1O9$kO2cBvkB9g6bCvasO9vQYaXqabvXJEJoWh71iYCb/j4=",
+            "last_login": "2022-06-07T09:40:59.024Z",
             "email": "worlanyo528@gmail.com",
             "first_name": "Kerl",
             "last_name": "Klu",
@@ -150,6 +150,40 @@
             "department": 1,
             "is_admin": false,
             "is_department": false
+        }
+    },
+    {
+        "model": "user.user",
+        "pk": 10,
+        "fields": {
+            "password": "pbkdf2_sha256$260000$4kW2LvcTBSKvjf6YRMO689$ygBPSE7/efy1F+Z/2AN7oyzfjhZGE+HGQG30ylueLh4=",
+            "last_login": "2022-06-14T07:45:09.515Z",
+            "email": "richardarthur228@gmail.com",
+            "first_name": "Richard",
+            "last_name": "Arthur",
+            "date_joined": "2022-05-31T11:17:47.158Z",
+            "is_active": true,
+            "staff_id": "4433221",
+            "department": 1,
+            "is_admin": false,
+            "is_department": false
+        }
+    },
+    {
+        "model": "user.user",
+        "pk": 11,
+        "fields": {
+            "password": "pbkdf2_sha256$260000$fJ9WUKdlD8KeUezYZ3ymWA$qzBtzvC+lltx8i5hkinPKyeFp1x0GzWlpS/xJMG/EDU=",
+            "last_login": "2022-06-22T13:07:45.979Z",
+            "email": "hr@gmail.com",
+            "first_name": "Human",
+            "last_name": "Resource - Secretariat",
+            "date_joined": "2022-06-22T12:59:09.594Z",
+            "is_active": true,
+            "staff_id": "8393762",
+            "department": 2,
+            "is_admin": false,
+            "is_department": true
         }
     }
 ]
